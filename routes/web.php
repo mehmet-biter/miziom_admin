@@ -1,14 +1,15 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\Contact\ContactController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\Profile\ProfileController;
-use App\Http\Controllers\Setting\AdminSettingController;
-use App\Http\Controllers\Setting\FaqController;
 use App\Http\Controllers\User\RoleController;
 use App\Http\Controllers\User\UserController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\admin\CoinController;
+use App\Http\Controllers\Setting\FaqController;
+use App\Http\Controllers\Contact\ContactController;
+use App\Http\Controllers\Profile\ProfileController;
+use App\Http\Controllers\Setting\AdminSettingController;
 
 Route::get('/', [HomeController::class,'index'])->name('home');
 Route::get('login', [AuthController::class,'login'])->name('login');
@@ -60,6 +61,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','admins']], function 
 
     Route::get('settings',[AdminSettingController::class,'adminSetting'])->name('adminSetting');
     Route::post('update-generel-settings',[AdminSettingController::class,'updateGeneralSetting'])->name('updateGeneralSetting');
+
+    Route::get('coin-list',[CoinController::class,'adminCoinList'])->name('adminCoinList');
+    Route::get('add-new-coin', [CoinController::class,'adminAddCoin'])->name('adminAddCoin');
+    Route::post('save-new-coin', [CoinController::class,'adminSaveCoin'])->name('adminSaveCoin');
 });
 });
 

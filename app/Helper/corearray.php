@@ -360,3 +360,13 @@ function roleActionArray($input = null){
         }
         return $currency_list;
     }
+
+function getTradeCurrencyType($index = null)
+{
+    $array = [
+        CURRENCY_TYPE_CRYPTO => __("Crypto"),
+        CURRENCY_TYPE_FIAT => __("Fiat"),
+    ];
+    if(isset($array[$index])) return $array[$index];
+    return $array;
+}
