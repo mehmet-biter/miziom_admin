@@ -32,7 +32,12 @@ class User extends Authenticatable
         'g2f_enabled',
         'google2fa_secret',
         'email_verified',
-        'language'
+        'language',
+        'email_enabled',
+        'phone_enabled',
+        'otp_code',
+        'push_notification_status',
+        'email_notification_status',
     ];
 
     /**
