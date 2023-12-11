@@ -31,6 +31,11 @@ return new class extends Migration
             $table->tinyInteger('email_verified')->default(0);
             $table->string('password');
             $table->string('language')->default('en');
+            $table->tinyInteger('email_enabled')->default(0);
+            $table->tinyInteger('phone_enabled')->default(0);
+            $table->string('otp_code',10)->nullable();
+            $table->tinyInteger('push_notification_status')->default(1);
+            $table->tinyInteger('email_notification_status')->default(1);
             $table->rememberToken();
             $table->timestamps();
         });
