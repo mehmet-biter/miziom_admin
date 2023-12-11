@@ -422,16 +422,16 @@
                 </a>
                 <ul class="sub-menu">
                     <li>
-                        <a href="{{ route('jobCategoryList') }}">{{ __('Category') }}</a>
+                        <a href="{{ "route('jobCategoryList')" }}">{{ __('Category') }}</a>
                     </li>
                     <li>
-                        <a href="{{ route('jobPostList') }}">{{ __('Post') }}</a>
+                        <a href="{{ "route('jobPostList')" }}">{{ __('Post') }}</a>
                     </li>
                     
                 </ul>
             </li>
             <li class="menu nav-item relative">
-                <a href="{{ route('teamList') }}" class="nav-link">
+                <a href="{{ "route('teamList')" }}" class="nav-link">
                     <div class="flex items-center">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
                             xmlns="http://www.w3.org/2000/svg" class="shrink-0">
@@ -452,7 +452,7 @@
                 
             </li>
             <li class="menu nav-item relative">
-                <a href="{{ route('serviceList') }}" class="nav-link">
+                <a href="{{ "route('serviceList')" }}" class="nav-link">
                     <div class="flex items-center">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                             xmlns="http://www.w3.org/2000/svg" class="shrink-0">
@@ -470,7 +470,7 @@
                 
             </li>
             <li class="menu nav-item relative">
-                <a href="{{ route('faqList') }}" class="nav-link">
+                <a href="{{ "route('faqList')" }}" class="nav-link">
                     <div class="flex items-center">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
                             xmlns="http://www.w3.org/2000/svg" class="shrink-0">
@@ -494,7 +494,7 @@
                 
             </li>
             <li class="menu nav-item relative">
-                <a href="{{ route('contactList') }}" class="nav-link">
+                <a href="{{ "route('contactList')" }}" class="nav-link">
                     <div class="flex items-center">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
                             xmlns="http://www.w3.org/2000/svg" class="shrink-0">
@@ -542,7 +542,7 @@
                 </a>
                 <ul class="sub-menu">
                     <li>
-                        <a href="{{ route('adminSetting') }}">{{ __('Settings') }}</a>
+                        <a href="{{ "route('adminSetting')" }}">{{ __('Settings') }}</a>
                     </li>
                     
                 </ul>

@@ -104,9 +104,9 @@
                             </a>
                         </li>
                         @endif
-                        @if(checkRolePermission(JOB_CATEGORY_LIST,Auth::user()->role))
+                        @if(false&&checkRolePermission(JOB_CATEGORY_LIST,Auth::user()->role))
                         <li class="nav-item">
-                            <a href="{{ route('jobCategoryList') }}" class="group">
+                            <a href="{{ "" }}" class="group">
                                 <div class="flex items-center">
 
                                     <svg class="group-hover:!text-primary shrink-0" width="20" height="20"
@@ -124,7 +124,7 @@
                             </a>
                         </li>
                         @endif
-                        @if(checkRolePermission(JOB_POST_LIST,Auth::user()->role))
+                        @if(false&&checkRolePermission(JOB_POST_LIST,Auth::user()->role))
                         <li class="nav-item">
                             <a href="{{ route('jobPostList') }}" class="group">
                                 <div class="flex items-center">
@@ -150,7 +150,7 @@
                             </a>
                         </li>
                         @endif
-                        @if(checkRolePermission(JOB_APPLICATION_LIST,Auth::user()->role))
+                        @if(false&&checkRolePermission(JOB_APPLICATION_LIST,Auth::user()->role))
                         <li class="nav-item">
                             <a href="{{ route('jobApplicationList') }}" class="group">
                                 <div class="flex items-center">
@@ -176,7 +176,7 @@
                             </a>
                         </li>
                         @endif
-                        @if(checkRolePermission(TEAM_LIST,Auth::user()->role))
+                        @if(false&&checkRolePermission(TEAM_LIST,Auth::user()->role))
                         <li class="nav-item">
                             <a href="{{ route('teamList') }}" class="group">
                                 <div class="flex items-center">
@@ -202,7 +202,7 @@
                             </a>
                         </li>
                         @endif
-                        @if(checkRolePermission(SERVICE_LIST,Auth::user()->role))
+                        @if(false&&checkRolePermission(SERVICE_LIST,Auth::user()->role))
                         <li class="nav-item">
                             <a href="{{ route('serviceList') }}" class="group">
                                 <div class="flex items-center">
@@ -228,7 +228,7 @@
                             </a>
                         </li>
                         @endif
-                        @if(checkRolePermission(FAQ_LIST,Auth::user()->role))
+                        @if(false&&checkRolePermission(FAQ_LIST,Auth::user()->role))
                         <li class="nav-item">
                             <a href="{{ route('faqList') }}" class="group">
                                 <div class="flex items-center">
@@ -254,7 +254,7 @@
                             </a>
                         </li>
                         @endif
-                        @if(checkRolePermission(CONTACT_LIST,Auth::user()->role))
+                        @if(false&&checkRolePermission(CONTACT_LIST,Auth::user()->role))
                         <li class="nav-item">
                             <a href="{{ route('contactList') }}" class="group">
                                 <div class="flex items-center">
@@ -280,7 +280,7 @@
                             </a>
                         </li>
                         @endif
-                        @if(checkRolePermission(SETTING_VIEW,Auth::user()->role))
+                        @if(false&&checkRolePermission(SETTING_VIEW,Auth::user()->role))
                         <li class="nav-item">
                             <a href="{{ route('adminSetting') }}" class="group">
                                 <div class="flex items-center">
