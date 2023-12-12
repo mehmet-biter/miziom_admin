@@ -4,19 +4,9 @@
     "src": "resources/css/highlight.min.css",
     "isEntry": true
   },
-  "resources/css/tippy.css": {
-    "file": "assets/tippy.79ba074f.css",
-    "src": "resources/css/tippy.css",
-    "isEntry": true
-  },
-  "resources/css/nice-select.css": {
-    "file": "assets/nice-select.b1ccd362.css",
-    "src": "resources/css/nice-select.css",
-    "isEntry": true
-  },
-  "resources/css/markdown-editor.css": {
-    "file": "assets/markdown-editor.854cb2a8.css",
-    "src": "resources/css/markdown-editor.css",
+  "resources/css/easymde.min.css": {
+    "file": "assets/easymde.min.86d3f618.css",
+    "src": "resources/css/easymde.min.css",
     "isEntry": true
   },
   "resources/css/nice-select2.css": {
@@ -24,19 +14,19 @@
     "src": "resources/css/nice-select2.css",
     "isEntry": true
   },
+  "resources/css/nice-select.css": {
+    "file": "assets/nice-select.b1ccd362.css",
+    "src": "resources/css/nice-select.css",
+    "isEntry": true
+  },
   "resources/css/nouislider.min.css": {
     "file": "assets/nouislider.min.3771034d.css",
     "src": "resources/css/nouislider.min.css",
     "isEntry": true
   },
-  "resources/css/easymde.min.css": {
-    "file": "assets/easymde.min.86d3f618.css",
-    "src": "resources/css/easymde.min.css",
-    "isEntry": true
-  },
-  "resources/css/flatpickr.min.css": {
-    "file": "assets/flatpickr.min.7b14c7ca.css",
-    "src": "resources/css/flatpickr.min.css",
+  "resources/css/markdown-editor.css": {
+    "file": "assets/markdown-editor.854cb2a8.css",
+    "src": "resources/css/markdown-editor.css",
     "isEntry": true
   },
   "resources/css/swiper-bundle.min.css": {
@@ -44,14 +34,24 @@
     "src": "resources/css/swiper-bundle.min.css",
     "isEntry": true
   },
+  "resources/css/fullcalendar.min.css": {
+    "file": "assets/fullcalendar.min.97e9cb23.css",
+    "src": "resources/css/fullcalendar.min.css",
+    "isEntry": true
+  },
+  "resources/css/tippy.css": {
+    "file": "assets/tippy.79ba074f.css",
+    "src": "resources/css/tippy.css",
+    "isEntry": true
+  },
   "resources/css/fancybox.css": {
     "file": "assets/fancybox.62e850d0.css",
     "src": "resources/css/fancybox.css",
     "isEntry": true
   },
-  "resources/css/fullcalendar.min.css": {
-    "file": "assets/fullcalendar.min.97e9cb23.css",
-    "src": "resources/css/fullcalendar.min.css",
+  "resources/css/flatpickr.min.css": {
+    "file": "assets/flatpickr.min.7b14c7ca.css",
+    "src": "resources/css/flatpickr.min.css",
     "isEntry": true
   },
   "resources/css/quill.snow.css": {
@@ -65,7 +65,7 @@
     "isEntry": true
   },
   "resources/css/app.css": {
-    "file": "assets/app.d37c5fbc.css",
+    "file": "assets/app.d63e627b.css",
     "src": "resources/css/app.css",
     "isEntry": true
   }

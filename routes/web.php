@@ -7,6 +7,7 @@ use App\Http\Controllers\User\RoleController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\admin\CoinController;
 use App\Http\Controllers\Setting\FaqController;
+use App\Http\Controllers\admin\CurrencyController;
 use App\Http\Controllers\Contact\ContactController;
 use App\Http\Controllers\Profile\ProfileController;
 use App\Http\Controllers\Setting\AdminSettingController;
@@ -65,6 +66,14 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','admins']], function 
     Route::get('coin-list',[CoinController::class,'adminCoinList'])->name('adminCoinList');
     Route::get('add-new-coin', [CoinController::class,'adminAddCoin'])->name('adminAddCoin');
     Route::post('save-new-coin', [CoinController::class,'adminSaveCoin'])->name('adminSaveCoin');
+
+    Route::get('currency-list', [CurrencyController::class,'adminCurrencyList'])->name('adminCurrencyList');
+    Route::get('currency-add', [CurrencyController::class,'adminCurrencyAdd'])->name('adminCurrencyAdd');
+    Route::get('currency-edit-{id}', [CurrencyController::class,'adminCurrencyEdit'])->name('adminCurrencyEdit');
+    Route::get('currency-rate-change', [CurrencyController::class,'adminCurrencyRate'])->name('adminCurrencyRate');
+    Route::post('currency-all', [CurrencyController::class,'adminAllCurrency'])->name('adminAllCurrency');
+    Route::post('currency-status-change', [CurrencyController::class,'adminCurrencyStatus'])->name('adminCurrencyStatus');
+    Route::post('currency-save-process', [CurrencyController::class,'adminCurrencyAddEdit'])->name('adminCurrencyStore');
 });
 });
 

@@ -37,8 +37,8 @@
 
                                 <div class="hidden" id="coin_type_select">
                                     <select id="status" name="coin_type_select_" class="form-select flex-1">
-                                        @foreach (getTradeCurrencyType() as $key => $value)
-                                            <option value="{{ $key }}">{{ $value }}</option>
+                                        @foreach ($currency as $currency)
+                                            <option value="{{ $currency->code }}" data-price="{{ $currency->rate }}" >{{ $currency->code }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -56,7 +56,7 @@
                             </div>
                             <div class="items-center mt-4">
                                 <label for="status" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">{{ __('Get coin rate from api ?') }} <span class="text-danger">*</span></label>
-                                <select id="status" name="status" class="form-select flex-1">
+                                <select id="status" name="get_price_api" class="form-select flex-1">
                                     <option value="1">{{__('Yes')}}</option>
                                     <option value="2">{{__('No')}}</option>
                                 </select>
