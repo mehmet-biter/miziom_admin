@@ -32,6 +32,9 @@ const CURRENCY_TYPE_FIAT = 2;
 const ROLE_SUPER_ADMIN=1;
 const ROLE_ADMIN=2;
 
+const COIN_PAYMENT = 1;
+const BITGO_API = 2;
+
 // gender
 const MALE=1;
 const FEMALE=2;

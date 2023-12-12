@@ -169,14 +169,13 @@ class CoinController extends Controller
                     $data['coin_price'] = $request->coin_price;
                 }
             }
-            $save = Coin::create($data);
-            if ($save) {
-                return redirect()->route('adminCoinList')->with('dismiss', __('New coin added successfully'));
-            }
+
+            if (Coin::create($data))
+                return redirect()->route('adminCoinList')->with('success', __('New coin added successfully'));
             return redirect()->back()->with('dismiss', __('Something went wrong'));
         } catch (\Exception $e) {
             $this->logger->log('adminSaveCoin : ',$e->getMessage());
-            return redirect()->back()->with('dismiss', __('Something went wrong'));
+            return redirect()->back()->with('dismiss', $e->getMessage().__('Something went wrong'));
         }
     }
 

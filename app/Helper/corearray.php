@@ -548,3 +548,13 @@ function fiat_currency_array($input = null){
     }
     return $currency_list;
 }
+
+function api_settings($input = null)
+{
+    $output = [
+        COIN_PAYMENT => __('Coin Payment Api'),
+        BITGO_API => __('Bitgo Api'),
+    ];
+    if (is_null($input)) return $output;
+    return isset($output[$input]) ? $output[$input] : null;
+}

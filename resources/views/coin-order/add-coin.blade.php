@@ -31,12 +31,12 @@
                                 <label for="question" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">{{ __('Coin Type') }} <span class="text-danger">*</span></label>
 
                                 <div class="hidden" id="coin_type_input">
-                                    <input id="coin_type_input_" type="text" name="title" class="form-input flex-1"
-                                    @if(isset($item)) value="{{ $item->title }}" @else value="{{ old('title') }}" @endif />
+                                    <input id="coin_type_input_" type="text" class="form-input flex-1"
+                                    @if(isset($item)) value="{{ $item->coin_type }}" @else value="{{ old('coin_type') }}" @endif />
                                 </div>
 
                                 <div class="hidden" id="coin_type_select">
-                                    <select id="status" name="coin_type_select_" class="form-select flex-1">
+                                    <select id="coin_type_select_" class="form-select flex-1">
                                         @foreach ($currency as $currency)
                                             <option value="{{ $currency->code }}" data-price="{{ $currency->rate }}" >{{ $currency->code }}</option>
                                         @endforeach
@@ -49,11 +49,6 @@
                                     @if(isset($item)) value="{{ $item->decimal }}" @else value="{{ old('decimal') }}" @endif />
                             </div>
                             
-                            <div class="mt-4 items-center">
-                                <label for="question" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">{{ __('Coin Decimal') }} <span class="text-danger">*</span></label>
-                                <input id="question" type="text" name="decimal" class="form-input flex-1"
-                                    @if(isset($item)) value="{{ $item->decimal }}" @else value="{{ old('decimal') }}" @endif />
-                            </div>
                             <div class="items-center mt-4">
                                 <label for="status" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">{{ __('Get coin rate from api ?') }} <span class="text-danger">*</span></label>
                                 <select id="status" name="get_price_api" class="form-select flex-1">
@@ -65,6 +60,14 @@
                                 <label for="question" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">{{ __('Coin Price') }} <span class="text-danger">*</span></label>
                                 <input id="question" type="text" name="coin_price" class="form-input flex-1"
                                     @if(isset($item)) value="{{ $item->coin_price }}" @else value="{{ old('coin_price') }}" @endif />
+                            </div>
+                            <div class="items-center mt-4">
+                                <label for="status" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">{{ __('Coin API') }} <span class="text-danger">*</span></label>
+                                <select id="status" name="network" class="form-select flex-1">
+                                    @foreach(api_settings() as $key => $value)
+                                        <option value="{{$key}}">{{$value}}</option>
+                                    @endforeach
+                                </select>
                             </div>
                             <div class="mt-8">
                                 <div class="flex justify-between sm:flex-row flex-col mt-6 px-4">

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('coin_type',20)->unique();
             $table->tinyInteger('currency_type')->default(1);
-            $table->tinyInteger('currency_id')->nullable();
+            $table->unsignedInteger('currency_id')->nullable();
             $table->tinyInteger('status')->default(1);
             $table->tinyInteger('network')->default(1);
             $table->tinyInteger('is_withdrawal')->default(1);
