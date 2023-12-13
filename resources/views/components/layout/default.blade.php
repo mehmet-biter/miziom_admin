@@ -15,12 +15,14 @@
         rel="stylesheet" />
 
         <!-- Datatable CSS -->
-<link rel="stylesheet" href="{{asset('assets/common/css/datatable/datatables.min.css')}}">
-<link rel="stylesheet" href="{{asset('assets/common/css/datatable/dataTables.bootstrap.min.css')}}">
-<link rel="stylesheet" href="{{asset('assets/common/css/datatable/dataTables.jqueryui.min.css')}}">
-<link rel="stylesheet" href="{{asset('assets/common/css/datatable/dataTables.responsive.css')}}">
-<link rel="stylesheet" href="{{asset('assets/common/css/datatable/jquery.dataTables.min.css')}}">
-<link rel="stylesheet" href="{{asset('assets/common/css/css-circular-prog-bar.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/common/css/datatable/datatables.min.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/common/css/datatable/dataTables.bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/common/css/datatable/dataTables.jqueryui.min.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/common/css/datatable/dataTables.responsive.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/common/css/datatable/jquery.dataTables.min.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/common/css/css-circular-prog-bar.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/common/css/fontawsome6.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/file-upload-with-preview/dist/style.css" />
 
     <script src="/assets/js/perfect-scrollbar.min.js"></script>
     <script defer src="/assets/js/popper.min.js"></script>
@@ -31,6 +33,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://unpkg.com/file-upload-with-preview/dist/file-upload-with-preview.iife.js"></script>
 </head>
 
 <body x-data="main" class="antialiased relative font-nunito text-sm font-normal overflow-x-hidden"

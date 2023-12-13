@@ -35,7 +35,7 @@ class CoinController extends Controller
     {
         try {
             $data['title'] = __('Coin List');
-            $data['coins'] = Coin::where('status', '<>', STATUS_DELETED);
+            $data['coins'] = Coin::where('status', '<>', STATUS_DELETED)->get();
             return view('coin-order.coin', $data);
         } catch (\Exception $e) {
             $this->logger->log('admin coin-list exception --> ',$e->getMessage());
@@ -63,14 +63,13 @@ class CoinController extends Controller
     public function adminCoinEdit($id)
     {
         $coinId = decryptId($id);
-        $data['module'] = Module::allEnabled();
 
         if(is_array($coinId)) {
             return redirect()->back()->with(['dismiss' => __('Coin not found')]);
         }
 
         $item = $this->coinService->getCoinDetailsById($coinId);
-        //dd($item);
+
         if (isset($item) && $item['success'] == false) {
             return redirect()->back()->with(['dismiss' => $item['message']]);
         }
@@ -79,7 +78,7 @@ class CoinController extends Controller
         $data['title'] = __('Update Coin');
         $data['button_title'] = __('Update');
 
-        return view('coin-order.add-coin', $data);
+        return view('coin-order.edit-coin', $data);
     }
 
 
@@ -95,21 +94,15 @@ class CoinController extends Controller
             $input['is_deposit'] = isset($request->is_deposit) ? 1 : 0;
             $input['is_withdrawal'] = isset($request->is_withdrawal) ? 1 : 0;
             $input['status'] = isset($request->status) ? 1 : 0;
-            $input['trade_status'] = isset($request->trade_status) ? 1 : 0;
             $input['is_wallet'] = isset($request->is_wallet) ? 1 : 0;
-            $input['is_buy'] = isset($request->is_buy) ? 1 : 0;
             $input['is_virtual_amount'] = isset($request->is_virtual_amount) ? 1 : 0;
-            $input['is_currency'] = isset($request->is_currency) ? 1 : 0;
             $input['is_transferable'] = isset($request->is_transferable) ? 1 : 0;
-            $input['minimum_buy_amount'] = $request->minimum_buy_amount;
-            $input['minimum_sell_amount'] = $request->minimum_sell_amount;
             $input['minimum_withdrawal'] = $request->minimum_withdrawal;
             $input['maximum_withdrawal'] = $request->maximum_withdrawal;
             $input['withdrawal_fees'] = $request->withdrawal_fees;
             $input['max_send_limit'] = $request->max_send_limit ?? 0;
             $input['withdrawal_fees_type'] = $request->withdrawal_fees_type ?? 2;
             $input['admin_approval'] = $request->admin_approval ?? 2;
-            $input['is_demo_trade'] = isset($request->is_demo_trade)? 1 : 0;
 
             if (!empty($request->coin_icon)) {
                 $icon = uploadFile($request->coin_icon,IMG_ICON_PATH,'');

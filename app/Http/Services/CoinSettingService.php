@@ -1,9 +1,9 @@
 <?php
 namespace App\Http\Services;
 
-use App\Http\Repositories\CoinSettingRepository;
 use App\Models\Coin;
 use App\Models\CoinSetting;
+use App\Http\Repository\CoinSettingRepository;
 
 class CoinSettingService extends BaseService {
 

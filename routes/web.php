@@ -63,8 +63,14 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','admins']], function 
     Route::get('settings',[AdminSettingController::class,'adminSetting'])->name('adminSetting');
     Route::post('update-generel-settings',[AdminSettingController::class,'updateGeneralSetting'])->name('updateGeneralSetting');
 
+    Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index'])->name('adminLogs');
+
     Route::get('coin-list',[CoinController::class,'adminCoinList'])->name('adminCoinList');
     Route::get('add-new-coin', [CoinController::class,'adminAddCoin'])->name('adminAddCoin');
+    Route::get('coin-edit/{id}', [CoinController::class,'adminCoinEdit'])->name('adminCoinEdit');
+    Route::get('coin-delete/{id?}', [CoinController::class,'adminCoinDelete'])->name('adminCoinDelete');
+    Route::get('coin-settings/{id}', [CoinController::class,'adminCoinSettings'])->name('adminCoinSettings');
+    Route::post('coin-save-process', [CoinController::class,'adminCoinSaveProcess'])->name('adminCoinSaveProcess');
     Route::post('save-new-coin', [CoinController::class,'adminSaveCoin'])->name('adminSaveCoin');
 
     Route::get('currency-list', [CurrencyController::class,'adminCurrencyList'])->name('adminCurrencyList');

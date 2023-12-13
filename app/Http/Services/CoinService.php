@@ -1,13 +1,18 @@
 <?php
 namespace App\Http\Services;
 
+use App\Models\Coin;
+use App\Models\Wallet;
+use Illuminate\Support\Facades\DB;
+use App\Http\Repository\AdminCoinRepository;
+
 class CoinService extends BaseService {
 
     public $model = Coin::class;
     public $repository = AdminCoinRepository::class;
 
     public function __construct(){
-        parent::__construct($this->model,$this->repository);
+        parent::__construct($this->model, $this->repository);
     }
 
     public function getCoin($data){

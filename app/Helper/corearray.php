@@ -558,3 +558,13 @@ function api_settings($input = null)
     if (is_null($input)) return $output;
     return isset($output[$input]) ? $output[$input] : null;
 }
+
+function discount_type($input = null)
+{
+    $output = [
+        DISCOUNT_TYPE_FIXED => __('Fixed'),
+        DISCOUNT_TYPE_PERCENTAGE => __('Percentage')
+    ];
+    if (is_null($input)) return $output;
+    return isset($output[$input]) ? $output[$input] : null;
+}

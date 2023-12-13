@@ -1,8 +1,11 @@
 <?php
 
-use App\Http\Services\Logger;
-use App\Models\AdminSetting;
 use App\Models\Role;
+use App\Models\AdminSetting;
+use App\Http\Services\Logger;
+use App\Models\WithdrawHistory;
+use App\Models\DepositeTransaction;
+use App\Models\WalletAddressHistory;
 use Illuminate\Support\Facades\Auth;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
@@ -229,4 +232,71 @@ function showDefaultImage($path,$image)
         // }
     }
     return $return;
+}
+
+function decryptId($encryptedId)
+{
+    try {
+        $id = decrypt($encryptedId);
+    } catch (Exception $e) {
+        storeException('decryptId',$e->getMessage());
+        return ['success' => false];
+    }
+    return $id;
+}
+
+function find_coin_type($coin_type)
+{
+    $type = $coin_type;
+    if ($coin_type == 'Default') {
+        $type = settings('coin_name');
+    }
+
+    return $type;
+}
+
+function checkCoinDeleteCondition($coin)
+{
+    $response = ['success' => true, 'message' => __('Success')];
+//    $checkCoinWalletBalance = checkWalletBalanceByCoin($coin->id);
+//    if ($checkCoinWalletBalance > 0) {
+//        return ['success' => false, 'message' => __('This coin wallet already have some balance, so you should not delete this coin.')];
+//    }
+    $checkCoinWalletAddress = checkWalletAddressByCoin($coin->coin_type);
+    if ($checkCoinWalletAddress > 0) {
+        return ['success' => false, 'message' => __('This coin wallet already have some address, so you should not delete this coin.')];
+    }
+
+    $checkCoinDeposit = checkDepositByCoin($coin->coin_type);
+    if ($checkCoinDeposit > 0) {
+        return ['success' => false, 'message' => __('This coin already have some deposit, so you should not delete this coin')];
+    }
+    $checkCoinWithdrawal = checkWithdrawalByCoin($coin->coin_type);
+    if ($checkCoinWithdrawal > 0) {
+        return ['success' => false, 'message' => __('This coin already have some withdrawal, so you should not delete this coin')];
+    }
+    return $response;
+}
+
+function checkWithdrawalByCoin($coinType)
+{
+    $item = WithdrawHistory::where(['coin_type' => $coinType])->get();
+    if (isset($item[0])) {
+        return 1;
+    }
+    return 0;
+}
+
+function checkDepositByCoin($coinType)
+{
+    $item = DepositeTransaction::where(['coin_type' => $coinType])->get();
+    if (isset($item[0])) {
+        return 1;
+    }
+    return 0;
+}
+
+function checkWalletAddressByCoin($coinType)
+{
+    return WalletAddressHistory::where(['coin_type' => $coinType])->count();
 }

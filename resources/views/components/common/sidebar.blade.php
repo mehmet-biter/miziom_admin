@@ -64,7 +64,7 @@
 
                 <li class="nav-item">
                     <ul>
-                        @if(checkRolePermission(USER_LIST,Auth::user()->role))
+                        @if(false&&checkRolePermission(USER_LIST,Auth::user()->role))
                         <li class="nav-item">
                             <a href="{{ route('adminList') }}" class="group">
                                 <div class="flex items-center">
@@ -84,7 +84,7 @@
                             </a>
                         </li>
                         @endif
-                        @if(checkRolePermission(ROLE_LIST,Auth::user()->role))
+                        @if(false&&checkRolePermission(ROLE_LIST,Auth::user()->role))
                         <li class="nav-item">
                             <a href="{{ route('roleList') }}" class="group">
                                 <div class="flex items-center">
