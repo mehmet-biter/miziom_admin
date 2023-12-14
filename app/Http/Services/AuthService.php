@@ -22,7 +22,7 @@ class AuthService extends BaseService
     {
         $this->repository =  new AuthRepositories;
         $this->emailService = new MailService;
-        parent::__construct($this->repository);
+        parent::__construct("",$this->repository);
 
     }
 
