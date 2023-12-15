@@ -27,6 +27,10 @@ Route::group(['namespace'=>'Api','middleware' => ['apiCheck']], function (){
         Route::post('verify-email',[AuthController::class, 'verifyEmail']);
         Route::post('forgot-password',[AuthController::class, 'forgotPassword']);
         Route::post('reset-password',[AuthController::class, 'resetPassword']);
+    });
+
+    Route::group(['middleware' => ['auth:api']], function () {
+        //logout
         Route::post('logout',[AuthController::class, 'logout']);
     });
 });

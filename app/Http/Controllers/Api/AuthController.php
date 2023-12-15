@@ -9,6 +9,10 @@ use App\Http\Requests\Api\Auth\RegisterRequest;
 use App\Http\Requests\Api\Auth\ResetPasswordRequest;
 use App\Http\Requests\Api\Auth\VerifyEmailRequest;
 use App\Http\Services\AuthService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller
 {
@@ -79,6 +83,20 @@ class AuthController extends Controller
             return responseJsonData($response['success'],$response['message'],$response['data']);
         } catch(\Exception $e) {
             storeException('resetPassword', $e->getMessage());
+            return responseJsonData(false,__('Something went wrong'));
+        }
+    }
+
+    // reset Password
+    public function logout(Request $request){
+        try {
+            Session::flush();
+            Cookie::queue(Cookie::forget('accesstokenvalue'));
+            $user = Auth::user()->token();
+            $user->revoke();
+            return responseJsonData(true,__('Logout successful'),[]);
+        } catch(\Exception $e) {
+            storeException('logout', $e->getMessage());
             return responseJsonData(false,__('Something went wrong'));
         }
     }
