@@ -41,3 +41,18 @@ const CO_WALLET = 2;
 
 const DISCOUNT_TYPE_FIXED = 1;
 const DISCOUNT_TYPE_PERCENTAGE = 2;
+
+const MODULE_SUPER_ADMIN = 1;
+const MODULE_ADMIN = 2;
+const MODULE_USER = 3;
+
+const IMAGE_PATH = 'general/';
+const IMAGE_PATH_USER = 'user/';
+const IMAGE_SETTING_PATH = 'settings/';
+
+const VIEW_IMAGE_PATH = '/storage/general/';
+const VIEW_IMAGE_PATH_USER = '/storage/user/';
+const VIEW_IMAGE_SETTING_PATH = '/storage/settings/';
+
+const CODE_TYPE_EMAIL = 1;
+const CODE_TYPE_PHONE = 2;

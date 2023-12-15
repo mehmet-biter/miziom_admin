@@ -300,3 +300,9 @@ function checkWalletAddressByCoin($coinType)
 {
     return WalletAddressHistory::where(['coin_type' => $coinType])->count();
 }
+
+function responseJsonData($status,$message='',$data=[])
+{
+    $message = !empty($message) ? $message : __('Something went wrong');
+    return response()->json(['success' => $status,'message' => $message, 'data' => $data]);
+}

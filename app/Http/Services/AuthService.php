@@ -26,6 +26,115 @@ class AuthService extends BaseService
 
     }
 
+    // register process
+    public function registerProcess($request){
+        DB::beginTransaction();
+        $response = responseData(false);
+        try {
+            
+            $inputData = $request->except(['_token','confirm_password']);
+            $inputData['password'] = Hash::make($request->password);
+            $inputData['unique_code'] = makeUniqueId();
+            $mail_key = randomNumber(6);
+            $user = User::create($inputData);
+            if($user) {
+                $userVerificationData = [
+                    'user_id' => $user->id,
+                    'code' => $mail_key,
+                    'expired_at' => date('Y-m-d', strtotime('+15 days'))
+                ];
+                UserVerificationCode::create($userVerificationData);
+                DB::commit();
+                $this->sendVerifyemail($user, $mail_key);
+                $response = responseData(true, __('Registration successful'), $user);
+            } else {
+                $response = responseData(false, __('Registration failed'));
+            }
+            
+        } catch(\Exception $e) {
+            DB::rollBack();
+            storeException('registerProcess', $e->getMessage());
+        }
+        
+        return $response;
+    }
+
+    // login process
+    public function loginProcess($request){
+        try {
+            $response = responseData(false);
+            $message = '';
+            $data = [];
+            $data['email_verified'] = 1;
+            $user = User::where('email', $request->email)->first();
+            if (!empty($user)) {
+                $data['email_verified'] = 1;
+                if($user->role_module == MODULE_USER) {
+                    if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+                        $data['token'] = $user->createToken($request->email)->accessToken;
+                        //Check email verification
+                        if ($user->status == STATUS_SUCCESS) {
+                            if (!empty($user->email_verified)) {
+                                $message = __('Login successful');
+                                $data['email_verified'] = $user->email_verified;
+                                
+                                $data['user'] = $user;
+                                $data['user']->photo = showUserImage(VIEW_IMAGE_PATH_USER,$user->photo);
+                                $response = responseData(true,$message,$data);
+                                return $response;
+                            } else {
+                                $existsToken = User::join('user_verification_codes','user_verification_codes.user_id','users.id')
+                                    ->where('user_verification_codes.user_id',$user->id)
+                                    ->whereDate('user_verification_codes.expired_at' ,'>=', Carbon::now()->format('Y-m-d'))
+                                    ->first();
+                                if(!empty($existsToken)) {
+                                    $mail_key = $existsToken->code;
+                                } else {
+                                    $mail_key = randomNumber(6);
+                                    UserVerificationCode::create(['user_id' => $user->id, 'code' => $mail_key, 'status' => STATUS_PENDING, 'expired_at' => date('Y-m-d', strtotime('+15 days'))]);
+                                }
+                                $data['email_verified'] = $user->email_verified;
+                                $this->sendVerifyemail($user, $mail_key);
+
+                                $response['success'] = false;
+                                $response['message'] = __('Your email is not verified yet. Please verify your mail.');
+                                Auth::logout();
+
+                                $response['data'] = $data;
+                                return $response;
+                                
+                            }
+                        } else {
+                            $response['success'] = false;
+                            $response['message'] = __("Your account has been deactivated. please contact support team to active again");
+                            $response['data'] = $data;
+                            return $response;
+                        }
+                    } else {
+                        $response['success'] = false;
+                        $response['message'] = __("Email or Password doesn't match");
+                        $response['data'] = $data;
+                        return $response;
+                    }
+                } else {
+                    $response['success'] = false;
+                    $response['message'] = __("You have no login access");
+                    Auth::logout();
+                    $response['data'] = $data;
+                    return $response;
+                }
+            } else {
+                $response['success'] = false;
+                $response['message'] =  __("Email or Password doesn't match");
+                $response['data'] = $data;
+                return $response;
+            }
+        } catch(\Exception $e) {
+            storeException('loginProcess', $e->getMessage());
+            return responseData(false);
+        }
+        return $response;
+    }
 
     // send verify email
     public function sendVerifyemail($user, $mail_key)
@@ -34,16 +143,11 @@ class AuthService extends BaseService
             $userName = $user->first_name.' '.$user->last_name;
             $userEmail = $user->email;
             $companyName = isset(allsetting()['app_title']) && !empty(allsetting()['app_title']) ? allsetting()['app_title'] : __('Company Name');
-            $subject = __('Email Verification 5 | :companyName', ['companyName' => $companyName]);
-            $data['data'] = $user;
-            $data['key'] = $mail_key;
-            if($user->role == USER_ROLE_ADMIN) {
-                $template = emailTemplateName('verifyWeb');
-                // $template = 'email.verifyWeb';
-            } else {
-                $template = emailTemplateName('verifyapp');
-                // $template = 'email.verifyapp';
-            }
+            $subject = __('Email Verification | :companyName', ['companyName' => $companyName]);
+            $data['user'] = $user;
+            $data['token'] = $mail_key;
+            $template = 'email.verifyapp';
+            
             $this->emailService->send($template, $data, $userEmail, $userName, $subject);
         } catch (\Exception $e) {
             storeException('sendVerifyemail', $e->getMessage());
@@ -53,10 +157,7 @@ class AuthService extends BaseService
     // send forgot mail process
     public function sendForgotMailProcess($request)
     {
-        if (env('APP_MODE') == 'demo') {
-            return ['success' => false, 'message' => __('Currently disable only for demo')];
-        }
-        $response = ['success' => false, 'message' => __('Something went wrong')];
+        $response = responseData(false);
         $user = User::where(['email' => $request->email])->first();
 
         if ($user) {
@@ -80,14 +181,14 @@ class AuthService extends BaseService
                 Session::put(['resend_email'=>$user->email]);
                 DB::commit();
 
-                $response = ['success' => true, 'message' => $data['message']];
+                $response = responseData(true,$data['message']);
             } catch (\Exception $e) {
                 DB::rollBack();
                 storeException('sendForgotMailProcess', $e->getMessage());
-                $response = ['success' => false, 'message' => __('Something went wrong')];
+                $response = responseData(false);
             }
         } else {
-            $response = ['success' => false, 'message' => __('Invalid email address')];
+            $response = responseData(false,__('Invalid email address'));
         }
 
         return $response;
@@ -123,10 +224,7 @@ class AuthService extends BaseService
     // reset password process
     public function passwordResetProcess($request)
     {
-        if (env('APP_MODE') == 'demo') {
-            return ['success' => false, 'message' => __('Currently disable only for demo')];
-        }
-        $response = ['success' => false, 'message' => __('Something went wrong')];
+        $response = responseData(false);
         try {
             $vf_code = UserVerificationCode::where(['code' => $request->token, 'status' => STATUS_PENDING, 'type' => CODE_TYPE_EMAIL])
                 ->whereDate('expired_at', '>', Carbon::now()->format('Y-m-d'))
@@ -135,7 +233,7 @@ class AuthService extends BaseService
             if (!empty($vf_code)) {
                 $user = User::where(['id'=> $vf_code->user_id, 'email'=>$request->email])->first();
                 if (empty($user)) {
-                    $response = ['success' => false, 'message' => __('User not found')];
+                    $response = responseData(false,__('User not found'));
                 }
                 $data_ins['password'] = hash::make($request->password);
                 $data_ins['email_verified'] = STATUS_SUCCESS;
@@ -147,21 +245,20 @@ class AuthService extends BaseService
                     $data['success'] = 'success';
                     $data['message'] = __('Password Reset Successfully');
 
-                    $response = ['success' => true, 'message' => $data['message']];
+                    $response = responseData(true,$data['message']);
                 } else {
                     $data['success'] = 'dismiss';
                     $data['message'] = __('You already used this password');
-                    $response = ['success' => false, 'message' => $data['message']];
+                    $response = responseData(false,$data['message']);
                 }
             } else {
                 $data['success'] = 'dismiss';
                 $data['message'] = __('Invalid code');
 
-                $response = ['success' => false, 'message' => $data['message']];
+                $response = responseData(false,$data['message']);
             }
         } catch (\Exception $e) {
             storeException('passwordResetProcess', $e->getMessage());
-            $response = ['success' => false, 'message' => __('Something went wrong')];
         }
 
         return $response;
@@ -197,7 +294,7 @@ class AuthService extends BaseService
     // verify email
     public function verifyEmailProcess($request)
     {
-        $data = ['success' => false, 'message' => __('Something went wrong')];
+        $response = responseData(false);
         try {
             if($request->token) {
                 $token = explode('email', $request->token);
@@ -221,23 +318,22 @@ class AuthService extends BaseService
                 }
 
                 if ($verify) {
-                    $check = $user->update(['is_verified' => STATUS_SUCCESS]);
+                    $check = $user->update(['email_verified' => STATUS_SUCCESS]);
                     if ($check) {
                         UserVerificationCode::where(['user_id' => $user->id, 'id' => $verify->id])->delete();
-                        $data = ['success' => true, 'message' => __('Verify successful,you can login now')];
+                        $response = responseData(true,__('Verify successful,you can login now'));
                     }
                 } else {
                     Auth::logout();
-                    $data = ['success' => false, 'message' => __('Your verify code was expired,you can generate new one')];
+                    $response = responseData(false,__('Your verify code was expired,you can generate new one'));
                 }
             } else {
-                $data = ['success' => false, 'message' => __('Your email not found or token expired')];
+                $response = responseData(false,__('Your email not found or token expired'));
             }
         } catch (\Exception $e) {
-            storeException('signUpProcess', $e->getMessage());
-            $data = ['success' => false, 'message' => __('Something went wrong')];
+            storeException('verifyEmailProcess', $e->getMessage());
         }
-        return $data;
+        return $response;
     }
 
     // g2fa verify process

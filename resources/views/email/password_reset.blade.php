@@ -7,9 +7,7 @@
 <p style="text-align:center;font-size:30px;font-weight:bold">
     {{$token}}
 </p>
-@if(isset($user))
-    
-        <p>{{__('You can reset your password with this link')}} : <a href="{{route('resetPasswordPage')}}">{{__('Click Here')}}</a></p>
-   
+@if(isset($user) && ($user->role_module != MODULE_USER))
+    <p>{{__('You can reset your password with this link')}} : <a href="{{route('resetPasswordPage')}}">{{__('Click Here')}}</a></p>
 @endif
 
