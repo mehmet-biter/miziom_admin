@@ -28,11 +28,8 @@ class UserRepository
     // update user profile
     public function profileUpdate($request, $user_id)
     {
-        if (env('APP_MODE') == 'demo') {
-            return ['success' => false, 'message' => __('Currently disable only for demo')];
-        }
         $response['success'] = false;
-        $response['user'] = (object)[];
+        $response['data'] = (object)[];
         $response['message'] = __('Invalid Request');
         try {
             $user = User::find($user_id);
@@ -70,19 +67,19 @@ class UserRepository
                 $affected_row = User::where('id', $user_id)->update($userData);
                 if ($affected_row) {
                     $response['success'] = true;
-                    
+                    $response['data'] = User::find($user_id);
                     $response['message'] = __('Profile updated successfully');
                 }
             } else {
                 $response['success'] = false;
-                $response['user'] = (object)[];
+                $response['data'] = (object)[];
                 $response['message'] = __('Invalid User');
             }
         } catch (\Exception $e) {
             storeException('profileUpdate', $e->getMessage());
             $response = [
                 'success' => false,
-                'user' => (object)[],
+                'data' => (object)[],
                 'message' => $e->getMessage()
             ];
             return $response;
@@ -93,9 +90,7 @@ class UserRepository
 
     public function passwordChange($request, $user_id)
     {
-        if (env('APP_MODE') == 'demo') {
-            return ['success' => false, 'message' => __('Currently disable only for demo')];
-        }
+        $response['data'] = [];
         $response['success'] = false;
         $response['message'] = __('Invalid Request');
         try {
@@ -137,51 +132,44 @@ class UserRepository
     // user profile
     public function userProfile($user_id)
     {
+        $response = responseData(false);
         try {
             if (isset($user_id)) {
-                $user = User::select(
+                $user = User::with('roles')->select(
                     'id',
-                    'nickname',
                     'first_name',
                     'last_name',
                     'email',
-                    'country',
-                    'google2fa_secret',
-                    'phone_verified',
-                    'phone',
-                    'gender',
-                    'birth_date',
-                    'photo',
+                    'unique_code',
+                    'role',
+                    'role_module',
                     'status',
-                    'is_verified',
-                    'phone_verified',
+                    'phone',
+                    'photo',
+                    'g2f_enabled',
+                    'google2fa_secret',
+                    'email_verified',
+                    'language',
                     'created_at',
                     'updated_at',
-                    'currency'
-                )->findOrFail($user_id);
+                    'email_enabled',
+                    'phone_enabled',
+                    'push_notification_status',
+                    'email_notification_status',
+                    
+                )->where('id',$user_id)->first();
 
                 $data['user'] = $user;
-                $data['user']->photo = imageSrcUser($user->photo,IMG_USER_VIEW_PATH);
-                $data['user']->online_status = lastSeenStatus($user->id)['data'];
-                $data['user']->country_name = !empty($user->country) ? country(strtoupper($user->country)) : '';
-                $data['activityLog'] = ActivityLog::where('user_id', $user_id)->where('action',USER_ACTIVITY_LOGIN)->latest()->take(5)->get();
-                $data['success'] = true;
-                $data['message'] = __('Successful');
+                $data['user']->photo = showUserImage(VIEW_IMAGE_PATH_USER,$user->photo);
+                $response = responseData(true,__('User get successfully'),$data['user']);
+                
             } else {
-                $data= [
-                    'success' => false,
-                    'user' => (object)[],
-                    'message' => __('User not found'),
-                ];
+                $response = responseData(false,__('User not found'));
             }
         } catch (\Exception $e) {
             storeException('userProfile', $e->getMessage());
-            $data = [
-                'success' => false,
-                'message' => __('Something went wrong')
-            ];
         }
-        return $data;
+        return $response;
     }
 
    
