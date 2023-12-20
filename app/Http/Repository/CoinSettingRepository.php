@@ -4,12 +4,13 @@ namespace App\Http\Repository;
 
 use App\Models\CoinSetting;
 
-class CoinSettingRepository extends CommonRepository
+class CoinSettingRepository extends BaseRepository
 {
-
-    function __construct($model)
+    public $model;
+    function __construct()
     {
-        parent::__construct($model);
+        $this->model = new CoinSetting();
+        parent::__construct($this->model);
     }
 
     public function getCoinSettingData($coinId)

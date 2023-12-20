@@ -7,13 +7,23 @@ use App\Http\Repository\CoinSettingRepository;
 
 class CoinSettingService extends BaseService {
 
-    public $model = CoinSetting::class;
-    public $repository = CoinSettingRepository::class;
-    public $coinService;
+    // public $model = CoinSetting::class;
+    // public $repository = CoinSettingRepository::class;
+    // public $coinService;
 
-    public function __construct(){
-        parent::__construct($this->model,$this->repository);
+    // public function __construct(){
+    //     parent::__construct($this->model,$this->repository);
+    //     $this->coinService = new CoinService();
+    // }
+
+    public $coinService;
+    public $repository;
+    public function __construct()
+    {
         $this->coinService = new CoinService();
+        $this->repository =  new CoinSettingRepository();
+        parent::__construct($this->repository);
+
     }
 
     // get coin setting

@@ -5,12 +5,14 @@ namespace App\Http\Repository;
 
 use App\Models\Coin;
 
-class AdminCoinRepository extends CommonRepository
+class AdminCoinRepository extends BaseRepository
 {
 
-    function __construct($model)
+    public $model;
+    function __construct()
     {
-        parent::__construct($model);
+        $this->model = new Coin();
+        parent::__construct($this->model);
     }
 
     public function update($where, $update){

@@ -5,83 +5,60 @@ namespace App\Http\Services;
 
 class BaseService
 {
+    public $repository;
 
-//    public $model = null;
-//    public $repository = null;
-//    public $object = null;
-
-    public function __construct($model, $repo)
+    function __construct($repository)
     {
-
-        $this->model = $model;
-        $this->repository = $repo;
-        $this->object = new $this->repository($this->model);
+        $this->repository = $repository;
     }
 
-    public function insert($entity)
+    public function create($data)
     {
-        return $this->object->insert($entity);
-    }
-    public function createData($entity)
-    {
-        return $this->object->create($entity);
+        return $this->repository->create($data);
     }
 
-    public function getAll()
+    public function update($where, $data)
     {
-        return $this->object->getAll();
-    }
-
-    public function getById($id)
-    {
-        return $this->object->getById($id);
-    }
-
-    public function getDocs($params)
-    {
-        return $this->object->getDocs($params);
+        return $this->repository->update($where, $data);
     }
 
     public function delete($id)
     {
-        return $this->object->deleteById($id);
+        return $this->repository->delete($id);
     }
 
-    public function update($where, $update){
-        return $this->object->update($where, $update);
-    }
-
-    public function deleteWhere($where, $isForce = false){
-        return $this->object->deleteWhere($where, $isForce);
-    }
-
-    public function exists($where = [], $relation = [])
+    public function fullDelete($id)
     {
-        return $this->object->exists($where,$relation);
-    }
-    public function countWhere($where = [], $relation = [])
-    {
-        return $this->object->countWhere($where,$relation);
+        return $this->repository->fullDelete($id);
     }
 
-    public function randomWhere($quantity, $where = [], $relation = [])
+    public function getById($id)
     {
-        return $this->object->randomWhere($quantity,$where,$relation);
+        return $this->repository->getById($id);
     }
 
-    public function whereFirst($where = [], $relation = [])
+    public function getAll($relation = [])
     {
-        return $this->object->whereFirst($where,$relation);
+        return $this->repository->getAll($relation);
+    }
+
+    public function getWhere($where, $relation = [])
+    {
+        return $this->repository->getWhere($where, $relation);
+    }
+
+    public function whereFirst($where, $relation = [])
+    {
+        return $this->repository->whereFirst($where, $relation);
     }
 
     public function selectWhere($select, $where, $relation = [], $paginate = 0)
     {
-        return $this->object->selectWhere($select, $where, $relation, $paginate);
+        return $this->repository->selectWhere($select, $where, $relation, $paginate);
     }
 
-    public function limitWhere($quantity, $where = [], $relation = [])
+    public function getDocs($params)
     {
-        return $this->object->limitWhere($quantity, $where, $relation);
+        return $this->repository->getDocs($params);
     }
-
 }

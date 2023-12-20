@@ -8,15 +8,16 @@ use App\Http\Repository\AdminCoinRepository;
 
 class CoinService extends BaseService {
 
-    public $model = Coin::class;
-    public $repository = AdminCoinRepository::class;
+    public $repository;
+    public function __construct()
+    {
+        $this->repository =  new AdminCoinRepository();
+        parent::__construct($this->repository);
 
-    public function __construct(){
-        parent::__construct($this->model, $this->repository);
     }
 
     public function getCoin($data){
-        $object = $this->object->getDocs($data);
+        $object = $this->repository->getDocs($data);
 
         if (empty($object)) {
             return null;
@@ -28,7 +29,7 @@ class CoinService extends BaseService {
     public function getCoinListActive()
     {
         try{
-            $data = $this->object->getCoinListActive();
+            $data = $this->repository->getWhere(['status' => STATUS_ACTIVE]);
             $response = ['success' => true, 'message' => __('Active Coin list!'), 'data'=>$data];
         }catch (\Exception $e) {
             storeException("getCoinListActive",$e->getMessage());
@@ -37,53 +38,6 @@ class CoinService extends BaseService {
         return $response;
     }
 
-    public function getPrimaryCoin()
-    {
-        $coinRepo = new AdminCoinRepository($this->model);
-        $object = $this->object->getPrimaryCoin();
-
-        return $object;
-    }
-
-    public function getBuyableCoin()
-    {
-        $object = $this->object->getBuyableCoin();
-        if (empty($object)) {
-            return null;
-        }
-
-        return json_encode($object);
-    }
-
-    public function getBuyableCoinDetails($coinId){
-        $object = $this->object->getBuyableCoinDetails($coinId);
-        if (empty($object)) {
-            return null;
-        }
-        return json_encode($object);
-    }
-
-    public function generate_address($coinId)
-    {
-        $address='';
-
-        $coinApiCredential = $this->object->getCoinApiCredential($coinId);
-        if(isset($coinApiCredential)){
-            $api = new BitCoinApiService($coinApiCredential->user, decryptId($coinApiCredential->password), $coinApiCredential->host, $coinApiCredential->port);
-            $address = $api->getNewAddress();
-        }
-
-        return json_encode($address);
-    }
-
-    public function getCoinApiCredential($coinId){
-        $coinRepo = new AdminCoinRepository($this->model);
-        $object = $coinRepo->getCoinApiCredential($coinId);
-        if (empty($object)) {
-            return null;
-        }
-        return $object;
-    }
 
     public function addCoin($data,$coin_id=null){
         try{
@@ -125,7 +79,7 @@ class CoinService extends BaseService {
 
     public function getCoinDetailsById($coinId){
         try{
-            $coin = $this->object->getCoinDetailsById($coinId);
+            $coin = $this->repository->whereFirst(['id' => $coinId]);
             if($coin) {
                 return ['success'=>true,'data'=>$coin,'message'=>'successfull.'];
             } else {

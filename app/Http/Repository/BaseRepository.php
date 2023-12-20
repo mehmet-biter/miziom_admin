@@ -85,4 +85,26 @@ class BaseRepository
     {
         return $this->model->where($where)->with($relation)->limit($quantity)->get();
     }
+
+    public function getDocs($params=[],$select=null,$orderBy=[],$with=[]){
+        if($select == null){
+            $select = ['*'];
+        }
+        $query = $this->model::select($select);
+        foreach($with as $wt) {
+            $query = $query->with($wt);
+        }
+        foreach($params as $key => $value) {
+            if(is_array($value)){
+                $query->where($key,$value[0],$value[1]);
+            }else{
+                $query->where($key,'=',$value);
+            }
+        }
+        foreach($orderBy as $key => $value) {
+            $query->orderBy($key,$value);
+        }
+
+        return $query->get();
+    }
 }
