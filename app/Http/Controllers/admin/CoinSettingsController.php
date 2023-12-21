@@ -22,6 +22,10 @@ class CoinSettingsController extends Controller
         if(isset($_GET['tab'])){
             $data['tab']=$_GET['tab'];
         }
+
+        if($data['tab'] == 'payment') 
+            return redirect()->route('coinPaymentSetting');
+
         $data['title'] = __('Coin Api Settings');
         $data['settings'] = allsetting();
 
