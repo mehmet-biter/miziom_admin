@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\admin;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class CoinSettingsController extends Controller
 {
@@ -24,6 +25,6 @@ class CoinSettingsController extends Controller
         $data['title'] = __('Coin Api Settings');
         $data['settings'] = allsetting();
 
-        return view('admin.settings.api.general', $data);
+        return view('settings.api.general', $data);
     }
 }
