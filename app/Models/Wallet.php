@@ -20,5 +20,6 @@ class Wallet extends Model
         "status",
         "is_primary",
         "balance",
+        "referral_balance",
     ];
 }

@@ -23,6 +23,7 @@ return new class extends Migration
             $table->tinyInteger('status')->default(1);
             $table->tinyInteger('is_primary')->default(0);
             $table->decimal('balance',29,18)->default(0);
+            $table->decimal('referral_balance',29,18)->default(0);
             $table->unique(['user_id', 'coin_id']);
             $table->timestamps();
         });
