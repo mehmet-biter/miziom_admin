@@ -38,8 +38,7 @@ class UserRepository
                 
                 $userData = [
                     'email' => $request['email'],
-                    'first_name' => $request['first_name'],
-                    'last_name' => $request['last_name'],
+                    'name' => $request['name'],
                     'phone' => $request['phone'],
                 ];
                 if (!empty($request['country'])) {
@@ -137,8 +136,7 @@ class UserRepository
             if (isset($user_id)) {
                 $user = User::with('roles')->select(
                     'id',
-                    'first_name',
-                    'last_name',
+                    'name',
                     'email',
                     'unique_code',
                     'role',

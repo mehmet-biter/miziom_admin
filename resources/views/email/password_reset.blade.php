@@ -1,5 +1,5 @@
 
-<h3>{{__('Hello')}}, {{isset($user) ? $user->first_name.' '.$user->last_name : ''}}</h3>
+<h3>{{__('Hello')}}, {{isset($user) ? $user->name : ''}}</h3>
 <p>
     {{ __('You are receiving this email because we received a password reset request for your account.') }}
     {{__('Please use the code below to reset your password.')}}

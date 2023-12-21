@@ -26,13 +26,8 @@
                             </div>
                             <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-5">
                                 <div>
-                                    <label for="name">First Name</label>
-                                    <input id="name" type="text" name="first_name" value="{{ $user->first_name }}"
-                                        class="form-input" />
-                                </div>
-                                <div>
-                                    <label for="profession">Last Name</label>
-                                    <input id="profession" type="text" name="last_name" value="{{ $user->last_name }}"
+                                    <label for="name">User Name</label>
+                                    <input id="name" type="text" name="name" value="{{ $user->name }}"
                                         class="form-input" />
                                 </div>
                                 

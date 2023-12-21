@@ -3,9 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\ProfileUpdateRequest;
-use App\Http\Requests\Admin\UpdatePasswordRequest;
-use App\Http\Services\UserService;
 use App\Http\Services\WalletService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,6 +22,18 @@ class WalletController extends Controller
             return responseJsonData($response['success'],$response['message'],$response['data']);
         } catch(\Exception $e) {
             storeException('coinList',$e->getMessage());
+            return responseJsonData(false);
+        }
+    }
+
+    //coin list
+    public function walletList(Request $request,$type){
+        try {
+            $currency = $request->header('currency') ?? 'NGN';
+            $response = $this->service->userWalletList(Auth::id(),$type,$currency);
+            return responseJsonData($response['success'],$response['message'],$response['data']);
+        } catch(\Exception $e) {
+            storeException('walletList',$e->getMessage());
             return responseJsonData(false);
         }
     }

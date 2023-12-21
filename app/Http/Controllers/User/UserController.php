@@ -30,8 +30,8 @@ class UserController extends Controller
              if($request->ajax()) {
                  $list = User::where('role_module','<>',ROLE_SUPER_ADMIN)->where('id','<>',Auth::id());
                  return datatables($list)
-                 ->addColumn('first_name', function ($item) use($request) {
-                    return $item->first_name.' '.$item->last_name;
+                 ->addColumn('name', function ($item) use($request) {
+                    return $item->name;
                 })
                      ->addColumn('created_at', function ($item) use($request) {
                          return $item->created_at;

@@ -53,7 +53,7 @@
             responsive: true,
             autoWidth: false,
             columns: [
-                    {"data": "first_name", "orderable": true},
+                    {"data": "name", "orderable": true},
                     {"data": "email", "orderable": true},
                     {"data": "phone", "orderable": true},
                     {"data": "role", "orderable": true},

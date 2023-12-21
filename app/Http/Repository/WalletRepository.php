@@ -13,4 +13,13 @@ class WalletRepository extends BaseRepository
         $this->model = new Wallet();
         parent::__construct($this->model);
     }
+
+    public function getUserWalletList($userId,$type,$currency){
+        try {
+            $query = Wallet::query()->where(['user_id' => $userId,'status' => STATUS_ACTIVE]);
+
+        } catch(\Exception $e) {
+            storeException('getUserWalletList',$e->getMessage());
+        }
+    }
 }

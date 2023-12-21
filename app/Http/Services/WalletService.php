@@ -15,7 +15,7 @@ class WalletService extends BaseService
 
     }
 
-    // delete data
+    // coin data
    public function coinList($type) {
         try {
             if($type == CURRENCY_TYPE_BOTH) {
@@ -30,6 +30,25 @@ class WalletService extends BaseService
             }
         } catch(\Exception $e) {
             storeException('coin list ex', $e->getMessage());
+            return responseData(false, __('Something went wrong'));
+        }
+    }
+
+     // user wallet list
+   public function userWalletList($userId,$type) {
+     try {
+            if($type == CURRENCY_TYPE_BOTH) {
+                $items = $this->repository->whereFirst(['status' => STATUS_ACTIVE, 'user_id' => $userId])->get();
+            } else {
+                $items = Coin::where(['status' => STATUS_ACTIVE, 'currency_type' => $type])->get();
+            }
+            if (isset($items[0])) {
+                return responseData(true, __('Data get successfully'),$items);
+            } else {
+                return responseData(false, __('Data not found'));
+            }
+        } catch(\Exception $e) {
+            storeException('userWalletList ex', $e->getMessage());
             return responseData(false, __('Something went wrong'));
         }
     }

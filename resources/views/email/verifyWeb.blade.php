@@ -1,5 +1,5 @@
 @include('email.header_new')
-<h3>{{__('Hello')}}, {{ $user->first_name.' '.$user->last_name  }}</h3>
+<h3>{{__('Hello')}}, {{ $user->name }}</h3>
 <p>
     {{__('We need to verify your email address. In order to verify your account please click on the following link or paste the link on address bar of your browser and hit -')}}
 </p>

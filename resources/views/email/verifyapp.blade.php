@@ -1,5 +1,5 @@
 
-<h3>{{__('Hello')}}, {{ $user->first_name.' '.$user->last_name  }}</h3>
+<h3>{{__('Hello')}}, {{ $user->name  }}</h3>
 <p>
     {{__('We need to verify your email address. ')}}
 </p>

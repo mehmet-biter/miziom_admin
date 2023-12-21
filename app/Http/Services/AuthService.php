@@ -141,7 +141,7 @@ class AuthService extends BaseService
     public function sendVerifyemail($user, $mail_key)
     {
         try {
-            $userName = $user->first_name.' '.$user->last_name;
+            $userName = $user->name;
             $userEmail = $user->email;
             $companyName = isset(allsetting()['app_title']) && !empty(allsetting()['app_title']) ? allsetting()['app_title'] : __('Company Name');
             $subject = __('Email Verification | :companyName', ['companyName' => $companyName]);
@@ -204,7 +204,7 @@ class AuthService extends BaseService
                 'user' => $user,
                 'token' => $mail_key,
             ];
-            $userName = $user->first_name.' '.$user->last_name;
+            $userName = $user->name;
             $userEmail = $user->email;
             if (!empty($type) && $type == 'verify') {
                 $subject = __('Email Verify | :companyName', ['companyName' => $companyName]);

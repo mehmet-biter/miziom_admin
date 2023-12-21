@@ -25,15 +25,11 @@
                             </div>
                             <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-5">
                                 <div>
-                                    <label for="name">First Name</label>
-                                    <input id="name" type="text" name="first_name" value="{{ isset($user) ? $user->first_name : old('first_name') }}"
+                                    <label for="name">User Name</label>
+                                    <input id="name" type="text" name="name" value="{{ isset($user) ? $user->name : old('name') }}"
                                         class="form-input" />
                                 </div>
-                                <div>
-                                    <label for="profession">Last Name</label>
-                                    <input id="profession" type="text" name="last_name" value="{{ isset($user) ? $user->last_name : old('last_name') }}"
-                                        class="form-input" />
-                                </div>
+                                
                                 
                                 <div>
                                     <label for="address">Email</label>

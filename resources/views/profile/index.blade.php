@@ -34,7 +34,7 @@
                         <div class="flex flex-col justify-center items-center">
                             <img @if(!empty($user->photo)) src="{{ asset($user->photo) }}" @else src="{{ asset('assets/images/avatar.jpg') }}" @endif alt="image"
                                 class="w-24 h-24 rounded-full object-cover  mb-5" />
-                            <p class="font-semibold text-primary text-xl">{{ $user->first_name.' '.$user->last_name }}</p>
+                            <p class="font-semibold text-primary text-xl">{{ $user->name }}</p>
                         </div>
                         <ul class="mt-5 flex flex-col max-w-[160px] m-auto space-y-4 font-semibold text-white-dark">
                             <li class="flex items-center gap-2">
@@ -165,17 +165,12 @@
                                 
                                 <tbody class="dark:text-white-dark">
                                     <tr>
-                                        <td>{{ __('First Name') }}</td>
+                                        <td>{{ __('User Name') }}</td>
                                         
                                         <td class="text-danger">:</td>
-                                        <td class="text-center">{{ $user->first_name }}</td>
+                                        <td class="text-center">{{ $user->name }}</td>
                                     </tr>
-                                    <tr>
-                                        <td>{{ __('Last Name') }}</td>
-                                        
-                                        <td class="text-danger">:</td>
-                                        <td class="text-center">{{ $user->last_name }}</td>
-                                    </tr>
+                                    
                                     <tr>
                                         <td>{{ __('Email') }}</td>
                                         
