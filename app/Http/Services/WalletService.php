@@ -35,13 +35,10 @@ class WalletService extends BaseService
     }
 
      // user wallet list
-   public function userWalletList($userId,$type) {
+   public function userWalletList($userId,$type,$currency) {
      try {
-            if($type == CURRENCY_TYPE_BOTH) {
-                $items = $this->repository->whereFirst(['status' => STATUS_ACTIVE, 'user_id' => $userId])->get();
-            } else {
-                $items = Coin::where(['status' => STATUS_ACTIVE, 'currency_type' => $type])->get();
-            }
+            createUserWallet($userId);
+            $items = $this->repository->getUserWalletList($userId,$type,$currency);
             if (isset($items[0])) {
                 return responseData(true, __('Data get successfully'),$items);
             } else {
