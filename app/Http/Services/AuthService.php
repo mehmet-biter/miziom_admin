@@ -71,10 +71,11 @@ class AuthService extends BaseService
                 $data['email_verified'] = 1;
                 if($user->role_module == MODULE_USER) {
                     if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-                        $data['token'] = $user->createToken($request->email)->accessToken;
+                        
                         //Check email verification
                         if ($user->status == STATUS_SUCCESS) {
                             if (!empty($user->email_verified)) {
+                                $data['token'] = $user->createToken($request->email)->accessToken;
                                 $message = __('Login successful');
                                 $data['email_verified'] = $user->email_verified;
                                 

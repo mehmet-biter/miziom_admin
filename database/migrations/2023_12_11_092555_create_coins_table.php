@@ -28,7 +28,7 @@ return new class extends Migration
             $table->tinyInteger('withdrawal_fees_type')->default(2);
             
             $table->tinyInteger('is_deposit')->default(1);
-            $table->string('coin_icon', 50)->nullable();
+            $table->string('coin_icon')->nullable();
             
             $table->tinyInteger('is_convert')->default(1);
             $table->decimal('minimum_convert', 19, 8)->default(0.0000001);

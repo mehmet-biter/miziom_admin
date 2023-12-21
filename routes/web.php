@@ -13,7 +13,8 @@ use App\Http\Controllers\Contact\ContactController;
 use App\Http\Controllers\Profile\ProfileController;
 use App\Http\Controllers\Setting\AdminSettingController;
 
-Route::get('/', [HomeController::class,'index'])->name('home');
+// Route::get('/', [HomeController::class,'index'])->name('home');
+Route::get('/', [AuthController::class,'login'])->name('login');
 Route::get('login', [AuthController::class,'login'])->name('login');
 Route::post('login-process', [AuthController::class,'loginProcess'])->name('loginProcess');
 Route::get('forgot-password', [AuthController::class,'forgotPassword'])->name('forgotPassword');
