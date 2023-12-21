@@ -6,6 +6,15 @@ use Illuminate\Http\Request;
 
 class CoinSettingsController extends Controller
 {
+    private $coinService;
+    private $coinSettingService;
+    private $logger;
+    public function __construct()
+    {
+        // $this->coinService = new CoinService();
+        // $this->logger = new Logger();
+        // $this->coinSettingService = new CoinSettingService();
+    }
     public function adminCoinApiSettings(Request $request)
     {
         $data['tab']='payment';
