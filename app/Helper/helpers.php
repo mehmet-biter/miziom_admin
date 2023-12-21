@@ -4,6 +4,7 @@ use App\Models\Role;
 use App\Models\AdminSetting;
 use App\Http\Services\Logger;
 use App\Models\Coin;
+use App\Models\CurrencyList;
 use App\Models\WithdrawHistory;
 use App\Models\DepositeTransaction;
 use App\Models\Wallet;
@@ -321,4 +322,32 @@ function createUserWallet($userId) {
             ]);
         }
     }
+}
+
+// convert currency
+function convert_currency($from, $to, $amount){
+    $returnAmount = 0;
+    try {
+        $fromCoin = Coin::where(['coin_type' => $from])->first();
+        if(empty($fromCoin)) {
+            $fromCoin = CurrencyList::where(['code' => $from])->first();
+        }
+
+        $toCoin = Coin::where(['coin_type' => $to])->first();
+        if(empty($toCoin)) {
+            $toCoin = CurrencyList::where(['code' => $to])->first();
+        }
+        if (isset($fromCoin) && ($to == 'USD' || $to == 'USDT' || $to == 'USDC')) {
+            $returnAmount = bcmul($fromCoin->usd_rate,$amount,8);
+            return $returnAmount;
+        } 
+        if (isset($toCoin) && ($from == 'USD' || $from == 'USDT' || $from == 'USDC')) {
+            $returnAmount = bcmul(bcdiv(1,$toCoin->usd_rate,8),$amount,8);
+            return $returnAmount;
+        } 
+        $returnAmount = bcmul(bcdiv($fromCoin->usd_rate,$toCoin->usd_rate,8),$amount,8);
+    } catch(\Exception $e) {
+        storeException('convert_currency', $e->getMessage());
+    }
+    return $returnAmount;
 }

@@ -33,7 +33,7 @@ Route::group(['namespace'=>'Api','middleware' => ['apiCheck']], function (){
 
     Route::group(['middleware' => ['auth:api']], function () {
         //logout
-        Route::post('logout',[AuthController::class, 'logout']);
+        Route::get('logout',[AuthController::class, 'logout']);
         Route::group(['prefix' => 'user'], function () {
             Route::get('profile',[UserController::class, 'profile']);
             Route::post('update-profile',[UserController::class, 'updateProfile']);

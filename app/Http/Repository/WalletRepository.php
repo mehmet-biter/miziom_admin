@@ -25,6 +25,13 @@ class WalletRepository extends BaseRepository
                 $query->where(['coins.currency_type' => (int)$type]);
             }
             $list = $query->get();
+            if(isset($list[0])) {
+                foreach($list as $item) {
+                    $rate = convert_currency($item->coin_type,$currency,1);
+                    $item->usd_value_rate = $rate;
+                    $item->usd_value = bcmul($rate,$item->balance,8);
+                }
+            }
 
         } catch(\Exception $e) {
             storeException('getUserWalletList',$e->getMessage());
