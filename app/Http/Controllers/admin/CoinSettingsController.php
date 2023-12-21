@@ -25,6 +25,6 @@ class CoinSettingsController extends Controller
         $data['title'] = __('Coin Api Settings');
         $data['settings'] = allsetting();
 
-        return view('settings.api.general', $data);
+        return view('setting.bitgo', $data);
     }
 }

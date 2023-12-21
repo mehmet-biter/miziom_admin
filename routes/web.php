@@ -7,6 +7,7 @@ use App\Http\Controllers\User\RoleController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\admin\CoinController;
 use App\Http\Controllers\Setting\FaqController;
+use App\Http\Controllers\admin\SettingController;
 use App\Http\Controllers\admin\CurrencyController;
 use App\Http\Controllers\Contact\ContactController;
 use App\Http\Controllers\Profile\ProfileController;
@@ -89,6 +90,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','admins']], function 
     Route::post('bitgo-webhook-save', [CoinController::class, "webhookSave"])->name('webhookSave');
 
     Route::get('adjust-bitgo-wallet/{id}', [CoinController::class, 'adminAdjustBitgoWallet'])->name('adminAdjustBitgoWallet');
+
+    Route::get('bitgo-setting', [SettingController::class, 'bitgoSetting'])->name('bitgoSetting');
+    Route::post('save-bitgo-settings', [SettingController::class, 'adminSaveBitgoSettings'])->name('adminSaveBitgoSettings');
 });
 });
 
