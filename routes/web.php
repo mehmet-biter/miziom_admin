@@ -85,6 +85,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','admins']], function 
     Route::get('coin-settings/{id}', [CoinController::class, 'adminCoinSettings'])->name('adminCoinSettings');
     Route::post('save-coin-settings', [CoinController::class, 'adminSaveCoinSetting'])->name('adminSaveCoinSetting');
     Route::get('api-settings', [CoinSettingsController::class, "adminCoinApiSettings"])->name('adminCoinApiSettings');
+    Route::post('bitgo-webhook-save', [CoinController::class, "webhookSave"])->name('webhookSave');
 
     Route::get('adjust-bitgo-wallet/{id}', [CoinController::class, 'adminAdjustBitgoWallet'])->name('adminAdjustBitgoWallet');
 });

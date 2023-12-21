@@ -568,3 +568,19 @@ function discount_type($input = null)
     if (is_null($input)) return $output;
     return isset($output[$input]) ? $output[$input] : null;
 }
+
+function webhook_type($input = null)
+{
+    $output = [
+//        WEBHOOK_TYPE_TRANSFER => __('Transfer'),
+        WEBHOOK_TYPE_TRANSACTION => __('Transaction'),
+//        WEBHOOK_TYPE_PENDING_APPROVAL => __('Pending Approval'),
+//        WEBHOOK_TYPE_ADDRESS_CONFIRM => __('Address Confirmation'),
+//        WEBHOOK_TYPE_LOW_FEE => __('Low Fee'),
+    ];
+    if (is_null($input)) {
+        return $output;
+    } else {
+        return isset($output[$input]) ? ($output[$input]) : null;
+    }
+}

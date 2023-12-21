@@ -3,6 +3,7 @@ namespace App\Http\Services;
 
 use App\Models\Coin;
 use App\Models\Wallet;
+use App\Models\CoinSetting;
 use Illuminate\Support\Facades\DB;
 use App\Http\Repository\AdminCoinRepository;
 
@@ -17,13 +18,13 @@ class CoinService extends BaseService {
     }
 
     public function getCoin($data){
-        $object = $this->repository->getDocs($data);
+        $repository = $this->repository->getDocs($data);
 
-        if (empty($object)) {
+        if (empty($repository)) {
             return null;
         }
 
-        return $object;
+        return $repository;
     }
 
     public function getCoinListActive()
@@ -187,69 +188,6 @@ class CoinService extends BaseService {
             ];
         }
         return $response;
-    }
-
-    public function saveCoinByICO($ico_id, $data)
-    {
-        try{
-            $response = $this->object->saveCoinByICO($ico_id, $data);
-        } catch (\Exception $e) {
-            $response = ['success' => false, 'message' => __('Something went wrong')];
-            storeException('saveCoinByICO', $e->getMessage());
-        }
-        return $response;
-    }
-
-    public function makeTokenListedToCoin($coin_id)
-    {
-        $check_module = Module::allEnabled();
-
-        if(!empty($check_module) && (isset($check_module['IcoLaunchpad']) && $check_module['IcoLaunchpad'] == 'IcoLaunchpad'))
-        {
-            $coin_details = Coin::find($coin_id);
-
-            if(isset($coin_details))
-            {
-                $token_details = IcoToken::find($coin_details->ico_id);
-                if(isset($token_details))
-                {
-                    $pending_token_buy_history_list = TokenBuyHistory::where('token_id', $token_details->id)
-                                                                   ->where('status',STATUS_PENDING)->get();
-                                                                   
-                    if($pending_token_buy_history_list->count() > 0 )
-                    {
-                        return responseData(false, __('Please, Accept or Reject the pending token buy history, and then try again!'));
-                        
-                    }else{ 
-                        $ico_phase_list = IcoPhaseInfo::where('ico_token_id', $token_details->id)->get();
-                        
-                        if($ico_phase_list->count() == 0 )
-                        {
-                            return responseData(false, __('You can not make this coin listed because this token has no phase!'));
-                        }
-                        IcoPhaseInfo::where('ico_token_id', $token_details->id)->where('status',STATUS_ACTIVE)->update(['status'=>STATUS_DEACTIVE]);
-                        
-                        $coin_details->is_listed = STATUS_ACTIVE;
-                        $coin_details->is_withdrawal = STATUS_ACTIVE;
-                        $coin_details->is_deposit = STATUS_ACTIVE;
-                        $coin_details->is_buy = STATUS_ACTIVE;
-                        $coin_details->is_sell = STATUS_ACTIVE;
-                        $coin_details->is_listed = STATUS_ACTIVE;
-                        $coin_details->trade_status = STATUS_ACTIVE;
-                        $coin_details->save();
-                        return responseData(true, __('Your ICO Token is listed Successfully!'));
-                        
-                    }
-                }
-                return responseData(false, __('ICO Token not found!'));
-            }else{
-                return responseData(false, __('Invalid Request!'));
-            }
-            
-        } else {
-            
-            return responseData(false, __('Your ICO module is not enabled!'));
-        }
     }
 
     public function getAllActiveCoinList()

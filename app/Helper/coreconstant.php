@@ -57,3 +57,10 @@ const VIEW_IMAGE_SETTING_PATH = '/storage/settings/';
 
 const CODE_TYPE_EMAIL = 1;
 const CODE_TYPE_PHONE = 2;
+
+//webhook type
+const WEBHOOK_TYPE_TRANSFER = 'transfer';
+const WEBHOOK_TYPE_TRANSACTION = 'transaction';
+const WEBHOOK_TYPE_PENDING_APPROVAL = 'pendingapproval';
+const WEBHOOK_TYPE_ADDRESS_CONFIRM = 'address_confirmation';
+const WEBHOOK_TYPE_LOW_FEE = 'lowFee';
