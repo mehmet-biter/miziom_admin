@@ -23,14 +23,14 @@
                 </div>
                 <div class="mt-4 ">
                     <label for="question" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">{{ __('Bitgo Wallet Password') }} <span class="text-danger">*</span></label>
-                    <input id="question" type="text" name="bitgo_wallet" class="form-input flex-1"
+                    <input id="question" type="password" name="bitgo_wallet" class="form-input flex-1"
                         @if(isset($item)) value="{{ $item->bitgo_wallet ? decrypt($item->bitgo_wallet) : '' }}" @else value="{{ old('bitgo_wallet') }}" @endif />
                 </div>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div class="mt-4 ">
-                    <label for="question" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">{{ __('Bitgo Wallet Chain') }} </label>
+                    <label for="question" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">{{ __('Bitgo Wallet Chain') }} <span class="text-danger">*</span> </label>
                     <input id="question" type="text" name="chain" class="form-input flex-1"
                         @if(isset($item)) value="{{ $item->chain }}" @else value="{{ old('chain') }}" @endif />
                 </div>

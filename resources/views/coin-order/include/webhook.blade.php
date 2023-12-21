@@ -4,12 +4,12 @@
             <div class="text-lg font-semibold">{{ __('Add Bitgo Webhook') }}</div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div class=" mt-4">
-                    <label for="name" class="ltr:mr-2 rtl:ml-2 w-3/3 mb-0">{{ __('Webhook Title') }} </label>
+                    <label for="name" class="ltr:mr-2 rtl:ml-2 w-3/3 mb-0">{{ __('Webhook Title') }} <span class="text-danger">*</span></label>
                     <input id="name" type="text" name="label" class="form-input flex-1" 
                     @if(isset($item)) value="{{ $item->bitgo_webhook_label }}" @endif />
                 </div>
                 <div class=" mt-4">
-                    <label for="allTokentype" class="ltr:mr-2 rtl:ml-2 w-3/3 mb-0">{{ __('Coin Api') }} </label>
+                    <label for="allTokentype" class="ltr:mr-2 rtl:ml-2 w-3/3 mb-0">{{ __('Coin Api') }} <span class="text-danger">*</span></label>
                     <select id="allTokentype" name="type" class="form-select flex-1">
                         @foreach(webhook_type() as $key => $value)
                             <option @if(isset($item) && $item->bitgo_webhook_type == $key) selected @endif value="{{$key}}">{{$value}}</option>
@@ -33,7 +33,7 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div class="mt-4 ">
-                    <label for="allToken" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">{{ __('Bitgo Wallet Chain') }} </label>
+                    <label for="allToken" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">{{ __('Bitgo Wallet Chain') }} <span class="text-danger">*</span></label>
                     <select id="allToken" name="allToken" class="form-select flex-1">
                         <option @if(isset($item) && $item->bitgo_webhook_allToken == STATUS_DEACTIVE) selected @endif value="{{STATUS_DEACTIVE}}">{{__('False')}}</option>
                         <option @if(isset($item) && $item->bitgo_webhook_allToken == STATUS_ACTIVE) selected @endif value="{{STATUS_ACTIVE}}">{{__('True')}}</option>

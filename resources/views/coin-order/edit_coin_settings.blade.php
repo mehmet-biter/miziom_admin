@@ -17,7 +17,7 @@
                     <div class=" md:top-5 ltr:md:left-5 rtl:md:right-5">
                         <div class="flex items-center gap-2 mb-5">
                             @if($item->network == BITGO_API)
-                                <a  href="{{route('adminCoinApiSettings',['tab' => 'bitgo'])}}" 
+                                <a  href="{{route('bitgoSetting')}}" 
                                     class="btn btn-primary gap-2 float-right">
                                     {{ __('Bitgo Api Setting') }} 
                                 </a>
