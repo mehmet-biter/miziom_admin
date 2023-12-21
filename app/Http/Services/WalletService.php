@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Http\Repository\WalletRepository;
+use App\Models\Coin;
 
 class WalletService extends BaseService
 {
@@ -15,25 +16,23 @@ class WalletService extends BaseService
     }
 
     // delete data
-   public function deleteData($id) {
-    try {
-        $item = $this->repository->whereFirst(['unique_code' => $id]);
-        if ($item) {
-            $checkRole = User::where(['role' => $item->id])->first();
-            if ($checkRole) {
-                return responseData(true, __('This role is assigned at user, it should not delete'));
+   public function coinList($type) {
+        try {
+            if($type == CURRENCY_TYPE_BOTH) {
+                $items = Coin::where(['status' => STATUS_ACTIVE])->get();
+            } else {
+                $items = Coin::where(['status' => STATUS_ACTIVE, 'currency_type' => $type])->get();
             }
-            $delete = $this->repository->fullDelete($item->id);
-            return responseData(true, __('Data deleted successfully'));
-        } else {
-            return responseData(false, __('Data not found'));
+            if (isset($items[0])) {
+                return responseData(true, __('Data get successfully'),$items);
+            } else {
+                return responseData(false, __('Data not found'));
+            }
+        } catch(\Exception $e) {
+            storeException('coin list ex', $e->getMessage());
+            return responseData(false, __('Something went wrong'));
         }
-    } catch(\Exception $e) {
-        storeException('delete team ex', $e->getMessage());
-        return responseData(false, __('Something went wrong'));
     }
-    
-}
 
 // save data
 public function saveItemData($request)

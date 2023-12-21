@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ProfileUpdateRequest;
 use App\Http\Requests\Admin\UpdatePasswordRequest;
 use App\Http\Services\UserService;
+use App\Http\Services\WalletService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,38 +15,30 @@ class WalletController extends Controller
     private $service;
     public function __construct()
     {
-        $this->service = new UserService();
+        $this->service = new WalletService();
     }
-    //profile
-    public function profile(){
+
+    //coin list
+    public function coinList($type){
         try {
-            $response = $this->service->userProfile(Auth::id());
+            $response = $this->service->coinList($type);
             return responseJsonData($response['success'],$response['message'],$response['data']);
         } catch(\Exception $e) {
-            storeException('profile',$e->getMessage());
+            storeException('coinList',$e->getMessage());
             return responseJsonData(false);
         }
     }
 
     // update profile
-    public function updateProfile(ProfileUpdateRequest $request) {
-        try {
-            $response = $this->service->userProfileUpdate($request,Auth::id());
-            return responseJsonData($response['success'],$response['message'],$response['data']);
-        } catch(\Exception $e) {
-            storeException('profile update ex', $e->getMessage());
-            return responseJsonData(false);
-        }
-    }
+    // public function updateProfile(ProfileUpdateRequest $request) {
+    //     try {
+    //         $response = $this->service->userProfileUpdate($request,Auth::id());
+    //         return responseJsonData($response['success'],$response['message'],$response['data']);
+    //     } catch(\Exception $e) {
+    //         storeException('profile update ex', $e->getMessage());
+    //         return responseJsonData(false);
+    //     }
+    // }
 
-    // update password
-    public function changePassword(UpdatePasswordRequest $request) {
-        try {
-            $response = $this->service->userChangePassword($request,Auth::id());
-            return responseJsonData($response['success'],$response['message'],$response['data']);
-        } catch(\Exception $e) {
-            storeException('changePassworde ex', $e->getMessage());
-            return responseJsonData(false);
-        }
-    }
+   
 }
