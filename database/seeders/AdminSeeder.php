@@ -20,7 +20,7 @@ class AdminSeeder extends Seeder
             'status' => STATUS_SUCCESS,
             'email_verified' => 1,
             'password' => Hash::make('Pass.321'),
-            'unique_code' => makeUniqueId()
+            'unique_code' => randomNumber(14)
         ]);
     }
 }

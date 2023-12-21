@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Storage;
 
 function makeUniqueId()
 {
-    return uniqid().date('').time().uniqid();
+    return uniqid().date('').time();
 }
 
 function checkRolePermission($role_task, $my_role)
