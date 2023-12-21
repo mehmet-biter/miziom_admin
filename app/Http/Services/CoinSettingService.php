@@ -34,7 +34,7 @@ class CoinSettingService extends BaseService {
             if($coin['success'] == false) {
                 return responseData(false,__('Coin not found'));
             }
-            $data = $this->object->getCoinSettingData($coinId);
+            $data = $this->repository->getCoinSettingData($coinId);
             return responseData(true,__('Data get successfully'), $data);
         } catch (\Exception $e) {
             storeException('getCoinSettings',$e->getMessage());
@@ -51,7 +51,7 @@ class CoinSettingService extends BaseService {
             if($coin['success'] == false) {
                 return responseData(false,__('Coin not found'));
             }
-            $data = $this->object->getCoinSettingData($coin['data']->id);
+            $data = $this->repository->getCoinSettingData($coin['data']->id);
             if($data->network == BITGO_API) {
                 $response = $this->updateBitgoApi($data->coin_id,$request);
             } elseif ($data->network == BITCOIN_API) {
@@ -77,7 +77,7 @@ class CoinSettingService extends BaseService {
                 'coin_api_port' => $request->coin_api_port,
                 'check_encrypt' => STATUS_SUCCESS,
             ];
-            $this->object->updateWhere(['coin_id' => $coinId],$data);
+            $this->repository->updateWhere(['coin_id' => $coinId],$data);
             $response = responseData(true, __('Coin api setting updated successfully'));
         } catch (\Exception $e) {
             storeException('updateBitCoinApi',$e->getMessage());
@@ -96,7 +96,7 @@ class CoinSettingService extends BaseService {
                 'chain' => $request->chain,
                 'check_encrypt' => STATUS_SUCCESS,
             ];
-            $this->object->updateWhere(['coin_id' => $coinId],$data);
+            $this->repository->updateWhere(['coin_id' => $coinId],$data);
             $response = responseData(true, __('Coin api setting updated successfully'));
         } catch (\Exception $e) {
             storeException('updateBitgoApi',$e->getMessage());
@@ -118,7 +118,7 @@ class CoinSettingService extends BaseService {
                 'gas_limit'=> $request->gas_limit,
                 'check_encrypt' => STATUS_SUCCESS,
             ];
-            $this->object->updateWhere(['coin_id' => $coinId],$data);
+            $this->repository->updateWhere(['coin_id' => $coinId],$data);
             $response = responseData(true, __('Coin api setting updated successfully'));
         } catch (\Exception $e) {
             storeException('updateERCCoinApi',$e->getMessage());
@@ -136,7 +136,7 @@ class CoinSettingService extends BaseService {
             if($coin['success'] == false) {
                 return responseData(false,__('Coin not found'));
             }
-            $data = $this->object->getCoinSettingData($coin['data']->id);;
+            $data = $this->repository->getCoinSettingData($coin['data']->id);;
             if($data->network == BITGO_API) {
                 if (empty($data->bitgo_wallet_id)) {
                     return responseData(false,__('Please add your bitgo wallet id first'));
@@ -149,7 +149,7 @@ class CoinSettingService extends BaseService {
                         'bitgo_wallet_type' => $getWallet['data']['type'],
                         'webhook_status' => 1,
                     ];
-                    $this->object->updateWhere(['coin_id' => $coinId],$datas);
+                    $this->repository->updateWhere(['coin_id' => $coinId],$datas);
                     $response = responseData(true, __('Bitgo wallet adjusted successfully'));
                 } else {
                     $response = responseData(false,$getWallet['message']);

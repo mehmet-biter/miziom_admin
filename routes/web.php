@@ -7,6 +7,7 @@ use App\Http\Controllers\User\RoleController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\admin\CoinController;
 use App\Http\Controllers\Setting\FaqController;
+use App\Http\Controllers\CoinSettingsController;
 use App\Http\Controllers\admin\CurrencyController;
 use App\Http\Controllers\Contact\ContactController;
 use App\Http\Controllers\Profile\ProfileController;
@@ -80,6 +81,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','admins']], function 
     Route::post('currency-all', [CurrencyController::class,'adminAllCurrency'])->name('adminAllCurrency');
     Route::post('currency-status-change', [CurrencyController::class,'adminCurrencyStatus'])->name('adminCurrencyStatus');
     Route::post('currency-save-process', [CurrencyController::class,'adminCurrencyAddEdit'])->name('adminCurrencyStore');
+
+    Route::get('api-settings', [CoinSettingsController::class, "adminCoinApiSettings"])->name('adminCoinApiSettings');
 });
 });
 
