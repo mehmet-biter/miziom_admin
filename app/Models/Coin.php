@@ -14,6 +14,8 @@ class Coin extends Model
         "coin_type",
         "currency_type",
         "currency_id",
+        "coin_price",
+        "usd_rate",
         "status",
         "network",
         "is_withdrawal",
