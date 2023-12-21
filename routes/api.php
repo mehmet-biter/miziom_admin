@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\WalletController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -37,6 +38,9 @@ Route::group(['namespace'=>'Api','middleware' => ['apiCheck']], function (){
             Route::get('profile',[UserController::class, 'profile']);
             Route::post('update-profile',[UserController::class, 'updateProfile']);
             Route::post('change-password',[UserController::class, 'changePassword']);
+        });
+        Route::group(['prefix' => 'wallet'], function () {
+            Route::get('coin-list/{type}',[WalletController::class, 'coinList']);
         });
     });
     

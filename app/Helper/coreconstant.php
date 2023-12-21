@@ -27,6 +27,7 @@ const IMG_USER_VERIFICATION_PATH = 'users/verifications/';
 
 const CURRENCY_TYPE_CRYPTO = 1;
 const CURRENCY_TYPE_FIAT = 2;
+const CURRENCY_TYPE_BOTH = 3;
 
 // user role
 const ROLE_SUPER_ADMIN=1;

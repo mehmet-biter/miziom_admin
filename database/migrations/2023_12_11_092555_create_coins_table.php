@@ -12,28 +12,30 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('coins', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('name');
             $table->string('coin_type',20)->unique();
             $table->tinyInteger('currency_type')->default(1);
-            $table->unsignedInteger('currency_id')->nullable();
+            $table->unsignedBigInteger('currency_id')->nullable();
             $table->decimal('coin_price',19, 8)->default(1);
-            $table->decimal('usd_rate',19, 8)->default(1);
             $table->tinyInteger('network')->default(1);
+
             $table->tinyInteger('is_withdrawal')->default(1);
-            $table->tinyInteger('is_deposit')->default(1);
-            $table->string('coin_icon', 50)->nullable();
-            $table->boolean('is_wallet')->default(0);
-            $table->boolean('is_transferable')->default(0);
-            $table->boolean('is_virtual_amount')->default(0);
-            $table->string('sign')->nullable()->collation('utf8_unicode_ci');
             $table->decimal('minimum_withdrawal', 19, 8)->default(0.0000001);
             $table->decimal('maximum_withdrawal', 19, 8)->default(99999999.0);
             $table->decimal('max_send_limit', 19, 8)->default(0.0000001);
             $table->decimal('withdrawal_fees', 29, 18)->default(0.0000001);
             $table->tinyInteger('withdrawal_fees_type')->default(2);
+            
+            $table->tinyInteger('is_deposit')->default(1);
+            $table->string('coin_icon', 50)->nullable();
+            
+            $table->tinyInteger('is_convert')->default(1);
+            $table->decimal('minimum_convert', 19, 8)->default(0.0000001);
+            $table->decimal('maximum_convert', 19, 8)->default(99999999.0);
+            $table->decimal('convert_fees', 29, 18)->default(0.0000001);
+            $table->tinyInteger('convert_fees_type')->default(2);
             $table->tinyInteger('status')->default(1);
-            $table->tinyInteger('admin_approval')->default(1);
             $table->timestamps();
         });
     }
