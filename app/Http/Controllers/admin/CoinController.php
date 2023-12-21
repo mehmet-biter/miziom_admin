@@ -191,7 +191,7 @@ class CoinController extends Controller
             if ($item['data']->network == COIN_PAYMENT) {
                 return redirect()->route('adminCoinApiSettings', ['tab' => 'payment']);
             } else {
-                return view('admin.coin-order.edit_coin_settings', $data);
+                return view('coin-order.edit_coin_settings', $data);
             }
         } catch (\Exception $e) {
             storeException('adminCoinSettings',$e->getMessage());

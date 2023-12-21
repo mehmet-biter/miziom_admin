@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "84d1ebd90eb54a6cfea7ed1f11fb36b2",
+    "content-hash": "cc71d354aa26e9592d17e9796195354a",
     "packages": [
         {
             "name": "brick/math",
@@ -5051,6 +5051,56 @@
                 "source": "https://github.com/rap2hpoutre/laravel-log-viewer/tree/v2.3.0"
             },
             "time": "2023-02-15T07:36:34+00:00"
+        },
+        {
+            "name": "sdtech/bitgo-laravel",
+            "version": "v1.0.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/syedbacchu/bitgo-laravel.git",
+                "reference": "091acf5f0bdd8d6a10f79b3da5f6c0d3838b0c44"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/syedbacchu/bitgo-laravel/zipball/091acf5f0bdd8d6a10f79b3da5f6c0d3838b0c44",
+                "reference": "091acf5f0bdd8d6a10f79b3da5f6c0d3838b0c44",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Sdtech\\BitgoApiLaravel\\Providers\\BitgoWalletApiServiceProviders"
+                    ]
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/Service/BitgoApiLaravelService.php"
+                ],
+                "psr-4": {
+                    "Sdtech\\BitgoApiLaravel\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "sd bacchu",
+                    "email": "bacchu.cse11@gmail.com"
+                }
+            ],
+            "description": "It's a simple library to integrate bitgo wallet api",
+            "support": {
+                "issues": "https://github.com/syedbacchu/bitgo-laravel/issues",
+                "source": "https://github.com/syedbacchu/bitgo-laravel/tree/v1.0.7"
+            },
+            "time": "2023-09-01T11:14:31+00:00"
         },
         {
             "name": "symfony/console",
@@ -10101,5 +10151,5 @@
         "php": "^8.0.2"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }

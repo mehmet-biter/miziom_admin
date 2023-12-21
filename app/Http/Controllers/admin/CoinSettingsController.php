@@ -1,11 +1,21 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\admin;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class CoinSettingsController extends Controller
 {
+    private $coinService;
+    private $coinSettingService;
+    private $logger;
+    public function __construct()
+    {
+        // $this->coinService = new CoinService();
+        // $this->logger = new Logger();
+        // $this->coinSettingService = new CoinSettingService();
+    }
     public function adminCoinApiSettings(Request $request)
     {
         $data['tab']='payment';
@@ -15,6 +25,6 @@ class CoinSettingsController extends Controller
         $data['title'] = __('Coin Api Settings');
         $data['settings'] = allsetting();
 
-        return view('admin.settings.api.general', $data);
+        return view('settings.api.general', $data);
     }
 }

@@ -107,4 +107,17 @@ class BaseRepository
 
         return $query->get();
     }
+
+    public function updateWhere($where=[], $update=[])
+    {
+        $query = $this->model::query();
+        foreach($where as $key => $value) {
+            if(is_array($value)){
+                $query->where($key,$value[0],$value[1]);
+            }else{
+                $query->where($key,'=',$value);
+            }
+        }
+        return $query->update($update);
+    }
 }

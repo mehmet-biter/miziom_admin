@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('code',180)->unique();
             $table->string('symbol',50);
-            $table->decimal('rate',19,2)->default(1);
+            $table->decimal('rate',19,8)->default(1);
             $table->tinyInteger('status')->default(1);
             $table->tinyInteger('is_primary')->default(0);
             $table->timestamps();
