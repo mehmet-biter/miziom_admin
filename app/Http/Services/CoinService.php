@@ -59,7 +59,7 @@ class CoinService extends BaseService {
                         return ['success'=>false,'data' => "",'message'=> $checkNetwork['message']];
                     }
                 }
-                $coin = $this->object->updateCoin($coin_id,$data);
+                $coin = $this->repository->updateCoin($coin_id,$data);
                 if ($coinData->coin_type != $data['coin_type']) {
                     Wallet::where(['coin_id' => $coinData->id])->update(['coin_type' => $data['coin_type'], 'name' => $data['coin_type'].' wallet']);
                 }
@@ -67,7 +67,7 @@ class CoinService extends BaseService {
 //                if (empty($data['coin_icon'])) {
 //                    return ['success' => false, 'message' => 'Coin icon can not be empty.'];
 //                }
-                $coin = $this->object->addCoin($data);
+                $coin = $this->repository->addCoin($data);
             }
 
             return ['success'=>true,'data'=>$coin,'message'=>__('updated successful.')];
