@@ -32,4 +32,52 @@ class SettingRepository
         DB::commit();
         return $response;
     }
+
+    public function savePaymentSetting($request)
+    {
+        $response = ['success' => false, 'message' => __('Invalid request')];
+        DB::beginTransaction();
+        try {
+
+            if (isset($request->COMPARE_WEBSITE)) {
+                AdminSetting::updateOrCreate(['slug' => 'COMPARE_WEBSITE'], ['value' => $request->COMPARE_WEBSITE]);
+            }
+            if (isset($request->COIN_PAYMENT_PUBLIC_KEY)) {
+                AdminSetting::updateOrCreate(['slug' => 'COIN_PAYMENT_PUBLIC_KEY'], ['value' => $request->COIN_PAYMENT_PUBLIC_KEY]);
+            }
+            if (isset($request->COIN_PAYMENT_PRIVATE_KEY)) {
+                AdminSetting::updateOrCreate(['slug' => 'COIN_PAYMENT_PRIVATE_KEY'], ['value' => $request->COIN_PAYMENT_PRIVATE_KEY]);
+            }
+            if (isset($request->COINPAYMENT_CURRENCY)) {
+                AdminSetting::updateOrCreate(['slug' => 'COINPAYMENT_CURRENCY'], ['value' => $request->COINPAYMENT_CURRENCY]);
+            }
+            if (isset($request->base_coin_type)) {
+                AdminSetting::updateOrCreate(['slug' => 'base_coin_type'], ['value' => $request->base_coin_type]);
+            }
+            if (isset($request->base_coin_type)) {
+                AdminSetting::updateOrCreate(['slug' => 'base_coin_type'], ['value' => $request->base_coin_type]);
+            }
+            if (isset($request->ipn_merchant_id)) {
+                AdminSetting::updateOrCreate(['slug' => 'ipn_merchant_id'], ['value' => $request->ipn_merchant_id]);
+            }
+            if (isset($request->ipn_secret)) {
+                AdminSetting::updateOrCreate(['slug' => 'ipn_secret'], ['value' => $request->ipn_secret]);
+            }
+            AdminSetting::updateOrCreate(['slug' => 'coin_payment_withdrawal_email'], ['value' => $request->coin_payment_withdrawal_email]);
+
+            $response = [
+                'success' => true,
+                'message' => __('Payment setting updated successfully')
+            ];
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $response = [
+                'success' => false,
+                'message' => __('Something went wrong')
+            ];
+            return $response;
+        }
+        DB::commit();
+        return $response;
+    }
 }

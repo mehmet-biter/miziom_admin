@@ -20,9 +20,16 @@ class SettingController extends Controller
     }
     public function bitgoSetting()
     {
-        $data['title'] = __('Coin Api Settings');
+        $data['title'] = __('Bitgo Settings');
         $data['settings'] = allsetting();
         return view('setting.bitgo', $data);
+    }
+
+    public function coinPaymentSetting()
+    {
+        $data['title'] = __('Coin Payment Settings');
+        $data['settings'] = allsetting();
+        return view('setting.coin-payment', $data);
     }
 
     public function adminSaveBitgoSettings(Request $request)
@@ -48,6 +55,38 @@ class SettingController extends Controller
 
             try {
                 $response = $this->settingRepo->saveBitgoSetting($request);
+                if ($response['success'] == true) {
+                    return redirect()->back()->with('success', $response['message']);
+                } else {
+                    return redirect()->back()->withInput()->with('success', $response['message']);
+                }
+            } catch(\Exception $e) {
+                return redirect()->back()->with(['dismiss' => $e->getMessage()]);
+            }
+        }
+    }
+
+    public function adminSavePaymentSettings(Request $request)
+    {
+        if ($request->post()) {
+            $rules = [
+                'COIN_PAYMENT_PUBLIC_KEY' => 'required',
+                'COIN_PAYMENT_PRIVATE_KEY' => 'required',
+            ];
+
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                $errors = [];
+                $e = $validator->errors()->all();
+                foreach ($e as $error) {
+                    $errors[] = $error;
+                }
+                $data['message'] = $errors;
+                return redirect()->back()->with(['dismiss' => $errors[0]]);
+            }
+
+            try {
+                $response = $this->settingRepo->savePaymentSetting($request);
                 if ($response['success'] == true) {
                     return redirect()->back()->with('success', $response['message']);
                 } else {

@@ -93,6 +93,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','admins']], function 
 
     Route::get('bitgo-setting', [SettingController::class, 'bitgoSetting'])->name('bitgoSetting');
     Route::post('save-bitgo-settings', [SettingController::class, 'adminSaveBitgoSettings'])->name('adminSaveBitgoSettings');
+    
+    Route::get('coin-payment-setting', [SettingController::class, 'coinPaymentSetting'])->name('coinPaymentSetting');
+    Route::post('save-payment-settings', [SettingController::class, 'adminSavePaymentSettings'])->name('adminSavePaymentSettings');
 });
 });
 
