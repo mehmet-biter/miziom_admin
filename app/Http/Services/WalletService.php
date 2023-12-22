@@ -4,7 +4,10 @@ namespace App\Http\Services;
 
 use App\Models\Coin;
 use App\Models\User;
+use App\Models\Wallet;
 use Illuminate\Support\Facades\DB;
+use App\Models\WalletAddressHistory;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Repository\WalletRepository;
 
 class WalletService extends BaseService
@@ -127,6 +130,46 @@ public function saveItemData($request)
             $data['wallet'] = $wallet;
 
             return responseData(true, __('Withdrawal data found!'), $data);
+        } catch(\Exception $e) {
+            storeException('searcheCustomer ex', $e->getMessage());
+            return responseData(false, __('Something went wrong'));
+        }
+    }
+
+    public function walletDeposit($request, $currency) {
+        try {
+            // check coin type exist
+            if(!isset($request->coin_type))
+                return responseData(false, __('Coin type not found!')); 
+
+            // set coin type in variable
+            $coin_type = $request->coin_type;
+
+            if(! $coin = Coin::where(['coin_type' => $coin_type, 'status' => STATUS_ACTIVE])->first())
+                return responseData(false, __('Coin not found!'));
+            
+            if(! $wallet = Wallet::where(['coin_id' => $coin->id, 'user_id' => Auth::id()])->first(['coin_type','balance','referral_balance']))
+                return responseData(false, __('Wallet not found!'));
+            
+            
+            if(! $walletAddress = WalletAddressHistory::where(['wallet_id' => $wallet->id])->first())
+            {
+
+            }
+            $wallet->is_withdrawal = $coin->is_withdrawal;
+            $wallet->minimum_withdrawal = $coin->minimum_withdrawal;
+            $wallet->maximum_withdrawal = $coin->maximum_withdrawal;
+            $wallet->max_send_limit = $coin->max_send_limit;
+            $wallet->withdrawal_fees = $coin->withdrawal_fees;
+            $wallet->withdrawal_fees_type = $coin->withdrawal_fees_type;
+            $rate = convert_currency($wallet->coin_type,$currency,1);
+            $wallet->usd_value_rate = $rate;
+            $wallet->usd_value = bcmul($rate,$wallet->balance,8);
+            $wallet->address = $walletAddress->address ?? 'thisisademoaddress'; 
+            $data['wallet'] = $wallet;
+            $data['memo'] = null;
+            
+            return responseData(true, __('Wallet deposit data found!'), $data);
         } catch(\Exception $e) {
             storeException('searcheCustomer ex', $e->getMessage());
             return responseData(false, __('Something went wrong'));
