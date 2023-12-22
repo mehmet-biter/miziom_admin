@@ -9,11 +9,14 @@ class WalletAddressHistory extends Model
 {
     use HasFactory;
     protected $fillable = [
-        "id",
         "wallet_id",
         "address",
         "coin_type",
         "wallet_key",
         "public_key",
+        "coin_id",
+        "network_id",
+        "memo",
+        "user_id"
     ];
 }

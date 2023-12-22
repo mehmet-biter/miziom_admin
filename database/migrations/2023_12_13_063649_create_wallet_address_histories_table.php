@@ -13,11 +13,15 @@ return new class extends Migration
     {
         Schema::create('wallet_address_histories', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('wallet_id');
+            $table->unsignedInteger('user_id');
+            $table->unsignedInteger('coin_id');
+            $table->unsignedInteger('wallet_id');
             $table->string('address');
             $table->string('coin_type')->default('BTC');
             $table->text('wallet_key')->nullable();
             $table->text('public_key')->nullable();
+            $table->integer('network_id')->nullable();
+            $table->string('memo')->nullable();
             $table->timestamps();
         });
     }

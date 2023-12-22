@@ -93,8 +93,8 @@ public function saveItemData($request)
 
     public function searcheCustomer($request) {
         try {
-            if(!isset($request->search) && empty($request->search))
-                return responseData(false, __('Customer not found!'));
+            // if(!isset($request->search) && empty($request->search))
+            //     return responseData(false, __('Customer not found!'));
 
             $search = $request->search;
             $user = User::where(function($q)use($search){
@@ -153,13 +153,23 @@ public function saveItemData($request)
             if(! $coin = Coin::where(['coin_type' => $coin_type, 'status' => STATUS_ACTIVE])->first())
                 return responseData(false, __('Coin not found!'));
             
-            if(! $wallet = Wallet::where(['coin_id' => $coin->id, 'user_id' => Auth::id()])->first(['coin_type','balance','referral_balance']))
+            if(! $wallet = Wallet::where(['coin_id' => $coin->id, 'user_id' => Auth::id()])->first(['id','coin_type','balance','referral_balance']))
                 return responseData(false, __('Wallet not found!'));
             
-            
+            $walletAddress = null;
             if(! $walletAddress = WalletAddressHistory::where(['wallet_id' => $wallet->id])->first())
             {
-                // TODO: wallet address generation
+               if($address = $this->get_bitgo_address($coin->coin_type)){
+                    $addressData = [
+                        "user_id"    => Auth::id(),
+                        "coin_id"    => $coin->id,
+                        "wallet_id"  => $wallet->id,
+                        "address"    => $address,
+                        "coin_type"  => $coin->coin_type,
+                        "network_id" => BITGO_API,
+                    ];
+                    $walletAddress = WalletAddressHistory::create($addressData);
+               }
             }
             $wallet->is_withdrawal        = $coin->is_withdrawal;
             $wallet->minimum_withdrawal   = $coin->minimum_withdrawal;
