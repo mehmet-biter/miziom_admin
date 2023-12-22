@@ -85,4 +85,19 @@ public function saveItemData($request)
     return $response;
 }
 
+    public function searcheCustomer($userId,$type,$currency) {
+        try {
+            createUserWallet($userId);
+            $items = $this->repository->getUserWalletList($userId,$type,$currency);
+            if (isset($items[0])) {
+                return responseData(true, __('Data get successfully'),$items);
+            } else {
+                return responseData(false, __('Data not found'));
+            }
+        } catch(\Exception $e) {
+            storeException('userWalletList ex', $e->getMessage());
+            return responseData(false, __('Something went wrong'));
+        }
+    }
+
 }
