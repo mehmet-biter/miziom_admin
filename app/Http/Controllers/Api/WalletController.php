@@ -55,5 +55,12 @@ class WalletController extends Controller
             $this->service->searcheCustomer($request)
         );
     }
+
+    public function walletWithdrawal(Request $request)
+    {
+        return response()->json(
+            $this->service->walletWithdrawal($request)
+        );
+    }
    
 }

@@ -4,6 +4,7 @@ namespace App\Http\Services;
 
 use App\Models\Coin;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use App\Http\Repository\WalletRepository;
 
 class WalletService extends BaseService
@@ -88,6 +89,45 @@ public function saveItemData($request)
 
     public function searcheCustomer($request) {
         try {
+            if(!isset($request->search) && empty($request->search))
+                return responseData(false, __('Customer not found!'));
+
+            $search = $request->search;
+            $user = User::where(function($q)use($search){
+                        return $q->where('name', 'LIKE', "%$search%")
+                        ->orWhere('email', 'LIKE', "%$search%");
+                    })
+                    ->where('role_module', MODULE_USER)
+                    ->get(['unique_code', 'email']);
+            $data['customer'] = $user;
+
+            if(isset($user[0])) return responseData(true, __('Customer get successfully'),$data);
+            return responseData(false, __('Customer not found!')); 
+        } catch(\Exception $e) {
+            storeException('searcheCustomer ex', $e->getMessage());
+            return responseData(false, __('Something went wrong'));
+        }
+    }
+   
+    public function walletWithdrawal($request) {
+        try {
+            // check coin type exist
+            if(!isset($request->coin_type))
+                return responseData(false, __('Coin not found!')); 
+
+            // set coin type in variable
+            $coin_type = $request->coin_type;
+
+            $wallet = DB::table('wallets')
+                        ->join('coins', 'coins.id', '=', 'wallets.coin_id')
+                        ->where('coins.coin_type', '=', $coin_type)
+                        ->where('coins.status', '=', STATUS_ACTIVE)
+                        ->select('wallets.*', 'coins.*')
+                        ->get();
+            dd($wallet);
+
+
+
             if(!isset($request->search) && empty($request->search))
                 return responseData(false, __('Customer not found!'));
 

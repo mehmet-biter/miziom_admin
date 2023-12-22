@@ -43,6 +43,7 @@ Route::group(['namespace'=>'Api','middleware' => ['apiCheck']], function (){
             Route::get('coin-list/{type}',[WalletController::class, 'coinList']);
             Route::get('wallet-list/{type}',[WalletController::class, 'walletList']);
             Route::get('customer',[WalletController::class, 'searcheCustomer']);
+            Route::get('withdrawal',[WalletController::class, 'walletWithdrawal']);
         });
     });
     
