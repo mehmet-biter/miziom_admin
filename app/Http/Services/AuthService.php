@@ -34,7 +34,7 @@ class AuthService extends BaseService
             
             $inputData = $request->except(['_token','confirm_password']);
             $inputData['password'] = Hash::make($request->password);
-            $inputData['unique_code'] = makeUniqueId();
+            $inputData['unique_code'] = randomNumber(14);
             $mail_key = randomNumber(6);
             $user = User::create($inputData);
             if($user) {

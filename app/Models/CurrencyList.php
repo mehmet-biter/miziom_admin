@@ -12,7 +12,7 @@ class CurrencyList extends Model
         'name',
         'code',
         'symbol',
-        'rate',
+        'usd_rate',
         'status',
         'is_primary',
     ];

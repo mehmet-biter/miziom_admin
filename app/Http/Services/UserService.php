@@ -363,7 +363,7 @@ class UserService
                 }
             } else {
                 $data = $request->except(['_token', 'photo','password_confirmation','password']);
-                $data['unique_code'] = makeUniqueId();
+                $data['unique_code'] = randomNumber(14);
                 $data['role_module'] = ROLE_ADMIN;
                 $data['email_verified'] = STATUS_ACTIVE;
             }

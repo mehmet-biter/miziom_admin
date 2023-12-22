@@ -15,13 +15,12 @@ class AdminSeeder extends Seeder
     public function run(): void
     {
         User::firstOrCreate(['email'=>'admin@info.com'],[
-            'first_name' => 'Mr.',
-            'last_name' => 'Admin',
+            'name' => 'Mr. Admin',
             'role_module' => ROLE_SUPER_ADMIN,
             'status' => STATUS_SUCCESS,
             'email_verified' => 1,
             'password' => Hash::make('Pass.321'),
-            'unique_code' => makeUniqueId()
+            'unique_code' => randomNumber(14)
         ]);
     }
 }
