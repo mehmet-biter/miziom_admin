@@ -211,4 +211,49 @@ public function saveItemData($request)
         }
     }
 
+    public function walletWithdrawalProccess($request)
+    {
+        $user = Auth::user();
+        $wallet = Wallet::join('coins', 'coins.id', '=', 'wallets.coin_id')
+                ->where(['wallets.id'=>$request->wallet_id, 'wallets.user_id'=> $user->id, 'coins.is_withdrawal' => STATUS_ACTIVE])
+                ->select('wallets.*', 'coins.status as coin_status', 'coins.is_withdrawal', 'coins.minimum_withdrawal',
+                    'coins.maximum_withdrawal', 'coins.withdrawal_fees', 'coins.max_send_limit','coins.withdrawal_fees_type','coins.network')
+                ->first();
+
+        if(!$wallet) return responseData(false, __('Wallet not found!'));
+
+        $amount = $request->amount;
+
+        if($request->type == WITHDRAWAL_CURRENCY_TYPE_CRYPTO){
+
+            if( !($wallet->balance >= $amount))
+                return responseData(false, __('insufficient balance for withdrawal request!'));
+        }else{
+
+            $usdTotalAmount = convert_currency($wallet->coin_type,'USD',1);
+            if( !($usdTotalAmount >= $amount))
+                return responseData(false, __('insufficient balance for withdrawal request!'));
+        }
+
+        if(isset($request->customer_id)){
+            if(! $customer = User::find($request->customer_id))
+                return responseData(false, __('Customer not found!'));
+
+            if(! $customerWallet = Wallet::where(['user_id' => $customer->id, "coin_type" => $wallet->coin_type])->first()){
+                createUserWallet($customer->id);
+                $customerWallet = Wallet::where(['user_id' => $customer->id, "coin_type" => $wallet->coin_type])->first();
+            }
+            
+            return responseData(true, __("Customer withdrawal success"));
+        }
+
+        $withdrawl_type = ADDRESS_TYPE_INTERNAL;
+        if(! $addressHistory = WalletAddressHistory::where('address', $request->address)->first()){
+            $withdrawl_type = ADDRESS_TYPE_EXTERNAL;
+            return responseData(true, __("EXTERNAL withdrawal success"));
+        }
+
+        return responseData(true, __("INTERNAL withdrawal success"));
+    }
+
 }
