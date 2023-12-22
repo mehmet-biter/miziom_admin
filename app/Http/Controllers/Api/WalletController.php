@@ -58,8 +58,9 @@ class WalletController extends Controller
 
     public function walletWithdrawal(Request $request)
     {
+        $currency = $request->header('currency') ?? 'NGN';
         return response()->json(
-            $this->service->walletWithdrawal($request)
+            $this->service->walletWithdrawal($request, $currency)
         );
     }
 

@@ -112,7 +112,7 @@ public function saveItemData($request)
         }
     }
    
-    public function walletWithdrawal($request) {
+    public function walletWithdrawal($request, $currency) {
         try {
             // check coin type exist
             if(!isset($request->coin_type))
@@ -126,7 +126,11 @@ public function saveItemData($request)
                         ->where('coins.coin_type', '=', $coin_type)
                         ->where('coins.status', '=', STATUS_ACTIVE)
                         ->select('wallets.*', 'coins.*')
-                        ->get();
+                        ->first();
+                        
+            $rate = convert_currency($wallet->coin_type,$currency,1);
+            $wallet->usd_value_rate = $rate;
+            $wallet->usd_value = bcmul($rate,$wallet->balance,8);
             $data['wallet'] = $wallet;
 
             return responseData(true, __('Withdrawal data found!'), $data);
