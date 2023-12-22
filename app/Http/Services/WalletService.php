@@ -159,7 +159,7 @@ public function saveItemData($request)
             $walletAddress = null;
             if(! $walletAddress = WalletAddressHistory::where(['wallet_id' => $wallet->id])->first())
             {
-               if($address = $this->get_bitgo_address($coin->coin_type)){
+                if($address = $this->get_bitgo_address($coin->coin_type)){
                     $addressData = [
                         "user_id"    => Auth::id(),
                         "coin_id"    => $coin->id,
@@ -169,7 +169,7 @@ public function saveItemData($request)
                         "network_id" => BITGO_API,
                     ];
                     $walletAddress = WalletAddressHistory::create($addressData);
-               }
+                }
             }
             $wallet->is_withdrawal        = $coin->is_withdrawal;
             $wallet->minimum_withdrawal   = $coin->minimum_withdrawal;
