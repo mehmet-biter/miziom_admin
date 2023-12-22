@@ -96,7 +96,7 @@ public function saveItemData($request)
                         return $q->where('name', 'LIKE', "%$search%")
                         ->orWhere('email', 'LIKE', "%$search%");
                     })
-                    ->where('role_module', 3)
+                    ->where('role_module', MODULE_USER)
                     ->get(['unique_code', 'email']);
             $data['customer'] = $user;
 
