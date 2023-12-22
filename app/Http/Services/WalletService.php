@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\WalletAddressHistory;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Repository\WalletRepository;
+use App\Http\Services\BitgoWalletService;
 
 class WalletService extends BaseService
 {
@@ -158,18 +159,18 @@ public function saveItemData($request)
             
             if(! $walletAddress = WalletAddressHistory::where(['wallet_id' => $wallet->id])->first())
             {
-
+                // TODO: wallet address generation
             }
-            $wallet->is_withdrawal = $coin->is_withdrawal;
-            $wallet->minimum_withdrawal = $coin->minimum_withdrawal;
-            $wallet->maximum_withdrawal = $coin->maximum_withdrawal;
-            $wallet->max_send_limit = $coin->max_send_limit;
-            $wallet->withdrawal_fees = $coin->withdrawal_fees;
+            $wallet->is_withdrawal        = $coin->is_withdrawal;
+            $wallet->minimum_withdrawal   = $coin->minimum_withdrawal;
+            $wallet->maximum_withdrawal   = $coin->maximum_withdrawal;
+            $wallet->max_send_limit       = $coin->max_send_limit;
+            $wallet->withdrawal_fees      = $coin->withdrawal_fees;
             $wallet->withdrawal_fees_type = $coin->withdrawal_fees_type;
-            $rate = convert_currency($wallet->coin_type,$currency,1);
-            $wallet->usd_value_rate = $rate;
-            $wallet->usd_value = bcmul($rate,$wallet->balance,8);
-            $wallet->address = $walletAddress->address ?? 'thisisademoaddress'; 
+            $rate                         = convert_currency($wallet->coin_type,$currency,1);
+            $wallet->usd_value_rate       = $rate;
+            $wallet->usd_value            = bcmul($rate,$wallet->balance,8);
+            $wallet->address              = $walletAddress->address ?? 'thisisademoaddress'; 
             $data['wallet'] = $wallet;
             $data['memo'] = null;
             
@@ -177,6 +178,36 @@ public function saveItemData($request)
         } catch(\Exception $e) {
             storeException('searcheCustomer ex', $e->getMessage());
             return responseData(false, __('Something went wrong'));
+        }
+    }
+
+    function get_bitgo_address($coin_type)
+    {
+        try {
+            $coin = Coin::join('coin_settings','coin_settings.coin_id', '=', 'coins.id')
+                ->where(['coins.coin_type' => $coin_type])
+                ->first();
+            if ($coin) {
+                if (empty($coin->bitgo_wallet_id)) {
+                    storeException('get_bitgo_address ', 'bitgo_wallet_id not found');
+                    return false;
+                } else {
+                    $bitgoApi =  new BitgoWalletService();
+                    $address = $bitgoApi->createBitgoWalletAddress($coin->coin_type,$coin->bitgo_wallet_id,$coin->chain);
+                    storeException('address bitgo', json_encode($address));
+                    if ($address['success']) {
+                        return $address['data']['address'];
+                    } else {
+                        storeException('get_bitgo_address address', $address['message']);
+                        return false;
+                    }
+                }
+            } else {
+                storeException('get_bitgo_address ', ' Coin not found');
+                return false;
+            }
+        } catch (\Exception $e) {
+            storeException('get_bitgo_address ', $e->getMessage());
         }
     }
 
