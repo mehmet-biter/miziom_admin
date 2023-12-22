@@ -2,8 +2,9 @@
 
 namespace App\Http\Services;
 
-use App\Http\Repository\WalletRepository;
 use App\Models\Coin;
+use App\Models\User;
+use App\Http\Repository\WalletRepository;
 
 class WalletService extends BaseService
 {
@@ -85,17 +86,24 @@ public function saveItemData($request)
     return $response;
 }
 
-    public function searcheCustomer($userId,$type,$currency) {
+    public function searcheCustomer($request) {
         try {
-            createUserWallet($userId);
-            $items = $this->repository->getUserWalletList($userId,$type,$currency);
-            if (isset($items[0])) {
-                return responseData(true, __('Data get successfully'),$items);
-            } else {
-                return responseData(false, __('Data not found'));
-            }
+            if(!isset($request->search) && empty($request->search))
+                return responseData(false, __('Customer not found!'));
+
+            $search = $request->search;
+            $user = User::where(function($q)use($search){
+                        return $q->where('name', 'LIKE', "%$search%")
+                        ->orWhere('email', 'LIKE', "%$search%");
+                    })
+                    ->where('role_module', 3)
+                    ->get(['unique_code', 'email']);
+            $data['customer'] = $user;
+
+            if(isset($user[0])) return responseData(true, __('Customer get successfully'),$data);
+            return responseData(false, __('Customer not found!')); 
         } catch(\Exception $e) {
-            storeException('userWalletList ex', $e->getMessage());
+            storeException('searcheCustomer ex', $e->getMessage());
             return responseData(false, __('Something went wrong'));
         }
     }
