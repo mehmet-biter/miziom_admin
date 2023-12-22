@@ -124,24 +124,9 @@ public function saveItemData($request)
                         ->where('coins.status', '=', STATUS_ACTIVE)
                         ->select('wallets.*', 'coins.*')
                         ->get();
-            dd($wallet);
+            $data['wallet'] = $wallet;
 
-
-
-            if(!isset($request->search) && empty($request->search))
-                return responseData(false, __('Customer not found!'));
-
-            $search = $request->search;
-            $user = User::where(function($q)use($search){
-                        return $q->where('name', 'LIKE', "%$search%")
-                        ->orWhere('email', 'LIKE', "%$search%");
-                    })
-                    ->where('role_module', MODULE_USER)
-                    ->get(['unique_code', 'email']);
-            $data['customer'] = $user;
-
-            if(isset($user[0])) return responseData(true, __('Customer get successfully'),$data);
-            return responseData(false, __('Customer not found!')); 
+            return responseData(true, __('Withdrawal data found!'), $data);
         } catch(\Exception $e) {
             storeException('searcheCustomer ex', $e->getMessage());
             return responseData(false, __('Something went wrong'));
