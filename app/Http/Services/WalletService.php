@@ -259,8 +259,7 @@ public function saveItemData($request)
                         return responseData(false, __("Customer wallet not found!"));
                 }
 
-                $wallet->decrement("balance", $amount);
-                if(! $customerWallet->increment("balance", $amount)){
+                if(($wallet->decrement("balance", $amount) && $customerWallet->increment("balance", $amount))){
                     DB::commit();
                     return responseData(true, __("Customer withdrawal success"));
                 }
@@ -272,7 +271,7 @@ public function saveItemData($request)
             if(! $addressHistory = WalletAddressHistory::where('address', $request->address)->first()){
                 $withdrawl_type = ADDRESS_TYPE_EXTERNAL;
 
-                if(! $wallet->decrement("balance", $amount)){
+                if($wallet->decrement("balance", $amount)){
                     DB::commit();
                     return responseData(true, __("Withdrawal success"));
                 }
@@ -280,9 +279,9 @@ public function saveItemData($request)
                 return responseData(true, __("Withdrawal failed"));
             }
 
-            if(! $customerWallet = Wallet::find($addressHistory->wallet_id)){
+            if($customerWallet = Wallet::find($addressHistory->wallet_id)){
                 $wallet->decrement("balance", $amount);
-                if(! $customerWallet->increment("balance", $amount)){
+                if($customerWallet->increment("balance", $amount)){
                     DB::commit();
                     return responseData(true, __("Withdrawal success"));
                 }
@@ -290,7 +289,6 @@ public function saveItemData($request)
                 return responseData(false, __("Withdrawal failed!"));
             }
 
-            DB::rollBack();
             return responseData(false, __("Withdrawal Failed!"));
         } catch(\Exception $e) {
             storeException("walletWithdrawalProccess", $e->getMessage());
