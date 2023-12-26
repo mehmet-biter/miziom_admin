@@ -223,47 +223,80 @@ public function saveItemData($request)
 
     public function walletWithdrawalProccess($request)
     {
-        $user = Auth::user();
-        $wallet = Wallet::join('coins', 'coins.id', '=', 'wallets.coin_id')
-                ->where(['wallets.id'=>$request->wallet_id, 'wallets.user_id'=> $user->id, 'coins.is_withdrawal' => STATUS_ACTIVE])
-                ->select('wallets.*', 'coins.status as coin_status', 'coins.is_withdrawal', 'coins.minimum_withdrawal',
-                    'coins.maximum_withdrawal', 'coins.withdrawal_fees', 'coins.max_send_limit','coins.withdrawal_fees_type','coins.network')
-                ->first();
+        try{
+            $user = Auth::user();
+            $wallet = Wallet::join('coins', 'coins.id', '=', 'wallets.coin_id')
+                    ->where(['wallets.id'=>$request->wallet_id, 'wallets.user_id'=> $user->id, 'coins.is_withdrawal' => STATUS_ACTIVE])
+                    ->select('wallets.*', 'coins.status as coin_status', 'coins.is_withdrawal', 'coins.minimum_withdrawal',
+                        'coins.maximum_withdrawal', 'coins.withdrawal_fees', 'coins.max_send_limit','coins.withdrawal_fees_type','coins.network')
+                    ->first();
 
-        if(!$wallet) return responseData(false, __('Wallet not found!'));
+            if(!$wallet) return responseData(false, __('Wallet not found!'));
 
-        $amount = $request->amount;
+            $amount = $request->amount;
 
-        if($request->type == WITHDRAWAL_CURRENCY_TYPE_CRYPTO){
+            if($request->type == WITHDRAWAL_CURRENCY_TYPE_CRYPTO){
 
-            if( !($wallet->balance >= $amount))
-                return responseData(false, __('insufficient balance for withdrawal request!'));
-        }else{
+                if( !($wallet->balance >= $amount))
+                    return responseData(false, __('insufficient balance for withdrawal request!'));
+            }else{
 
-            $usdTotalAmount = convert_currency($wallet->coin_type,'USD',1);
-            if( !($usdTotalAmount >= $amount))
-                return responseData(false, __('insufficient balance for withdrawal request!'));
-        }
-
-        if(isset($request->customer_id)){
-            if(! $customer = User::find($request->customer_id))
-                return responseData(false, __('Customer not found!'));
-
-            if(! $customerWallet = Wallet::where(['user_id' => $customer->id, "coin_type" => $wallet->coin_type])->first()){
-                createUserWallet($customer->id);
-                $customerWallet = Wallet::where(['user_id' => $customer->id, "coin_type" => $wallet->coin_type])->first();
+                $usdTotalAmount = convert_currency($wallet->coin_type,'USD',1);
+                $amount = $amount / $usdTotalAmount;
+                if( !($wallet->balance >= $amount))
+                    return responseData(false, __('insufficient balance for withdrawal request!'));
             }
-            
-            return responseData(true, __("Customer withdrawal success"));
-        }
 
-        $withdrawl_type = ADDRESS_TYPE_INTERNAL;
-        if(! $addressHistory = WalletAddressHistory::where('address', $request->address)->first()){
-            $withdrawl_type = ADDRESS_TYPE_EXTERNAL;
-            return responseData(true, __("EXTERNAL withdrawal success"));
-        }
+            DB::beginTransaction();
 
-        return responseData(true, __("INTERNAL withdrawal success"));
+            if(isset($request->customer_id)){
+                if(! $customer = User::find($request->customer_id))
+                    return responseData(false, __('Customer not found!'));
+
+                if(! $customerWallet = Wallet::where(['user_id' => $customer->id, "coin_type" => $wallet->coin_type])->first()){
+                    createUserWallet($customer->id);
+                    if(! $customerWallet = Wallet::where(['user_id' => $customer->id, "coin_type" => $wallet->coin_type])->first())
+                        return responseData(false, __("Customer wallet not found!"));
+                }
+
+                $wallet->decrement("balance", $amount);
+                if(! $customerWallet->increment("balance", $amount)){
+                    DB::commit();
+                    return responseData(true, __("Customer withdrawal success"));
+                }
+                DB::rollBack();
+                return responseData(false, __("Customer withdrawal failed!"));
+            }
+
+            $withdrawl_type = ADDRESS_TYPE_INTERNAL;
+            if(! $addressHistory = WalletAddressHistory::where('address', $request->address)->first()){
+                $withdrawl_type = ADDRESS_TYPE_EXTERNAL;
+
+                if(! $wallet->decrement("balance", $amount)){
+                    DB::commit();
+                    return responseData(true, __("Withdrawal success"));
+                }
+                DB::rollBack();
+                return responseData(true, __("Withdrawal failed"));
+            }
+
+            if(! $customerWallet = Wallet::find($addressHistory->wallet_id)){
+                $wallet->decrement("balance", $amount);
+                if(! $customerWallet->increment("balance", $amount)){
+                    DB::commit();
+                    return responseData(true, __("Withdrawal success"));
+                }
+                DB::rollBack();
+                return responseData(false, __("Withdrawal failed!"));
+            }
+
+            DB::rollBack();
+            return responseData(false, __("Withdrawal Failed!"));
+        } catch(\Exception $e) {
+            storeException("walletWithdrawalProccess", $e->getMessage());
+            DB::rollBack();
+            return responseData(false, __("Withdrawal Failed! Something went wrong"));
+        }
     }
 
 }
