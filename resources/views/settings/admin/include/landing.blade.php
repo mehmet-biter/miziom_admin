@@ -7,24 +7,24 @@
                     <div class="mt-4  items-center">
                         <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Banner Title') }}</label>
                         <input type="text" name="landing_banner_title" class="mt-2 form-input flex-1"
-                            value="{{ $settings['landing_banner_title']}}" />
+                            value="{{ $settings['landing_banner_title'] ?? ""}}" />
                     </div>
                     <div class="mt-4  items-center">
                         <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Banner Sub Title') }}</label>
                         <input type="text" name="landing_banner_sub_title" class="mt-2 form-input flex-1"
-                            value="{{ $settings['landing_banner_sub_title']}}" />
+                            value="{{ $settings['landing_banner_sub_title'] ?? ""}}" />
                     </div>
                     <div class="mt-4  items-center">
                         <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Banner Button Text') }}</label>
                         <input type="text" name="landing_banner_button_text" class="mt-2 form-input flex-1"
-                            value="{{ $settings['landing_banner_button_text']}}" />
+                            value="{{ $settings['landing_banner_button_text'] ?? ""}}" />
                     </div>
                     <div class="mt-4  items-center">
                         <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Banner Background Image') }}</label>
                         <input type="file" name="landing_banner_image" class="mt-2 form-input flex-1"/>
-                        @if(!empty($settings['landing_banner_image']))
+                        @if(!empty($settings['landing_banner_image'] ?? ""))
                             <div>
-                                <img class="w-40 h-20" src="{{ showImage(VIEW_IMAGE_SETTING_PATH,$settings['landing_banner_image']) }}" alt="">
+                                <img class="w-40 h-20" src="{{ showImage(VIEW_IMAGE_SETTING_PATH,$settings['landing_banner_image'] ?? "") }}" alt="">
                             </div>
                         @endif
                     </div>
@@ -35,23 +35,23 @@
                     <div class="mt-4  items-center">
                         <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('About Title') }}</label>
                         <input type="text" name="landing_about_title" class="mt-2 form-input flex-1"
-                            value="{{ $settings['landing_about_title']}}" />
+                            value="{{ $settings['landing_about_title'] ?? ""}}" />
                     </div>
                     <div class="mt-4  items-center">
                         <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('About Sub Title') }}</label>
                         <input type="text" name="landing_about_sub_title" class="mt-2 form-input flex-1"
-                            value="{{ $settings['landing_about_sub_title']}}" />
+                            value="{{ $settings['landing_about_sub_title'] ?? ""}}" />
                     </div>
                     <div class="mt-4  items-center">
                         <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('About Description') }}</label>
-                        <textarea id="" name="landing_about_des" class="form-textarea h-20" >{{ $settings['landing_about_des'] }}</textarea>
+                        <textarea id="" name="landing_about_des" class="form-textarea h-20" >{{ $settings['landing_about_des'] ?? "" }}</textarea>
                     </div>
                     <div class="mt-4  items-center">
                         <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('About Image') }}</label>
                         <input type="file" name="landing_about_image" class="mt-2 form-input flex-1"/>
-                        @if(!empty($settings['landing_about_image']))
+                        @if(!empty($settings['landing_about_image'] ?? ""))
                             <div>
-                                <img class="w-40 h-20" src="{{ showImage(VIEW_IMAGE_SETTING_PATH,$settings['landing_about_image']) }}" alt="">
+                                <img class="w-40 h-20" src="{{ showImage(VIEW_IMAGE_SETTING_PATH,$settings['landing_about_image'] ?? "") }}" alt="">
                             </div>
                         @endif
                     </div>
@@ -65,16 +65,16 @@
                     <div class="mt-4  items-center">
                         <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Service Title') }}</label>
                         <input type="text" name="landing_service_title" class="mt-2 form-input flex-1"
-                            value="{{ $settings['landing_service_title']}}" />
+                            value="{{ $settings['landing_service_title'] ?? ""}}" />
                     </div>
                     <div class="mt-4  items-center">
                         <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Service Sub Title') }}</label>
                         <input type="text" name="landing_service_sub_title" class="mt-2 form-input flex-1"
-                            value="{{ $settings['landing_service_sub_title']}}" />
+                            value="{{ $settings['landing_service_sub_title'] ?? ""}}" />
                     </div>
                     <div class="mt-4  items-center">
                         <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Service Description') }}</label>
-                        <textarea id="" name="landing_service_des" class="form-textarea h-20" >{{ $settings['landing_service_des'] }}</textarea>
+                        <textarea id="" name="landing_service_des" class="form-textarea h-20" >{{ $settings['landing_service_des'] ?? "" }}</textarea>
                     </div>
                 </div>
                 <div class="lg:w-1/2 w-full ltr:lg:mr-6 rtl:lg:ml-6 mb-6">
@@ -83,16 +83,16 @@
                     <div class="mt-4  items-center">
                         <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Team Title') }}</label>
                         <input type="text" name="landing_team_title" class="mt-2 form-input flex-1"
-                            value="{{ $settings['landing_team_title']}}" />
+                            value="{{ $settings['landing_team_title'] ?? ""}}" />
                     </div>
                     <div class="mt-4  items-center">
                         <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Team Sub Title') }}</label>
                         <input type="text" name="landing_team_sub_title" class="mt-2 form-input flex-1"
-                            value="{{ $settings['landing_team_sub_title']}}" />
+                            value="{{ $settings['landing_team_sub_title'] ?? ""}}" />
                     </div>
                     <div class="mt-4  items-center">
                         <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Team Description') }}</label>
-                        <textarea id="" name="landing_team_des" class="form-textarea h-20" >{{ $settings['landing_team_des'] }}</textarea>
+                        <textarea id="" name="landing_team_des" class="form-textarea h-20" >{{ $settings['landing_team_des'] ?? "" }}</textarea>
                     </div>
                     
                 </div>
@@ -105,16 +105,16 @@
                     <div class="mt-4  items-center">
                         <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Job Title') }}</label>
                         <input type="text" name="landing_job_title" class="mt-2 form-input flex-1"
-                            value="{{ $settings['landing_job_title']}}" />
+                            value="{{ $settings['landing_job_title'] ?? ""}}" />
                     </div>
                     <div class="mt-4  items-center">
                         <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Job Sub Title') }}</label>
                         <input type="text" name="landing_job_sub_title" class="mt-2 form-input flex-1"
-                            value="{{ $settings['landing_job_sub_title']}}" />
+                            value="{{ $settings['landing_job_sub_title'] ?? ""}}" />
                     </div>
                     <div class="mt-4  items-center">
                         <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Job Description') }}</label>
-                        <textarea id="" name="landing_job_des" class="form-textarea h-20" >{{ $settings['landing_job_des'] }}</textarea>
+                        <textarea id="" name="landing_job_des" class="form-textarea h-20" >{{ $settings['landing_job_des'] ?? "" }}</textarea>
                     </div>
                 </div>
                 <div class="lg:w-1/2 w-full ltr:lg:mr-6 rtl:lg:ml-6 mb-6">
@@ -123,16 +123,16 @@
                     <div class="mt-4  items-center">
                         <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Contact Title') }}</label>
                         <input type="text" name="landing_contact_title" class="mt-2 form-input flex-1"
-                            value="{{ $settings['landing_contact_title']}}" />
+                            value="{{ $settings['landing_contact_title'] ?? ""}}" />
                     </div>
                     <div class="mt-4  items-center">
                         <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Contact Sub Title') }}</label>
                         <input type="text" name="landing_contact_sub_title" class="mt-2 form-input flex-1"
-                            value="{{ $settings['landing_contact_sub_title']}}" />
+                            value="{{ $settings['landing_contact_sub_title'] ?? ""}}" />
                     </div>
                     <div class="mt-4  items-center">
                         <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Contact Description') }}</label>
-                        <textarea id="" name="landing_contact_des" class="form-textarea h-20" >{{ $settings['landing_contact_des'] }}</textarea>
+                        <textarea id="" name="landing_contact_des" class="form-textarea h-20" >{{ $settings['landing_contact_des'] ?? "" }}</textarea>
                     </div>
                     
                 </div>
@@ -145,26 +145,26 @@
                     <div class="mt-4  items-center">
                         <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Job Ready Title') }}</label>
                         <input type="text" name="landing_job_ready_title" class="mt-2 form-input flex-1"
-                            value="{{ $settings['landing_job_ready_title']}}" />
+                            value="{{ $settings['landing_job_ready_title'] ?? ""}}" />
                     </div>
                     <div class="mt-4  items-center">
                         <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Job Ready Button Text') }}</label>
                         <input type="text" name="landing_job_ready_button_text" class="mt-2 form-input flex-1"
-                            value="{{ $settings['landing_job_ready_button_text']}}" />
+                            value="{{ $settings['landing_job_ready_button_text'] ?? ""}}" />
                     </div>
                 </div>
                 <div class="lg:w-1/2 w-full ltr:lg:mr-6 rtl:lg:ml-6 mb-6">
                     <h5 class="font-semibold text-lg dark:text-white-light"></h5>
                     <div class="mt-4  items-center">
                         <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Job Ready Description') }}</label>
-                        <textarea id="" name="landing_job_ready_des" class="form-textarea h-20" >{{ $settings['landing_job_ready_des'] }}</textarea>
+                        <textarea id="" name="landing_job_ready_des" class="form-textarea h-20" >{{ $settings['landing_job_ready_des'] ?? "" }}</textarea>
                     </div>
                     <div class="mt-4  items-center">
                         <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Job Ready Background Image') }}</label>
                         <input type="file" name="landing_job_ready_back_img" class="mt-2 form-input flex-1"/>
-                        @if(!empty($settings['landing_job_ready_back_img']))
+                        @if(!empty($settings['landing_job_ready_back_img'] ?? ""))
                             <div>
-                                <img class="w-40 h-20" src="{{ showImage(VIEW_IMAGE_SETTING_PATH,$settings['landing_job_ready_back_img']) }}" alt="">
+                                <img class="w-40 h-20" src="{{ showImage(VIEW_IMAGE_SETTING_PATH,$settings['landing_job_ready_back_img'] ?? "") }}" alt="">
                             </div>
                         @endif
                     </div>

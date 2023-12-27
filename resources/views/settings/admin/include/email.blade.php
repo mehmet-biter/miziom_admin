@@ -4,21 +4,21 @@
             <div class="flex justify-between lg:flex-row flex-col">
                 <div class="lg:w-1/2 w-full ltr:lg:mr-6 rtl:lg:ml-6 mb-6">
                     <div class="mt-4  items-center">
-                        <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('App Name') }}</label>
+                        <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('App Namell') }}</label>
                         <input type="text" name="app_title" class="mt-2 form-input flex-1"
-                            value="{{ $settings['app_title']}}" />
+                            value="{{ $settings['app_title'] ?? ""}}" />
                     </div>
                     <div class="mt-4  items-center">
                         <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Tag Title') }}</label>
                         <input type="text" name="tag_title" class="mt-2 form-input flex-1"
-                            value="{{ $settings['tag_title']}}" />
+                            value="{{ $settings['tag_title'] ?? ""}}" />
                     </div>
                     
                     
                     <div class="mt-4  items-center">
                         <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Email Address') }}</label>
                         <input type="text" name="company_email" class="mt-2 form-input flex-1"
-                            value="{{ $settings['company_email']}}" />
+                            value="{{ $settings['company_email'] ?? ""}}" />
                     </div>
                     
                 </div>
@@ -26,18 +26,18 @@
                     <div class="mt-4  items-center">
                         <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Address Line') }}</label>
                         <input type="text" name="company_address" class="mt-2 form-input flex-1"
-                            value="{{ $settings['company_address']}}" />
+                            value="{{ $settings['company_address'] ?? ""}}" />
                     </div>
                     <div class="mt-4  items-center">
                         <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Helpline') }}</label>
                         <input type="text" name="helpline" class="mt-2 form-input flex-1"
-                            value="{{ $settings['helpline']}}" />
+                            value="{{ $settings['helpline'] ?? ""}}" />
                     </div>
                     
                     <div class="mt-4  items-center">
                         <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Copyright Text') }}</label>
                         <input type="text" name="copyright_text" class="mt-2 form-input flex-1"
-                            value="{{ $settings['copyright_text']}}" />
+                            value="{{ $settings['copyright_text'] ?? ""}}" />
                     </div>
                 </div>
             </div>
