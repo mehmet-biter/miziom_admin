@@ -1,43 +1,69 @@
-<form method="POST" action="{{ route('updateGeneralSetting') }}" enctype="multipart/form-data">
+<form method="POST" action="{{ route('adminSaveEmailSettings') }}" enctype="multipart/form-data">
     @csrf
         <div class="mt-4 px-4">
             <div class="flex justify-between lg:flex-row flex-col">
                 <div class="lg:w-1/2 w-full ltr:lg:mr-6 rtl:lg:ml-6 mb-6">
                     <div class="mt-4  items-center">
-                        <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('App Namell') }}</label>
-                        <input type="text" name="app_title" class="mt-2 form-input flex-1"
-                            value="{{ $settings['app_title'] ?? ""}}" />
+                        <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Mail Driver') }}</label>
+                        <input type="text" name="mail_driver" class="mt-2 form-input flex-1"
+                            value="{{ $settings['mail_driver'] ?? ""}}" />
                     </div>
                     <div class="mt-4  items-center">
-                        <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Tag Title') }}</label>
-                        <input type="text" name="tag_title" class="mt-2 form-input flex-1"
-                            value="{{ $settings['tag_title'] ?? ""}}" />
+                        <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Email Host') }}</label>
+                        <input type="text" name="mail_host" class="mt-2 form-input flex-1"
+                            value="{{ $settings['mail_host'] ?? ""}}" />
                     </div>
                     
                     
                     <div class="mt-4  items-center">
-                        <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Email Address') }}</label>
-                        <input type="text" name="company_email" class="mt-2 form-input flex-1"
-                            value="{{ $settings['company_email'] ?? ""}}" />
+                        <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Email Port') }}</label>
+                        <input type="number" name="mail_port" class="mt-2 form-input flex-1"
+                            value="{{ $settings['mail_port'] ?? ""}}" />
                     </div>
                     
                 </div>
                 <div class="lg:w-1/2 w-full ltr:lg:mr-6 rtl:lg:ml-6 mb-6">
                     <div class="mt-4  items-center">
-                        <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Address Line') }}</label>
-                        <input type="text" name="company_address" class="mt-2 form-input flex-1"
-                            value="{{ $settings['company_address'] ?? ""}}" />
+                        <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Email Username') }}</label>
+                        <input type="text" name="mail_username" class="mt-2 form-input flex-1"
+                            value="{{ $settings['mail_username'] ?? ""}}" />
                     </div>
                     <div class="mt-4  items-center">
-                        <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Helpline') }}</label>
-                        <input type="text" name="helpline" class="mt-2 form-input flex-1"
-                            value="{{ $settings['helpline'] ?? ""}}" />
+                        <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Email Password') }}</label>
+                        <input type="password" name="mail_password" class="mt-2 form-input flex-1"
+                            value="{{ $settings['mail_password'] ?? ""}}" />
                     </div>
                     
                     <div class="mt-4  items-center">
-                        <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Copyright Text') }}</label>
-                        <input type="text" name="copyright_text" class="mt-2 form-input flex-1"
-                            value="{{ $settings['copyright_text'] ?? ""}}" />
+                        <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Email Encryption') }}</label>
+                        <input type="text" name="mail_encryption" class="mt-2 form-input flex-1"
+                            value="{{ $settings['mail_encryption'] ?? ""}}" />
+                    </div>
+                </div>
+                <div class="lg:w-1/2 w-full ltr:lg:mr-6 rtl:lg:ml-6 mb-6">
+                    <div class="mt-4  items-center">
+                        <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Email From Address') }}</label>
+                        <input type="email" name="mail_from_address" class="mt-2 form-input flex-1"
+                            value="{{ $settings['mail_from_address'] ?? ""}}" required />
+                    </div>
+                </div>
+            </div>
+
+            <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6">
+            <div class="flex items-center justify-start mb-5">
+                <h2 class="font-semibold dark:text-white-light">{{ __('This configuration is only for mailgun (optional)') }}</h2>
+            </div>
+            <div class=" ">
+                <div class="flex lg:w-1/2 w-full ltr:lg:mr-6 rtl:lg:ml-6 mb-6">
+                    <div class="mt-4  items-center ">
+                        <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Mailgun Domain') }}</label>
+                        <input type="text" name="MAILGUN_DOMAIN" class="mt-2 form-input flex-1"
+                            value="{{ $settings['MAILGUN_DOMAIN'] ?? ""}}" />
+                    </div>
+                    <div class="mt-4  items-center mr-6">
+                        <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Mailgun Secret') }}</label>
+                        <input type="text" name="MAILGUN_SECRET" class="mt-2 form-input flex-1"
+                            value="{{ $settings['MAILGUN_SECRET'] ?? ""}}" />
                     </div>
                 </div>
             </div>
@@ -76,4 +102,31 @@
                 </div>
             </div>
         </div>
-    </form>
+</form>
+<hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6">
+<div class="flex items-center justify-between mb-5">
+    <h5 class="font-semibold text-lg dark:text-white-light">{{ __('Send Test Email') }}</h5>
+</div>
+<hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6">
+<form method="POST" action="{{ route('testmailsend') }}" enctype="multipart/form-data">
+    @csrf
+        <div class="mt-4 px-4">
+            <div class="flex justify-between lg:flex-row flex-col">
+                <div class="lg:w-1/2 w-full ltr:lg:mr-6 rtl:lg:ml-6 mb-6">
+                    <div class="mt-4  items-center">
+                        <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('To Email') }}</label>
+                        <input type="text" name="email" class="mt-2 form-input flex-1" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mt-8">
+            <div class="flex justify-between sm:flex-row flex-col mt-6 px-4">
+                <div class="sm:mb-0 mb-6 flex justify-between gap-2">
+                    <button type="submit" class="btn btn-success w-full gap-2">
+                        {{  __("Send Email")}} 
+                    </button>
+                </div>
+            </div>
+        </div>
+</form>

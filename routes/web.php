@@ -65,6 +65,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','admins']], function 
 
     Route::get('settings',[AdminSettingController::class,'adminSetting'])->name('adminSetting');
     Route::post('update-generel-settings',[AdminSettingController::class,'updateGeneralSetting'])->name('updateGeneralSetting');
+    Route::post('email-save-settings', [AdminSettingController::class,'adminSaveEmailSettings'])->name('adminSaveEmailSettings');
+    Route::post('send_test_mail', [AdminSettingController::class,'testMail'])->name('testmailsend');
 
     Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index'])->name('adminLogs');
 
