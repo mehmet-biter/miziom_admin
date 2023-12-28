@@ -351,3 +351,22 @@ function convert_currency($from, $to, $amount){
     }
     return $returnAmount;
 }
+
+function checkCoinNetworkUpdateCondition($coin)
+{
+    $response = ['success' => true, 'message' => __('Success')];
+
+    $checkCoinWalletAddress = checkWalletAddressByCoin($coin->coin_type);
+    if ($checkCoinWalletAddress > 0) {
+        return ['success' => false, 'message' => __('This coin network wallet already have some address, so you should not change this coin network.')];
+    }
+    $checkCoinDeposit = checkDepositByCoin($coin->coin_type);
+    if ($checkCoinDeposit > 0) {
+        return ['success' => false, 'message' => __('This coin network already have some deposit, so you should not change this coin network')];
+    }
+    $checkCoinWithdrawal = checkWithdrawalByCoin($coin->coin_type);
+    if ($checkCoinWithdrawal > 0) {
+        return ['success' => false, 'message' => __('This coin network already have some withdrawal, so you should not change this coin network')];
+    }
+    return $response;
+}

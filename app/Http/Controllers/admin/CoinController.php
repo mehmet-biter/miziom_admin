@@ -90,22 +90,18 @@ class CoinController extends Controller
             $input['coin_type'] = $request->coin_type;
             $input['network'] = $request->network;
             $input['name'] = $request->name;
-            $input['coin_price'] = $request->coin_price;
+            $input['usd_rate'] = $request->coin_price;
             $input['is_deposit'] = isset($request->is_deposit) ? 1 : 0;
             $input['is_withdrawal'] = isset($request->is_withdrawal) ? 1 : 0;
             $input['status'] = isset($request->status) ? 1 : 0;
-            $input['is_wallet'] = isset($request->is_wallet) ? 1 : 0;
-            $input['is_virtual_amount'] = isset($request->is_virtual_amount) ? 1 : 0;
-            $input['is_transferable'] = isset($request->is_transferable) ? 1 : 0;
             $input['minimum_withdrawal'] = $request->minimum_withdrawal;
             $input['maximum_withdrawal'] = $request->maximum_withdrawal;
             $input['withdrawal_fees'] = $request->withdrawal_fees;
             $input['max_send_limit'] = $request->max_send_limit ?? 0;
             $input['withdrawal_fees_type'] = $request->withdrawal_fees_type ?? 2;
-            $input['admin_approval'] = $request->admin_approval ?? 2;
 
             if (!empty($request->coin_icon)) {
-                $icon = uploadFile($request->coin_icon,IMG_ICON_PATH,'');
+                $icon = uploadImage($request->coin_icon,IMG_ICON_PATH,'');
                 if ($icon != false) {
                     $input['coin_icon'] = $icon;
                 }
@@ -120,7 +116,7 @@ class CoinController extends Controller
             return (isset($coin) && $coin['success']) ? redirect()->back()->with(['success' => $coin['message']]) :
                 redirect()->back()->with(['dismiss' => $coin['message']]);
         } catch (\Exception $e) {
-            storeException('coin_price', $e->getMessage());
+            storeException('adminCoinSaveProcess', $e->getMessage());
             redirect()->back()->with(['dismiss' => __('Something went wrong')]);
         }
     }
@@ -147,19 +143,19 @@ class CoinController extends Controller
             if($request->currency_type == CURRENCY_TYPE_FIAT){
                 if($currency = CurrencyList::whereCode($request->coin_type)->first()){
                     $data['currency_id'] = $currency->id;
-                    $data['coin_price'] = bcdiv(1,$currency->rate,8);
+                    $data['usd_rate'] = bcdiv(1,$currency->rate,8);
                 }
             } else {
                 if ($request->get_price_api == 1) {
                     $pair = strtoupper($request->coin_type).'_'.'USDT';
                     $apiData = getPriceFromApi($pair);
                     if ($apiData['success'] == true) {
-                        $data['coin_price'] = $apiData['data']['price'];
+                        $data['usd_rate'] = $apiData['data']['price'];
                     } else {
                         return redirect()->back()->with('dismiss', __('Get api data failed, please add manual price'));
                     }
                 } else {
-                    $data['coin_price'] = $request->coin_price;
+                    $data['usd_rate'] = $request->coin_price;
                 }
             }
 

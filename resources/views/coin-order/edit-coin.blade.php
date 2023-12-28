@@ -41,7 +41,7 @@
                                     <div class="mt-4 ">
                                         <label for="question" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">{{ __('Coin Price (in USD)') }} <span class="text-danger">*</span></label>
                                         <input id="question" type="text" name="coin_price" class="form-input flex-1"
-                                            @if(isset($item)) value="{{ $item->coin_price }}" @else value="{{ old('coin_price') }}" @endif />
+                                            @if(isset($item)) value="{{ $item->usd_rate }}" @else value="{{ old('coin_price') }}" @endif />
                                             <small>{{__('Coin price in USD. it will update by currency api regularly')}}</small>
                                     </div>
                                 </div>
