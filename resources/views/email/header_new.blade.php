@@ -54,7 +54,7 @@
                             <tr>
                                 <td valign="center">
                                     <div mc:edit="header_logo">
-                                        <a href="{{ settings('exchange_url') }}">
+                                        <a href="{{ env("APP_URL", "#") }}">
                                             <img @if(!empty(allSetting()['logo'])) src="{{asset(path_image().allSetting()['logo'])}}" @else src="{{asset('assets/user/images/logo.svg')}}" @endif alt="" style="width:140px;">
                                         </a>
                                     </div>

@@ -7,7 +7,7 @@
                     <td valign="center" align="center">
                         <p style="color: #F9B507">
                             {{__('Thanks a lot for being with us.')}} <br/>
-                            <a style="color: #F9B507" href="{{settings('exchange_url')}}">{{allSetting()['app_name']}}</a>
+                            <a style="color: #F9B507" href="{{ env("APP_URL", "#") }}">{{ allSetting()['app_title'] ?? __("Miziom")}}</a>
                         </p>
                     </td>
                 </tr>
