@@ -121,6 +121,20 @@
         },
     });
 
+    function processForm(active_id) {
+        $.ajax({
+            type: "POST",
+            url: "{{ route('adminCoinStatus') }}",
+            data: {
+                '_token': "{{ csrf_token() }}",
+                'active_id': active_id
+            },
+            success: function (data) {
+                console.log(data);
+            }
+        });
+    }
+
     const showAlert = async (id) => {
         let url = '{{ route("adminCoinDelete") }}/' + id;
         const swalWithBootstrapButtons = window.Swal.mixin({

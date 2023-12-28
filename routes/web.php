@@ -77,6 +77,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','admins']], function 
     Route::get('coin-settings/{id}', [CoinController::class,'adminCoinSettings'])->name('adminCoinSettings');
     Route::post('coin-save-process', [CoinController::class,'adminCoinSaveProcess'])->name('adminCoinSaveProcess');
     Route::post('save-new-coin', [CoinController::class,'adminSaveCoin'])->name('adminSaveCoin');
+    Route::post('change-coin-status', [CoinController::class,'adminCoinStatus'])->name('adminCoinStatus');
 
     Route::get('currency-list', [CurrencyController::class,'adminCurrencyList'])->name('adminCurrencyList');
     Route::get('currency-add', [CurrencyController::class,'adminCurrencyAdd'])->name('adminCurrencyAdd');
