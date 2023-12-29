@@ -9,12 +9,24 @@ class WithdrawHistory extends Model
 {
     use HasFactory;
     protected $fillable = [
-        "id",
+        "user_id",
         "wallet_id",
+        "amount",
+        "btc",
+        "doller",
+        "address_type",
         "address",
+        "transaction_hash",
         "coin_type",
-        "BTC",
-        "wallet_key",
-        "public_key",
+        "used_gas",
+        "receiver_wallet_id",
+        "confirmations",
+        "fees",
+        "status",
+        "updated_by",
+        "automatic_withdrawal",
+        "network_type",
+        "memo",
+        "message",
     ];
 }

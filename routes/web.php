@@ -11,6 +11,7 @@ use App\Http\Controllers\admin\SettingController;
 use App\Http\Controllers\admin\CurrencyController;
 use App\Http\Controllers\Contact\ContactController;
 use App\Http\Controllers\Profile\ProfileController;
+use App\Http\Controllers\admin\TransactionController;
 use App\Http\Controllers\admin\CoinSettingsController;
 use App\Http\Controllers\Setting\AdminSettingController;
 
@@ -99,6 +100,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','admins']], function 
     
     Route::get('coin-payment-setting', [SettingController::class, 'coinPaymentSetting'])->name('coinPaymentSetting');
     Route::post('save-payment-settings', [SettingController::class, 'adminSavePaymentSettings'])->name('adminSavePaymentSettings');
+
+    Route::get('pending-withdrawal', [TransactionController::class, 'adminPendingWithdrawal'])->name('adminPendingWithdrawal');
 });
 });
 

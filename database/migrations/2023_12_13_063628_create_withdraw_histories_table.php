@@ -13,11 +13,26 @@ return new class extends Migration
     {
         Schema::create('withdraw_histories', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('wallet_id');
+            $table->bigInteger('user_id');
+            $table->bigInteger('wallet_id')->unsigned();
+            $table->foreign('wallet_id')->references('id')->on('wallets')->onDelete('cascade');
+            $table->decimal('amount',19,8)->default(0);
+            $table->decimal('btc',19,8)->default(0);
+            $table->decimal('doller',19,8)->default(0);
+            $table->tinyInteger('address_type');
             $table->string('address');
+            $table->string('transaction_hash');
             $table->string('coin_type')->default('BTC');
-            $table->text('wallet_key')->nullable();
-            $table->text('public_key')->nullable();
+            $table->decimal('used_gas',19,8)->default(0);
+            $table->string('receiver_wallet_id')->nullable();
+            $table->string('confirmations')->nullable();
+            $table->decimal('fees',29,18)->default(0);
+            $table->tinyInteger('status')->default(0);
+            $table->tinyInteger('updated_by')->nullable();
+            $table->string('automatic_withdrawal')->nullable();
+            $table->string('network_type')->nullable();
+            $table->string('memo')->nullable();
+            $table->longText('message')->nullable();
             $table->timestamps();
         });
     }
