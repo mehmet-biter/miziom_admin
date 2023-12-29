@@ -229,7 +229,7 @@
                         </h2>
 
                         <li class="nav-item">
-                            <a href="{{ route('adminPendingWithdrawal') }}" class="group">
+                            <a href="{{ route('adminActiveWithdrawal') }}" class="group">
                                 <div class="flex items-center">
 
                                     <svg class="group-hover:!text-primary shrink-0" width="20" height="20"
@@ -277,7 +277,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('adminPendingWithdrawal') }}" class="group">
+                            <a href="{{ route('adminRejectedWithdrawal') }}" class="group">
                                 <div class="flex items-center">
 
                                     <svg class="group-hover:!text-primary shrink-0" width="20" height="20"

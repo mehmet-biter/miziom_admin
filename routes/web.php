@@ -101,7 +101,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','admins']], function 
     Route::get('coin-payment-setting', [SettingController::class, 'coinPaymentSetting'])->name('coinPaymentSetting');
     Route::post('save-payment-settings', [SettingController::class, 'adminSavePaymentSettings'])->name('adminSavePaymentSettings');
 
+    Route::get('active-withdrawal', [TransactionController::class, 'adminActiveWithdrawal'])->name('adminActiveWithdrawal');
     Route::get('pending-withdrawal', [TransactionController::class, 'adminPendingWithdrawal'])->name('adminPendingWithdrawal');
+    Route::get('rejected-withdrawal', [TransactionController::class, 'adminRejectedWithdrawal'])->name('adminRejectedWithdrawal');
 });
 });
 

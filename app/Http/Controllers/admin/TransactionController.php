@@ -62,6 +62,100 @@ class TransactionController extends Controller
                 ->rawColumns(['actions'])
                 ->make(true);
         }
-        return view('withdrawal.list', $data);
+        return view('withdrawal.pending_list', $data);
+    }
+
+    public function adminActiveWithdrawal(Request $request)
+    {
+        $data['title'] = __('Completed Withdrawal');
+        if ($request->ajax()) {
+            $withdrawal = WithdrawHistory::select(
+                'withdraw_histories.address'
+                , 'withdraw_histories.amount'
+                , 'withdraw_histories.user_id'
+                , 'withdraw_histories.fees'
+                , 'withdraw_histories.transaction_hash'
+                , 'withdraw_histories.confirmations'
+                , 'withdraw_histories.address_type as addr_type'
+                , 'withdraw_histories.updated_at'
+                , 'withdraw_histories.wallet_id'
+                , 'withdraw_histories.coin_type'
+                , 'withdraw_histories.network_type'
+                , 'withdraw_histories.receiver_wallet_id'
+                , 'withdraw_histories.memo'
+            )->where(['withdraw_histories.status' => STATUS_SUCCESS])
+                ->orderBy('withdraw_histories.id', 'desc');
+
+            return datatables()->of($withdrawal)
+                ->addColumn('address_type', function ($wdrl) {
+                    return addressType($wdrl->addr_type);
+                })
+                ->addColumn('coin_type', function ($wdrl) {
+                    return find_coin_type($wdrl->coin_type);
+                })
+                ->addColumn('sender', function ($wdrl) {
+                    if(!empty($wdrl->user)) $user = $wdrl->user;
+                    else $user = isset($wdrl->senderWallet) ? $wdrl->senderWallet->user : null;
+                    return isset($user) ? $user->name : 'N/A';
+                })
+                ->addColumn('network', function ($wdrl) {
+                    return api_settings($wdrl->network_type);
+                })
+                ->addColumn('receiver', function ($wdrl) {
+                    if (!empty($wdrl->receiverWallet) && $wdrl->receiverWallet->type == CO_WALLET) return  'Multi-signature Pocket: '.$wdrl->receiverWallet->name;
+                    else
+                    return isset($wdrl->receiverWallet->user) ? $wdrl->receiverWallet->user->name : 'N/A';
+                })
+                ->make(true);
+        }
+
+        return view('withdrawal.active_list', $data);
+    }
+
+    public function adminRejectedWithdrawal(Request $request)
+    {
+        $data['title'] = __('Rejected Withdrawal');
+        if ($request->ajax()) {
+            $withdrawal = WithdrawHistory::select(
+                'withdraw_histories.address'
+                , 'withdraw_histories.amount'
+                , 'withdraw_histories.user_id'
+                , 'withdraw_histories.fees'
+                , 'withdraw_histories.transaction_hash'
+                , 'withdraw_histories.confirmations'
+                , 'withdraw_histories.address_type as addr_type'
+                , 'withdraw_histories.updated_at'
+                , 'withdraw_histories.wallet_id'
+                , 'withdraw_histories.coin_type'
+                , 'withdraw_histories.network_type'
+                , 'withdraw_histories.receiver_wallet_id'
+                , 'withdraw_histories.memo'
+            )->where(['withdraw_histories.status' => STATUS_REJECTED])
+                ->orderBy('withdraw_histories.id', 'desc');
+
+            return datatables()->of($withdrawal)
+                ->addColumn('address_type', function ($wdrl) {
+                    return addressType($wdrl->addr_type);
+                })
+                ->addColumn('coin_type', function ($wdrl) {
+                    return find_coin_type($wdrl->coin_type);
+                })
+                ->addColumn('sender', function ($wdrl) {
+                    if(!empty($wdrl->user)) $user = $wdrl->user;
+                    else $user = isset($wdrl->senderWallet) ? $wdrl->senderWallet->user : null;
+                    return isset($user) ? $user->name : 'N/A';
+                })
+                ->addColumn('network', function ($wdrl) {
+                    return api_settings($wdrl->network_type);
+                })
+                ->addColumn('receiver', function ($wdrl) {
+                    if (!empty($wdrl->receiverWallet) && $wdrl->receiverWallet->type == CO_WALLET) return  'Multi-signature Pocket: '.$wdrl->receiverWallet->name;
+                    else
+                    return isset($wdrl->receiverWallet->user) ? $wdrl->receiverWallet->user->name : 'N/A';
+                })
+                ->make(true);
+        }
+
+        return view('withdrawal.reject_list', $data);
     }
 }
