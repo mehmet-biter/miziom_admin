@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use Illuminate\Http\Request;
 use App\Models\WithdrawHistory;
+use App\Models\DepositeTransaction;
 use App\Http\Controllers\Controller;
 
 class TransactionController extends Controller
@@ -157,5 +158,80 @@ class TransactionController extends Controller
         }
 
         return view('withdrawal.reject_list', $data);
+    }
+
+    public function adminPendingDeposit(Request $request)
+    {
+        $data['title'] = __('Pending Deposit');
+        if ($request->ajax()) {
+            $items = DepositeTransaction::where(['status' => STATUS_PENDING, 'address_type' => ADDRESS_TYPE_EXTERNAL])
+                ->orderBy('id', 'desc');
+
+            return datatables()->of($items)
+                ->addColumn('created_at', function ($item) {
+                    return $item->created_at;
+                })
+                ->addColumn('receiver_wallet_id', function ($item) {
+                    return isset($item->receiverWallet->user->email) ? $item->receiverWallet->user->email : 'N/A';
+                })
+                ->addColumn('actions', function ($item) {
+                    $action = '<div class="activity-icon"><ul>';
+                    
+                    $action .= '</ul> </div>';
+
+                    return $action;
+                })
+                ->rawColumns(['actions'])
+                ->make(true);
+        }
+        return view('deposit.pending_deposit', $data);
+    }
+
+    public function adminActiveDeposit(Request $request)
+    {
+        $data['title'] = __('Transaction History');
+        if ($request->ajax()) {
+            $deposit = DepositeTransaction::select('deposite_transactions.address'
+                , 'deposite_transactions.amount'
+                , 'deposite_transactions.fees'
+                , 'deposite_transactions.transaction_id'
+                , 'deposite_transactions.confirmations'
+                , 'deposite_transactions.address_type as addr_type'
+                , 'deposite_transactions.created_at'
+                , 'deposite_transactions.sender_wallet_id'
+                , 'deposite_transactions.receiver_wallet_id'
+                , 'deposite_transactions.status'
+                , 'deposite_transactions.coin_type'
+                , 'deposite_transactions.network_type'
+            )->orderBy('deposite_transactions.id', 'desc');
+
+            return datatables()->of($deposit)
+                ->addColumn('address_type', function ($dpst) {
+                    if ($dpst->addr_type == 'internal_address') {
+                        return __('External');
+                    } else {
+                        return addressType($dpst->addr_type);
+                    }
+
+                })
+                ->addColumn('coin_type', function ($dpst) {
+                    return $dpst->coin_type;
+                })
+                ->addColumn('status', function ($dpst) {
+                    return deposit_status($dpst->status);
+                })
+                ->addColumn('sender', function ($dpst) {
+                    if (!empty($dpst->senderWallet) && $dpst->senderWallet->type == CO_WALLET) return  'Multi-signature Pocket: '.$dpst->senderWallet->name;
+                    else
+                        return isset($dpst->senderWallet->user) ? $dpst->senderWallet->user->first_name . ' ' . $dpst->senderWallet->user->last_name : 'N/A';
+                })
+                ->addColumn('receiver', function ($dpst) {
+                    if (!empty($dpst->receiverWallet) && $dpst->receiverWallet->type == CO_WALLET) return  'Multi-signature Pocket: '.$dpst->receiverWallet->name;
+                    else
+                        return isset($dpst->receiverWallet->user) ? $dpst->receiverWallet->user->first_name . ' ' . $dpst->receiverWallet->user->last_name : 'N/A';
+                })
+                ->make(true);
+        }
+        return view('deposit.active_deposit', $data);        
     }
 }

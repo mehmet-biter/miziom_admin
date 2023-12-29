@@ -104,6 +104,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','admins']], function 
     Route::get('active-withdrawal', [TransactionController::class, 'adminActiveWithdrawal'])->name('adminActiveWithdrawal');
     Route::get('pending-withdrawal', [TransactionController::class, 'adminPendingWithdrawal'])->name('adminPendingWithdrawal');
     Route::get('rejected-withdrawal', [TransactionController::class, 'adminRejectedWithdrawal'])->name('adminRejectedWithdrawal');
+
+    Route::get('pending-deposit', [TransactionController::class, 'adminPendingDeposit'])->name('adminPendingDeposit');
+    Route::get('active-deposit', [TransactionController::class, 'adminActiveDeposit'])->name('adminActiveDeposit');
 });
 });
 

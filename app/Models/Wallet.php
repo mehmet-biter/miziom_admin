@@ -22,4 +22,13 @@ class Wallet extends Model
         "balance",
         "referral_balance",
     ];
+
+    public function user(){
+        return $this->hasOne(User::class,'id','user_id');
+    }
+
+    public function coin()
+    {
+        return $this->belongsTo(Coin::class,'coin_id');
+    }
 }

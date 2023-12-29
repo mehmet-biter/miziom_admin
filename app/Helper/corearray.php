@@ -584,3 +584,17 @@ function webhook_type($input = null)
         return isset($output[$input]) ? ($output[$input]) : null;
     }
 }
+
+function deposit_status($input = null)
+{
+    $output = [
+        STATUS_ACCEPTED => __('Accepted'),
+        STATUS_PENDING => __('Pending'),
+        STATUS_REJECTED => __('Rejected'),
+    ];
+    if (is_null($input)) {
+        return $output;
+    } else {
+        return $output[$input] ? $output[$input] : null;
+    }
+}

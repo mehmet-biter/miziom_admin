@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Wallet;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class DepositeTransaction extends Model
 {
@@ -28,4 +29,11 @@ class DepositeTransaction extends Model
         "network_type",
         "confirmations",
     ];
+
+    public function senderWallet(){
+        return $this->belongsTo(Wallet::class,'sender_wallet_id','id');
+    }
+    public function receiverWallet(){
+        return $this->belongsTo(Wallet::class,'receiver_wallet_id','id');
+    }
 }
