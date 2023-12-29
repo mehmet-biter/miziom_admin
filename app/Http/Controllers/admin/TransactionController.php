@@ -41,17 +41,20 @@ class TransactionController extends Controller
                 ->addColumn('sender', function ($wdrl) {
                     if(!empty($wdrl->user)) $user = $wdrl->user;
                     else $user = isset($wdrl->senderWallet) ? $wdrl->senderWallet->user : null;
-                    return isset($user) ? $user->first_name . ' ' . $user->last_name : 'N/A';
+                    return isset($user) ? $user->name : 'N/A';
                 })
                 ->addColumn('receiver', function ($wdrl) {
                     if (!empty($wdrl->receiverWallet) && $wdrl->receiverWallet->type == CO_WALLET) return  'Multi-signature Pocket: '.$wdrl->receiverWallet->name;
                     else
-                    return isset($wdrl->receiverWallet->user) ? $wdrl->receiverWallet->user->first_name . ' ' . $wdrl->receiverWallet->user->last_name : 'N/A';
+                    return isset($wdrl->receiverWallet->user) ? $wdrl->receiverWallet->user->name : 'N/A';
+                })
+                ->addColumn('network', function ($wdrl) {
+                    return api_settings($wdrl->network_type);
                 })
                 ->addColumn('actions', function ($wdrl) {
                     $action = '<div class="activity-icon"><ul>';
-                    $action .= accept_html('adminAcceptPendingWithdrawal',encrypt($wdrl->id));
-                    $action .= reject_html('adminRejectPendingWithdrawal',encrypt($wdrl->id));
+                    // $action .= accept_html('adminAcceptPendingWithdrawal',encrypt($wdrl->id));
+                    // $action .= reject_html('adminRejectPendingWithdrawal',encrypt($wdrl->id));
                     $action .= '</ul> </div>';
 
                     return $action;

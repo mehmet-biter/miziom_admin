@@ -370,3 +370,15 @@ function checkCoinNetworkUpdateCondition($coin)
     }
     return $response;
 }
+
+function addressType($input = null){
+    $output = [
+        ADDRESS_TYPE_INTERNAL => __('Internal'),
+        ADDRESS_TYPE_EXTERNAL => __('External'),
+    ];
+    if (is_null($input)) {
+        return $output;
+    } else {
+        return $output[$input] ? $output[$input] : null ;
+    }
+}

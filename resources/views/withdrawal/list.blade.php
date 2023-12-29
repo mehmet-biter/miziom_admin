@@ -14,7 +14,6 @@
                             <th scope="col">{{__('Amount')}}</th>
                             <th scope="col">{{__('Fees')}}</th>
                             <th scope="col">{{__('Transaction Id')}}</th>
-                            <th scope="col">{{__('Coin Api')}}</th>
                             <th class="text-lg-center all">{{__('Actions')}}</th>
                         </tr>
                         </thead>
@@ -65,13 +64,11 @@
                     {"data": "sender"},
                     {"data": "coin_type"},
                     {"data": "address"},
+                    {"data": "network"},
                     {"data": "receiver"},
                     {"data": "amount"},
-                    {"data": "memo"},
                     {"data": "fees"},
                     {"data": "transaction_hash"},
-                    {"data": "network_type"},
-                    {"data": "updated_at"},
                     {"data": "actions"}
                 ],
     });

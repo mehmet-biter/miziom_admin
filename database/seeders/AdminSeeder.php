@@ -22,5 +22,14 @@ class AdminSeeder extends Seeder
             'password' => Hash::make('Pass.321'),
             'unique_code' => randomNumber(14)
         ]);
+
+        User::firstOrCreate(['email'=>'user@info.com'],[
+            'name' => 'Mr. Admin',
+            'role_module' => 0,
+            'status' => STATUS_SUCCESS,
+            'email_verified' => 1,
+            'password' => Hash::make('Pass.321'),
+            'unique_code' => randomNumber(14)
+        ]);
     }
 }
