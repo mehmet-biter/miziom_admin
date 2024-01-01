@@ -37,7 +37,8 @@ class SettingSeeder extends Seeder
         AdminSetting::firstOrCreate(['slug' => 'mail_encryption'], ['value' => 'null']);
         AdminSetting::firstOrCreate(['slug' => 'mail_from_address'], ['value' => '']);
 
-        // landing
+        AdminSetting::firstOrCreate(['slug' => 'default_coin'], ['value' => 'USDC']);
+        AdminSetting::firstOrCreate(['slug' => 'default_currency'], ['value' => 'NGN']);
         
     }
 }

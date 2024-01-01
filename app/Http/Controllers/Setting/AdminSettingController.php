@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Setting;
 
+use App\Models\Coin;
+use App\Models\CurrencyList;
 use Illuminate\Http\Request;
 use App\Http\Services\MailService;
 use App\Http\Controllers\Controller;
@@ -20,6 +22,8 @@ class AdminSettingController extends Controller
     public function adminSetting() {
         $data['title'] = __('Admin Setting');
         $data['settings'] = allsetting();
+        $data['coins'] = Coin::get();
+        $data['currencies'] = CurrencyList::get();
         return view('settings.admin.setting', $data);
     }
 

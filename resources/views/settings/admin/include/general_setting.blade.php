@@ -20,8 +20,8 @@
                         <input type="text" name="company_email" class="mt-2 form-input flex-1"
                             value="{{ $settings['company_email'] ?? ""}}" />
                     </div>
-                    
                 </div>
+
                 <div class="lg:w-1/2 w-full ltr:lg:mr-6 rtl:lg:ml-6 mb-6">
                     <div class="mt-4  items-center">
                         <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Address Line') }}</label>
@@ -38,6 +38,37 @@
                         <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Copyright Text') }}</label>
                         <input type="text" name="copyright_text" class="mt-2 form-input flex-1"
                             value="{{ $settings['copyright_text'] ?? ""}}" />
+                    </div>
+                </div>
+
+                <div class="lg:w-1/2 w-full ltr:lg:mr-6 rtl:lg:ml-6 mb-6">
+                    <div class="mt-4  items-center">
+                        <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Default Coin') }}</label>
+                        <select name="default_coin" type="text" class="mt-2 form-select flex-1" >
+                            @if(isset($coins))
+                                @foreach($coins as $coin)
+                                    <option value="{{ $coin->coin_type }}"
+                                        @if(isset($settings['default_coin']) && $settings['default_coin'] == $coin->coin_type)
+                                            selected
+                                        @endif
+                                        >{{ $coin->name }}</option>
+                                @endforeach
+                            @endif
+                        </select>
+                    </div>
+                    <div class="mt-4  items-center">
+                        <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Default Currency') }}</label>
+                        <select name="default_currency" type="text" class="mt-2 form-select flex-1" >
+                            @if(isset($currencies))
+                                @foreach($currencies as $currency)
+                                    <option value="{{ $currency->code }}"
+                                        @if(isset($settings['default_currency']) && $settings['default_currency'] == $currency->code)
+                                            selected
+                                        @endif
+                                        >{{ $currency->name }}</option>
+                                @endforeach
+                            @endif
+                        </select>
                     </div>
                 </div>
             </div>
