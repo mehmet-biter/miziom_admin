@@ -7,7 +7,7 @@
     <title>{{ $title ?? ''}} {{ settings('app_title') }}</title>
 
     <meta name='viewport' content='width=device-width, initial-scale=1' />
-    <link rel="icon" type="image/svg" href="{{ settings('favicon') ? showImage(VIEW_IMAGE_PATH,settings('favicon')) : asset('assets/images/logo.png')  }}" />
+    <link rel="icon" type="image/svg" href="{{ settings('favicon') ? showImage(VIEW_IMAGE_PATH,settings('favicon')) : asset('assets/images/favicon.png')  }}" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
