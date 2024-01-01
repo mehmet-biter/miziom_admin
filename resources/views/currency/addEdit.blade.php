@@ -38,7 +38,7 @@
                             <div class="mt-4 items-center">
                                 <label for="question" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">{{ __('Rate (1 USD = ? )') }} <span class="text-danger">*</span></label>
                                 <input id="question" type="text" name="rate" class="form-input flex-1"
-                                    @if(isset($item)) value="{{ $item->rate }}" @else value="{{ old('rate') }}" @endif />
+                                    @if(isset($item)) value="{{ $item->usd_rate }}" @else value="{{ old('rate') }}" @endif />
                             </div>
 
                             <!-- rounded -->
