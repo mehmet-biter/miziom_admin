@@ -17,6 +17,7 @@ class CoinSeeder extends Seeder
     {
         Coin::firstOrCreate(['coin_type' => 'BTC'],['name' => 'Bitcoin', 'network' => 2]);
         Coin::firstOrCreate(['coin_type' => 'USDT'],['name' => 'Tether USD', 'network' => 2]);
+        Coin::firstOrCreate(['coin_type' => 'USDC'],['name' => 'USD Coin', 'network' => 2]);
 
         $users = User::select('*')->get();
         if (isset($users[0])) {

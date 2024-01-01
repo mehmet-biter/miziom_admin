@@ -24,18 +24,23 @@ class WalletRepository extends BaseRepository
             } else {
                 $query->where(['coins.currency_type' => (int)$type]);
             }
+            $total = 0;
             $list = $query->get();
+            $data['total']   = &$total;
+            $data['wallets'] = &$list;
+
             if(isset($list[0])) {
                 foreach($list as $item) {
                     $rate = convert_currency($item->coin_type,$currency,1);
                     $item->usd_value_rate = $rate;
                     $item->usd_value = bcmul($rate,$item->balance,8);
+                    $total += $item->usd_value;
                 }
             }
-
+            
         } catch(\Exception $e) {
             storeException('getUserWalletList',$e->getMessage());
         }
-        return $list;
+        return $data;
     }
 }

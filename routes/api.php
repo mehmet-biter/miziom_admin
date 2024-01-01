@@ -47,6 +47,7 @@ Route::group(['namespace'=>'Api','middleware' => ['apiCheck']], function (){
             Route::get('deposit',[WalletController::class, 'walletDeposit']);
             Route::post('withdrawal-proccess',[WalletController::class, 'walletWithdrawalProccess']);
         });
+        Route::post('exchange-rate',[WalletController::class, 'exchangeRate']);
     });
     
 });
