@@ -45,7 +45,7 @@ class WalletService extends BaseService
      try {
             createUserWallet($userId);
             $items = $this->repository->getUserWalletList($userId,$type,$currency);
-            if (isset($items[0])) {
+            if (isset($items['wallets'][0])) {
                 return responseData(true, __('Data get successfully'),$items);
             } else {
                 return responseData(false, __('Data not found'));

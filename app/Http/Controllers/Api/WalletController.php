@@ -30,7 +30,7 @@ class WalletController extends Controller
     //coin list
     public function walletList(Request $request,$type){
         try {
-            $currency = $request->header('currency') ?? 'NGN';
+            $currency = $request->header('currency') ?? 'USDC';
             $response = $this->service->userWalletList(Auth::id(),$type,$currency);
             return responseJsonData($response['success'],$response['message'],$response['data']);
         } catch(\Exception $e) {
