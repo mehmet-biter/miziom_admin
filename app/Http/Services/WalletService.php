@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Models\Coin;
+use App\Models\CurrencyList;
 use App\Models\User;
 use App\Models\Wallet;
 use Illuminate\Support\Facades\DB;
@@ -295,6 +296,42 @@ public function saveItemData($request)
             DB::rollBack();
             return responseData(false, __("Withdrawal Failed! Something went wrong"));
         }
+    }
+
+    private function getCurrencyByCode($code)
+    {
+        return CurrencyList::where('code', $code)->first();
+    }
+
+    private function getCoinByType($type)
+    {
+        return Coin::where('coin_type', $type)->first();
+    }
+
+    public function getExchageRate($request)
+    {
+        // set false currency values
+        $fromCurrencyFound = false;
+        $toCurrencyFound   = false;
+        $amount = $request->amount ?? 1;
+
+        // check from currency in request
+        if($fromCurrency = $this->getCurrencyByCode($request->from)) $fromCurrencyFound = true;
+        if($fromCoin = $this->getCoinByType($request->from))  $fromCurrencyFound = true;
+        if(!$fromCurrencyFound) return responseData(false, __("Your provided from currency is invalid"));
+
+        // check to currency in request
+        if($toCurrency = $this->getCurrencyByCode($request->to))  $toCurrencyFound = true;
+        if($toCoin =$this->getCoinByType($request->to)) $toCurrencyFound = true;
+        if(!$toCurrencyFound) return responseData(false, __("Your provided to currency is invalid"));
+
+        // convert to currency
+        $conver_amount = convert_currency($request->from, $request->to, $amount);
+
+        // return success response
+        return responseData(true, __("Rate converted successfully"), [
+            "rate" => $conver_amount
+        ]);
     }
 
 }

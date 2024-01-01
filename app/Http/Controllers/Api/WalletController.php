@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Services\WalletService;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\Api\ExchangeRate;
 use App\Http\Requests\Api\WithdrawalRequest;
 
 class WalletController extends Controller
@@ -77,6 +78,13 @@ class WalletController extends Controller
     {
         return response()->json(
             $this->service->walletWithdrawalProccess($request)
+        );
+    }
+    
+    public function exchangeRate(ExchangeRate $request)
+    {
+        return response()->json(
+            $this->service->getExchageRate($request)
         );
     }
 }
