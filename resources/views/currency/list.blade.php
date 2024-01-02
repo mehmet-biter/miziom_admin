@@ -41,7 +41,7 @@
                                     <td> {{ $value->name}} </td>
                                     <td> {{$value->code}} </td>
                                     <td> {{$value->symbol}} </td>
-                                    <td> {{ $value->rate.' '.$value->code.' /USD' }} </td>
+                                    <td> {{ $value->usd_rate.' '.$value->code.' /USD' }} </td>
                                     <td>
                                         <div>
                                             <label class="w-12 h-6 relative">

@@ -2,8 +2,8 @@
 
 namespace App\Http\Services;
 
+use Exception;
 use App\Models\Coin;
-use PHPUnit\Exception;
 use App\Models\CurrencyList;
 use App\Jobs\UpdateCoinRateUsd;
 use Illuminate\Support\Facades\DB;
@@ -44,12 +44,12 @@ class CurrencyService
                 'name' => $request->name,
                 'code' => $request->code,
                 'symbol' => $request->symbol,
-                'rate' => $request->rate,
+                'usd_rate' => $request->rate,
                 'status' => $status,
             ]);
         }catch (Exception $e){
             DB::rollBack();
-            storeException($e,"Currency Add Edit",$e->getMessage());
+            storeException("Currency Add Edit",$e->getMessage());
             return ["success" => false, "message" => $response . __("failed")];
         }
         DB::commit();

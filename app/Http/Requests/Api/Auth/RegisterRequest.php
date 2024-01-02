@@ -26,6 +26,7 @@ class RegisterRequest extends FormRequest
     {
         $rules =[
             'name'=>'required|max:255',
+            'username'=>'required|min:5|max:20|unique:users',
             'email'=>'required|email|unique:users,email',
             'password' =>[
                 'required',
@@ -44,10 +45,14 @@ class RegisterRequest extends FormRequest
     public function messages()
     {
         $messages=[
-            'email.required'=>__('Email is required')
-            ,'password.required'=>__('Password is required')
-            ,'email.email'=>__('Invalid email format.')
-            ,'email.exists'=>__('Invalid email or password.')
+            'email.required'=>__('Email is required'),
+            'password.required'=>__('Password is required'),
+            'email.email'=>__('Invalid email format.'),
+            'email.exists'=>__('Invalid email or password.'),
+            'username.required'=>__('Username is required.'),
+            'username.min'=>__('Username minimum character length 5.'),
+            'username.max'=>__('Username maximum character length 20.'),
+            'username.unique'=>__('Username already taken.'),
         ];
         return $messages;
     }
