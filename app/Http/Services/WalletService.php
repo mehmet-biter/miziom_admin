@@ -182,7 +182,7 @@ public function saveItemData($request)
             $rate                         = convert_currency($wallet->coin_type,$currency,1);
             $wallet->usd_value_rate       = $rate;
             $wallet->usd_value            = bcmul($rate,$wallet->balance,8);
-            $wallet->address              = $walletAddress->address ?? 'thisisademoaddress'; 
+            $wallet->address              = $walletAddress->address ?? null; 
             $wallet->coin                 = $coin;
             $data['wallet'] = $wallet;
             $data['memo'] = null;
