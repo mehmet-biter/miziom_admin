@@ -183,6 +183,7 @@ public function saveItemData($request)
             $wallet->usd_value            = bcmul($rate,$wallet->balance,8);
             $wallet->address              = $walletAddress->address ?? 'thisisademoaddress'; 
             $data['wallet'] = $wallet;
+            $data['coin'] = $coin;
             $data['memo'] = null;
             
             return responseData(true, __('Wallet deposit data found!'), $data);
