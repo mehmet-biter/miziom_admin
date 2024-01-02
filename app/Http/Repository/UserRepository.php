@@ -136,6 +136,7 @@ class UserRepository
             if (isset($user_id)) {
                 $user = User::with('roles')->select(
                     'id',
+                    'username',
                     'name',
                     'email',
                     'unique_code',
