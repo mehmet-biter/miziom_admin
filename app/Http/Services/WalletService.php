@@ -97,13 +97,14 @@ public function saveItemData($request)
             // if(!isset($request->search) && empty($request->search))
             //     return responseData(false, __('Customer not found!'));
 
-            $search = $request->search;
+            $search = $request->search ?? '';
             $user = User::where(function($q)use($search){
                         return $q->where('name', 'LIKE', "%$search%")
-                        ->orWhere('email', 'LIKE', "%$search%");
+                        ->orWhere('email', 'LIKE', "%$search%")
+                        ->orWhere('username', 'LIKE', "%$search%");
                     })
                     ->where('role_module', MODULE_USER)
-                    ->get(['unique_code', 'email']);
+                    ->get(['id', 'username', 'unique_code', 'name', 'email']);
             $data['customer'] = $user;
 
             if(isset($user[0])) return responseData(true, __('Customer get successfully'),$data);
