@@ -471,9 +471,12 @@ public function saveItemData($request)
                 'data' => $transactions,
             ];
 
+            if(isset($transactions[0])) return responseData(true, __("Transaction get successfully"), $data);
+            return responseData(false, __("Transaction data not found!"), $data);
+
         } catch (\Exception $e) {
             storeException("getTransaction", $e->getMessage());
+            return responseData(false, __("Something went wrong"));
         }
-        dd($data);
     }
 }
