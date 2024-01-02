@@ -16,6 +16,7 @@ class AdminSeeder extends Seeder
     {
         User::firstOrCreate(['email'=>'admin@info.com'],[
             'name' => 'Mr. Admin',
+            'username' => 'mr-admin',
             'role_module' => ROLE_SUPER_ADMIN,
             'status' => STATUS_SUCCESS,
             'email_verified' => 1,
@@ -25,6 +26,7 @@ class AdminSeeder extends Seeder
 
         User::firstOrCreate(['email'=>'user@info.com'],[
             'name' => 'Mr. Admin',
+            'username' => 'mr-user',
             'role_module' => 0,
             'status' => STATUS_SUCCESS,
             'email_verified' => 1,
