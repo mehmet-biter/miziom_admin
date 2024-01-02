@@ -364,7 +364,9 @@ class UserService
             } else {
                 $data = $request->except(['_token', 'photo','password_confirmation','password']);
                 $data['unique_code'] = randomNumber(14);
-                $data['role_module'] = ROLE_ADMIN;
+                if ($request->user_type == 'admin') {
+                    $data['role_module'] = ROLE_ADMIN;
+                } 
                 $data['email_verified'] = STATUS_ACTIVE;
             }
 
@@ -374,13 +376,20 @@ class UserService
             if(!empty($request->password)) {
                 $data['password'] = Hash::make($request->password);
             }
-            // dd($request->all());
             if($request->edit_id) {
                 User::where(['id' => $request->edit_id])->update($data);
-                $response = responseData(true,__('Admin updated successfully'));
+                if ($request->user_type == 'admin') {
+                    $response = responseData(true,__('Admin updated successfully'));
+                } else {
+                    $response = responseData(true,__('User updated successfully'));
+                }
             } else {
                 User::create($data);
-                $response = responseData(true,__('New admin added successfully'));
+                if ($request->user_type == 'admin') {
+                    $response = responseData(true,__('New admin added successfully'));
+                } else {
+                    $response = responseData(true,__('New user added successfully'));
+                }  
             }
         } catch (\Exception $e) {
             storeException('save user', $e->getMessage());

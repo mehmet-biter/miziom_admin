@@ -1,18 +1,5 @@
 <?php
 
-
-function admitClass($index = null)
-{
-    $array = [
-        ADMIT_CLASS_SIX => __("Six"),
-        ADMIT_CLASS_SEVEN => __("Seven"),
-        ADMIT_CLASS_EIGHT => __("Eight"),
-        ADMIT_CLASS_NINE => __("Nine"),
-    ];
-    if(isset($array[$index])) return $array[$index];
-    return $array;
-}
-
 function activationStatus($input = null)
 {
     $output = [

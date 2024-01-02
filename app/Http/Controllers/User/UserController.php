@@ -23,12 +23,53 @@ class UserController extends Controller
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\Http\Response|\Illuminate\View\View
      */
 
-     public function index(Request $request)
+     public function adminList(Request $request)
      {
          try {
              $data['title'] = __('Admin List');
              if($request->ajax()) {
-                 $list = User::where('role_module','<>',ROLE_SUPER_ADMIN)->where('id','<>',Auth::id());
+                 $list = User::where('role_module','<>',ROLE_SUPER_ADMIN)
+                    ->where('role_module',ROLE_ADMIN)
+                    ->where('id','<>',Auth::id());
+                 return datatables($list)
+                 ->addColumn('name', function ($item) use($request) {
+                    return $item->name;
+                })
+                     ->addColumn('created_at', function ($item) use($request) {
+                         return $item->created_at;
+                     })
+                     ->addColumn('role', function ($item) use($request) {
+                        return isset($item->roles) ? $item->roles->title : 'N/A' ;
+                    })
+                     ->addColumn('status', function ($item) use($request) {
+                         return status($item->status);
+                     })
+                     ->addColumn('actions', function ($item) use ($request) {
+                         
+                         $html = '<div class="flex gap-4 items-center">';
+                         $html .= edit_html('adminEdit',$item->unique_code);
+                         $html .= delete_html('adminDelete',$item->unique_code);
+                         $html .= '</div>';
+                         
+                         return $html;
+                     })
+                     ->rawColumns(['actions','status'])
+                     ->make(true);
+             }
+ 
+             return view('user.user.admin_list', $data);
+         } catch(\Exception $e) {
+             storeException('admin index ex', $e->getMessage());
+             return redirect()->back()->with('dismiss', __('Something went wrong'));
+         }
+     }
+
+     public function index(Request $request)
+     {
+         try {
+             $data['title'] = __('User List');
+             if($request->ajax()) {
+                 $list = User::where('role_module',ROLE_USER);
                  return datatables($list)
                  ->addColumn('name', function ($item) use($request) {
                     return $item->name;
@@ -73,10 +114,20 @@ class UserController extends Controller
              $data['roles'] = Role::where(['status' => STATUS_ACTIVE])->get();
              return view('user.user.add',$data);
          } catch(\Exception $e) {
-             storeException('user create ex', $e->getMessage());
+             storeException('admin create ex', $e->getMessage());
              return redirect()->back()->with('dismiss', __('Something went wrong'));
          }
      }
+
+     public function createUser() {
+        try {
+            $data['title'] = __('Add New User');
+            return view('user.user.add_user',$data);
+        } catch(\Exception $e) {
+            storeException('user create ex', $e->getMessage());
+            return redirect()->back()->with('dismiss', __('Something went wrong'));
+        }
+    }
  
      /**
       * Show the form for editing the specified resource.
@@ -150,8 +201,9 @@ class UserController extends Controller
      public function store(UserAddRequest $request) {
          try {
              $response = $this->service->saveItemData($request);
+             $route = $request->user_type == 'admin' ? 'adminList' : 'userList';
              if($response['success']) {
-                 return redirect()->route('adminList')->with('success',$response['message']);
+                 return redirect()->route($route)->with('success',$response['message']);
              } else {
                  return redirect()->back()->withInput()->with('dismiss',$response['message']);
              }

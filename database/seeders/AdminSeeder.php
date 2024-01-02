@@ -27,7 +27,6 @@ class AdminSeeder extends Seeder
         User::firstOrCreate(['email'=>'user@info.com'],[
             'name' => 'Mr. Admin',
             'username' => 'mr-user',
-            'role_module' => 0,
             'status' => STATUS_SUCCESS,
             'email_verified' => 1,
             'password' => Hash::make('Pass.321'),

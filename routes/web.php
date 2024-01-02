@@ -57,8 +57,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','admins']], function 
     Route::get('role/preview-{id}',[RoleController::class,'preview'])->name('rolePreview');
     Route::post('role/store',[RoleController::class,'store'])->name('roleStoreProcess');
 
-    Route::get('user',[UserController::class,'index'])->name('adminList');
-    Route::get('user/add',[UserController::class,'create'])->name('adminAdd');
+    Route::get('list',[UserController::class,'adminList'])->name('adminList');
+    Route::get('user/list',[UserController::class,'index'])->name('userList');
+    Route::get('add',[UserController::class,'create'])->name('adminAdd');
+    Route::get('user/add',[UserController::class,'createUser'])->name('userAdd');
     Route::get('user/edit-{id}',[UserController::class,'edit'])->name('adminEdit');
     Route::get('user/delete-{id}',[UserController::class,'destroy'])->name('adminDelete');
     Route::get('user/preview-{id}',[UserController::class,'preview'])->name('adminPreview');

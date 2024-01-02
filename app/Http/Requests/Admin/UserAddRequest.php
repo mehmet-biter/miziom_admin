@@ -25,8 +25,10 @@ class UserAddRequest extends FormRequest
         $rule = [
             'name' => 'required|string|max:255',
             'email' => ['required','email',Rule::unique('users')->ignore(($this->edit_id),'id')],
-            'role' => 'required|exists:roles,id'
         ];
+        if ($this->user_type == 'admin') {
+            $rule['role'] = 'required|exists:roles,id';
+        }
         if(empty($this->edit_id)) {
             $rule['password'] = ['required','min:8','max:255'];  
         }
