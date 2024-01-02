@@ -236,6 +236,7 @@ public function saveItemData($request)
             if(!$wallet) return responseData(false, __('Wallet not found!'));
 
             $amount = $request->amount;
+            $defaultCurrency = settings('default_currency') ?? "NGN";
 
             if($request->type == WITHDRAWAL_CURRENCY_TYPE_CRYPTO){
 
@@ -243,8 +244,8 @@ public function saveItemData($request)
                     return responseData(false, __('insufficient balance for withdrawal request!'));
             }else{
 
-                $usdTotalAmount = convert_currency($wallet->coin_type,'USD',1);
-                $amount = $amount / $usdTotalAmount;
+                $usdTotalAmount = convert_currency($defaultCurrency, $wallet->coin_type, 1);
+                $amount = $amount * $usdTotalAmount;
                 if( !($wallet->balance >= $amount))
                     return responseData(false, __('insufficient balance for withdrawal request!'));
             }
