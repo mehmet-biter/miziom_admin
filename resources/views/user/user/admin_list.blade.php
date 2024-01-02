@@ -4,8 +4,8 @@
             <div class="px-5">
                 <div class=" md:top-5 ltr:md:left-5 rtl:md:right-5">
                     <div class="flex items-center gap-2 mb-5">
-                        <h5 class="font-semibold text-lg dark:text-white-light">{{ __('User List') }}</h5>
-                        <a href="{{ route('userAdd') }}" class="btn btn-primary gap-2 float-right">
+                        <h5 class="font-semibold text-lg dark:text-white-light">{{ __('Admin List') }}</h5>
+                        <a href="{{ route('adminAdd') }}" class="btn btn-primary gap-2 float-right">
 
                             <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
@@ -23,7 +23,8 @@
                         <tr>
                             <th class="all">{{__('Full Name')}}</th>
                             <th class="all">{{__('Email')}}</th>
-                            <th class="all">{{__('Mobile')}}</th>             
+                            <th class="all">{{__('Mobile')}}</th>
+                            <th class="all">{{__('Role')}}</th>
                             <th class="all">{{__('Status')}}</th>
                             <th >{{__('Created At')}}</th>
                             <th class="text-lg-center all">{{__('Actions')}}</th>
@@ -46,14 +47,15 @@
             ordering:  true,
             select: false,
             bDestroy: true,
-            ajax: '{{route('userList')}}',
-            order: [4, 'desc'],
+            ajax: '{{route('adminList')}}',
+            order: [5, 'desc'],
             responsive: true,
             autoWidth: false,
             columns: [
                     {"data": "name", "orderable": true},
                     {"data": "email", "orderable": true},
                     {"data": "phone", "orderable": true},
+                    {"data": "role", "orderable": true},
                     {"data": "status", "orderable": true},
                     {"data": "created_at", "orderable": true},
                     {"data": "actions", "orderable": false}

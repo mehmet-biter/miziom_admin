@@ -6,7 +6,7 @@
                 <a href="javascript:;" class="text-primary hover:underline">{{ __('Admin') }}</a>
             </li>
             <li class="before:content-['/'] ltr:before:mr-1 rtl:before:ml-1">
-                <span>{{ isset($user) ? __('Update Admin') : __('Create Admin') }}</span>
+                <span>{{ isset($user) ? __('Update User') : __('Create User') }}</span>
             </li>
         </ul>
         <div class="pt-5">
@@ -37,16 +37,7 @@
                                         class="form-input" />
                                 </div>
                                 
-                                <div>
-                                    <label for="address">Role <span class="text-danger">*</span></label>
-                                    <select name="role" id="" class="form-select">
-                                        @if(isset($roles[0]))
-                                        @foreach ($roles as $role)
-                                            <option value="{{ $role->id }}">{{ $role->title }}</option>
-                                        @endforeach
-                                        @endif
-                                    </select>
-                                </div>
+                                
                                 <div class="">
                                     <label for="status" class="">{{ __('Activation Status') }} <span class="text-danger">*</span></label>
                                     <select id="status" name="status" class="form-select">
@@ -70,7 +61,7 @@
                                     @if(isset($user))    
                                     <input type="hidden" name="edit_id" value="{{ $user->id }}"> 
                                     @endif   
-                                    <input type="hidden" name="user_type" value="admin">
+                                    <input type="hidden" name="user_type" value="user">
                                 </div>
                                 <div>
                                     <label for="">Profile Image</label>

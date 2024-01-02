@@ -32,6 +32,7 @@ const CURRENCY_TYPE_BOTH = 3;
 // user role
 const ROLE_SUPER_ADMIN=1;
 const ROLE_ADMIN=2;
+const ROLE_USER=3;
 
 const COIN_PAYMENT = 1;
 const BITGO_API = 2;
