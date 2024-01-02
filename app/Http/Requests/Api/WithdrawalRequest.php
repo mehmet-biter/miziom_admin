@@ -25,7 +25,7 @@ class WithdrawalRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'address' => ['required', 'string'],
+            'address' => ['string'],
             'wallet_id' => 'required',
             'type' => 'required',
             'amount' => 'required|numeric' //|min:' . $this->minimum_withdrawal . '|max:' . $this->maximum_withdrawal
