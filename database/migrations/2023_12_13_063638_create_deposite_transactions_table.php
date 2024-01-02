@@ -30,6 +30,7 @@ return new class extends Migration
             $table->bigInteger('updated_by')->nullable();
             $table->string('network_type')->nullable();
             $table->integer('confirmations')->default(0);
+            $table->tinyInteger('transaction_type')->default(TRANSACTION_TYPE_DEPOSIT);
             $table->timestamps();
         });
     }

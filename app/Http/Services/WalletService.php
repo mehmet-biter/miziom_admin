@@ -336,4 +336,143 @@ public function saveItemData($request)
         ]);
     }
 
+    private function getUnionWithdrawQuery($user, $request)
+    {
+        $query = DB::table('withdraw_histories')
+        ->select(
+            DB::raw(
+                'wallets.name, wallets.coin_type, withdraw_histories.amount, withdraw_histories.address_type, 
+                withdraw_histories.receiver_wallet_id as sender_wallet, withdraw_histories.transaction_type , 
+                withdraw_histories.transaction_hash as trx_id, withdraw_histories.status, withdraw_histories.created_at as created_at'
+            )
+        )
+        ->join('wallets', 'withdraw_histories.wallet_id', '=', 'wallets.id')
+        ->where('wallets.user_id', $user->id);
+
+        if(isset($request->wallet_id)){
+            $query = $query->where('wallets.id', $request->wallet_id);
+        }
+
+        if(isset($request->search)){
+            $query = $query->where(function($q) use($request) {
+                $q->where('withdraw_histories.transaction_hash', 'LIKE', "%$request->search%")
+                ->orWhere('withdraw_histories.address', 'LIKE', "%$request->search%")
+                ->orWhere('withdraw_histories.created_at', 'LIKE', "%$request->search%");
+            });
+        }
+
+        if(isset($request->trx_id)){
+            $query = $query->where('withdraw_histories.transaction_hash', 'LIKE', "%$request->trx_id%");
+        }
+        if(isset($request->status)){
+            $query = $query->where('withdraw_histories.status', $request->status);
+        }
+
+        return $query;
+    }
+
+    public function getTransaction($request)
+    {
+        try {
+            $user = Auth::user();
+            $transactions = collect();
+
+            $totalPages = 0;
+            $totalCount = 0;
+            $settingPerPage = settings('pagination_count') ? (int)settings('pagination_count') : 10;
+            $page = isset($request->page) ? intval($request->page) : 1;
+            $perPage = isset($request->per_page) ? intval($request->per_page) : $settingPerPage;
+            $orderBy = isset($request->orderBy) ? $request->orderBy : 'desc';
+            $column = isset($request->orderColumn) ? $request->orderColumn : 'created_at';
+
+        
+            $transactions = DB::table('deposite_transactions')
+                ->select(
+                    DB::raw(
+                        'wallets.name, wallets.coin_type, deposite_transactions.amount, deposite_transactions.address_type, 
+                        deposite_transactions.sender_wallet_id as sender_wallet, deposite_transactions.transaction_type, 
+                        deposite_transactions.transaction_id as trx_id, deposite_transactions.status, deposite_transactions.created_at as created_at'
+                    )
+                )
+                ->union($this->getUnionWithdrawQuery($user, $request))
+                ->join('wallets', 'deposite_transactions.receiver_wallet_id', '=', 'wallets.id')
+                ->where('wallets.user_id', $user->id)
+                ->orderBy($column, $orderBy);
+
+                if(isset($request->wallet_id)){
+                    $transactions = $transactions->where('wallets.id', $request->wallet_id);
+                }
+
+                if(isset($request->search)){
+                    $transactions = $transactions->where(function($q) use($request) {
+                        $q->where('deposite_transactions.transaction_id', 'LIKE', "%$request->search%")
+                        ->orWhere('deposite_transactions.address', 'LIKE', "%$request->search%")
+                        ->orWhere('deposite_transactions.created_at', 'LIKE', "%$request->search%")
+                        ->orWhere('deposite_transactions.from_address', 'LIKE', "%$request->search%");
+                    });
+                }
+
+                if(isset($request->trx_id)){
+                    $transactions = $transactions->where('deposite_transactions.transaction_id', 'LIKE', "%$request->trx_id%");
+                }
+                
+                if(isset($request->status)){
+                    $transactions = $transactions->where('deposite_transactions.status', $request->status);
+                }
+
+                $totalCount = $transactions->count();
+                $totalPages = ceil($totalCount / $perPage);
+
+                if (isset($request->list_size) && $request->list_size === 'all') {
+                    $transactions = $transactions->get();
+                } else {
+                    $transactions = $transactions->skip(($page - 1) * $perPage)
+                    ->take($perPage)
+                    ->get();
+                }
+        
+
+            $transactions->map(function($trx) use($request) {
+                // set user
+                $trx->user = null;
+                if($trx->sender_wallet){
+                    if($wallet = Wallet::with('user:id,name,username')->find($trx->sender_wallet)){
+                        if(isset($request->wallet_id) && $trx->sender_wallet != $request->wallet_id)
+                        $trx->user = $wallet->user ?? null;
+                    }
+                }
+
+                // set status
+                $trx->raw_status = $trx->status;
+                $trx->status = deposit_status($trx->status);
+
+                // set transaction type
+                $trx->is_deposit = ($trx->transaction_type == TRANSACTION_TYPE_DEPOSIT);
+                $trx->is_withdrawal = ($trx->transaction_type == TRANSACTION_TYPE_WITHDRAW);
+
+                // set title
+                if($trx->is_withdrawal){
+                    $trx->title = __("Internal Withdrawal");
+                    if($trx->address_type == ADDRESS_TYPE_EXTERNAL)  $trx->title = __("External Withdrawal");
+                }
+                if($trx->is_deposit){
+                    $trx->title = __("Internal Deposit");
+                    if($trx->address_type == ADDRESS_TYPE_EXTERNAL)  $trx->title = __("External Deposit");
+                }
+
+            });
+
+            $data = [
+                'total_count' => $totalCount,
+                'total_page' => $totalPages,
+                'per_page' => $perPage,
+                'current_page' => $page,
+                'data' => $transactions,
+            ];
+
+        } catch (\Exception $e) {
+            storeException("getTransaction", $e->getMessage());
+        }
+        dd($data);
+    }
 }

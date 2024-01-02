@@ -87,4 +87,11 @@ class WalletController extends Controller
             $this->service->getExchageRate($request)
         );
     }
+
+    public function getTransaction(Request $request)
+    {
+        return response()->json(
+            $this->service->getTransaction($request)
+        );
+    }
 }

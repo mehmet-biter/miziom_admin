@@ -33,6 +33,7 @@ return new class extends Migration
             $table->string('network_type')->nullable();
             $table->string('memo')->nullable();
             $table->longText('message')->nullable();
+            $table->tinyInteger('transaction_type')->default(TRANSACTION_TYPE_WITHDRAW);
             $table->timestamps();
         });
     }
