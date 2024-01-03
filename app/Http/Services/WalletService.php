@@ -269,10 +269,11 @@ public function saveItemData($request)
             $currencyAmount = $request->amount;
             $amount = $request->amount;
             $rate = 0;
-            $fees = $wallet->withdrawal_fees ?? 0;
+            $fees = 0;
             $defaultCurrency = settings('default_currency') ?? "NGN";
 
             if($request->type == WITHDRAWAL_CURRENCY_TYPE_CRYPTO){
+                $fees = check_withdrawal_fees($amount, $wallet->withdrawal_fees,$wallet->withdrawal_fees_type);
                 $rate = convert_currency($wallet->coin_type, $defaultCurrency, 1);
                 $currencyAmount = $amount * $rate;
                 $totalAmount = $amount + $fees;
@@ -282,6 +283,7 @@ public function saveItemData($request)
 
                 $rate = convert_currency($defaultCurrency, $wallet->coin_type, 1);
                 $amount = ($amount * $rate);
+                $fees = check_withdrawal_fees($amount, $wallet->withdrawal_fees,$wallet->withdrawal_fees_type);
                 $totalAmount = $amount + $fees;
                 if( !($wallet->balance >= $totalAmount))
                     return responseData(false, __('Insufficient balance for withdrawal request!'));

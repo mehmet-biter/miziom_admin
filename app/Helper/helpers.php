@@ -382,3 +382,10 @@ function addressType($input = null){
         return $output[$input] ? $output[$input] : null ;
     }
 }
+
+function check_withdrawal_fees($amount, $fees_percentage, $type)
+{
+    return
+
+    $type == DISCOUNT_TYPE_FIXED ? $fees_percentage : bcdiv(bcmul($fees_percentage, $amount,8),100,8);
+}
