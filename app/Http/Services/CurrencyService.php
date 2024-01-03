@@ -112,21 +112,23 @@ class CurrencyService
 
             if($responseCurrencyExchangeRate['success'])
             {
-                $data = $responseCurrencyExchangeRate['data'];
-                if($data['rates']) {
-                    foreach ($data['rates'] as $type => $rate){
+                $data = $responseCurrencyExchangeRate['data']['rates'] ?? [];
+                if($data) {
+                    foreach ($data as $type => $rate){
                         $usd = (is_numeric($rate) && $rate > 0 ) ? bcdiv(1,number_format($rate, 8,".",""),4) : $rate;
                         if($coin = Coin::where("coin_type", $type)->first()){
-                            $coin->update(['coin_price' => $usd]);
+                            $coin->update(['usd_rate' => $usd]);
                         }
-                        CurrencyList::where('code',$type)->update([ 'rate' => $rate ? $rate : 1 ]);
+                        CurrencyList::where('code',$type)->update([ 'usd_rate' => $rate ? $rate : 1 ]);
                     }
                 }
+
             }else{
-                return $responseCurrencyExchangeRate;
+                $this->response = $responseCurrencyExchangeRate;
+                return;
             }
 
-        }catch (\Exception $e){
+        }catch (Exception $e){
             storeException('currencyRateSave', $e->getMessage());
             DB::rollBack();
             $this->response = [ 'success' => false, 'message' => __('Currency Rate Update failed') ];

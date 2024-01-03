@@ -56,11 +56,11 @@ class CurrencyController extends Controller
         try {
             $this->service->currencyRateSave();
             $response = $this->service->response;
-            if($response["success"]) return redirect()->route("adminCurrencyList")->with("success",$response["message"]);
-            return redirect()->route("adminCurrencyList")->with("dismiss",$response["message"]);
+            if(isset($response["success"]) && $response["success"]) return redirect()->route("adminCurrencyList")->with("success",$response["message"]);
+            return redirect()->route("adminCurrencyList")->with("dismiss",$response["message"] ?? __("Failed update currency rate"));
         } catch(\Exception $e) {
             storeException('adminCurrencyRate ex', $e->getMessage());
-            return redirect()->route("adminCurrencyList")->with("dismiss",__('Currency api key is not valid'));
+            return redirect()->route("adminCurrencyList")->with("dismiss",__('Something went wrong!'));
         }
 
     }

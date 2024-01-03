@@ -17,7 +17,7 @@
 
                         <a href="javascript:;" onclick="getallCurrency()" class="btn btn-success gap-2 float-right">
                             {{ __('Get All Currency') }} </a>
-                        <a href="{{ route('roleAdd') }}" class="btn btn-info gap-2 float-right">
+                        <a href="{{ route('adminCurrencyRate') }}" class="btn btn-info gap-2 float-right">
                             {{ __('Live Update Rate') }} </a>
                     </div>
                 </div>
