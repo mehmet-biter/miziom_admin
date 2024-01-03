@@ -267,7 +267,7 @@ public function saveItemData($request)
                 "amount"               => $amount,
                 "currency_amount"      => $currencyAmount,
                 "rate"                 => $rate,
-                "address_type"         => $request->type,
+                "address_type"         => ADDRESS_TYPE_INTERNAL,
                 "address"              => $request->address ?? '',
                 "transaction_hash"     => Str::random(32),
                 "coin_type"            => $wallet->coin_type,
@@ -291,7 +291,7 @@ public function saveItemData($request)
                     if(! $customerWallet = Wallet::where(['user_id' => $customer->id, "coin_type" => $wallet->coin_type])->first()){
                         return responseData(false, __("Customer wallet not found!"));
                     }
-                    
+
                     if(! isset($customerWallet->id)) return responseData(false, __("Customer wallet not found!"));
 
                     $withdrawalHistory["receiver_wallet_id"] = $customerWallet->id;
@@ -309,7 +309,7 @@ public function saveItemData($request)
             $withdrawl_type = ADDRESS_TYPE_INTERNAL;
             if(! $addressHistory = WalletAddressHistory::where('address', $request->address)->first()){
                 $withdrawl_type = ADDRESS_TYPE_EXTERNAL;
-
+                $withdrawalHistory["address_type"] = ADDRESS_TYPE_EXTERNAL;
                 if($wallet->decrement("balance", $amount)){
                     WithdrawHistory::create($withdrawalHistory);
                     DB::commit();
