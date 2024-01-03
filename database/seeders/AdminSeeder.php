@@ -28,6 +28,7 @@ class AdminSeeder extends Seeder
             'name' => 'Mr. Admin',
             'username' => 'mr-user',
             'status' => STATUS_SUCCESS,
+            'role_module' => ROLE_USER,
             'email_verified' => 1,
             'password' => Hash::make('Pass.321'),
             'unique_code' => randomNumber(14)
