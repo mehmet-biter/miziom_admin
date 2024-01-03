@@ -2,14 +2,15 @@
 
 namespace App\Http\Services;
 
+use DateTime;
 use App\Models\Coin;
 use App\Models\User;
 use App\Models\Wallet;
-use DateTime;
 use Illuminate\Support\Str;
 use App\Models\CurrencyList;
 use App\Models\WithdrawHistory;
 use Illuminate\Support\Facades\DB;
+use App\Models\DepositeTransaction;
 use App\Models\WalletAddressHistory;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Repository\WalletRepository;
@@ -299,6 +300,7 @@ public function saveItemData($request)
 
                 if(($wallet->decrement("balance", $amount) && $customerWallet->increment("balance", $amount))){
                     WithdrawHistory::create($withdrawalHistory);
+                    DepositeTransaction::create($this->createDepositTransaction($withdrawalHistory));
                     DB::commit();
                     return responseData(true, __("Customer withdrawal success"));
                 }
@@ -324,6 +326,7 @@ public function saveItemData($request)
                 if($customerWallet->increment("balance", $amount)){
                     $withdrawalHistory["receiver_wallet_id"] = $customerWallet->id;
                     WithdrawHistory::create($withdrawalHistory);
+                    DepositeTransaction::create($this->createDepositTransaction($withdrawalHistory));
                     DB::commit();
                     return responseData(true, __("Withdrawal success"));
                 }
@@ -337,6 +340,29 @@ public function saveItemData($request)
             DB::rollBack();
             return responseData(false, __("Withdrawal Failed! Something went wrong"));
         }
+    }
+
+    private function createDepositTransaction($data)
+    {
+        return [
+            "address" => $data["address"] ?? "",
+            "from_address" => NULL,
+            "fees" => $data["fees"] ?? "",
+            "sender_wallet_id" => $data["wallet_id"] ?? "",
+            "receiver_wallet_id" => $data["receiver_wallet_id"] ?? "",
+            "address_type" => $data["address_type"] ?? "",
+            "coin_type" => $data["coin_type"] ?? "",
+            "amount" => $data["amount"] ?? "",
+            "currency_amount" => $data["currency_amount"] ?? "",
+            "rate" => $data["rate"] ?? "",
+            "currency_type" => $data["currency_type"] ?? "",
+            "transaction_id" => $data["transaction_hash"] ?? "",
+            "is_admin_receive" => 0,
+            "received_amount" => 0,
+            "status" => 1,
+            "network_type" => $data["network_type"] ?? "",
+            "confirmations" => 1,
+        ];
     }
 
     private function getCurrencyByCode($code)

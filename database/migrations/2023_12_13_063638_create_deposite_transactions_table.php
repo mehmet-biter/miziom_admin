@@ -20,9 +20,10 @@ return new class extends Migration
             $table->bigInteger('receiver_wallet_id')->unsigned();
             $table->string('address_type');
             $table->string('coin_type')->nullable();
+            $table->string('currency_type')->default('NGN');
             $table->decimal('amount',29,18)->default(0);
-            $table->decimal('btc',19,8)->default(0);
-            $table->decimal('doller',19,8)->default(0);
+            $table->decimal('currency_amount',19,8)->default(0);
+            $table->decimal('rate',19,8)->default(0);
             $table->string('transaction_id');
             $table->tinyInteger('is_admin_receive')->default(0);
             $table->decimal('received_amount',29,18)->default(0);
