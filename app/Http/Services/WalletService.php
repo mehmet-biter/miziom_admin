@@ -275,14 +275,15 @@ public function saveItemData($request)
             if($request->type == WITHDRAWAL_CURRENCY_TYPE_CRYPTO){
                 $rate = convert_currency($wallet->coin_type, $defaultCurrency, 1);
                 $currencyAmount = $amount * $rate;
-                $amount = $amount + $fees;
-                if( !($wallet->balance >= $amount))
+                $totalAmount = $amount + $fees;
+                if( !($wallet->balance >= $totalAmount))
                     return responseData(false, __('Insufficient balance for withdrawal request!'));
             }else{
 
                 $rate = convert_currency($defaultCurrency, $wallet->coin_type, 1);
-                $amount = ($amount * $rate) + $fees;
-                if( !($wallet->balance >= $amount))
+                $amount = ($amount * $rate);
+                $totalAmount = $amount + $fees;
+                if( !($wallet->balance >= $totalAmount))
                     return responseData(false, __('Insufficient balance for withdrawal request!'));
             }
 
@@ -317,6 +318,8 @@ public function saveItemData($request)
                 return;
             }
 
+            $amount = $withdrawalHistory->amount + $withdrawalHistory->fees;
+
             if(isset($withdrawalHistory->customer_id) && $withdrawalHistory->customer_id){
                 if(! $customer = User::find($withdrawalHistory->customer_id)){
                     storeException("walletWithdrawalProccess", "withdrawal history id: $withdrawalHistory->id --- customer not found");
@@ -336,7 +339,9 @@ public function saveItemData($request)
                     return;
                 }
 
-                if(($wallet->decrement("balance", $withdrawalHistory->amount) && $customerWallet->increment("balance", $withdrawalHistory->amount))){
+
+
+                if(($wallet->decrement("balance", $amount) && $customerWallet->increment("balance", $amount))){
                     $response = $withdrawalHistory->update([
                         "receiver_wallet_id" => $customerWallet->id,
                         "status" => STATUS_ACTIVE
@@ -354,7 +359,7 @@ public function saveItemData($request)
             $withdrawl_type = ADDRESS_TYPE_INTERNAL;
             if(! $addressHistory = WalletAddressHistory::where('address', $withdrawalHistory->address)->first()){
                 $withdrawl_type = ADDRESS_TYPE_EXTERNAL;
-                if($wallet->decrement("balance", $withdrawalHistory->amount)){
+                if($wallet->decrement("balance", $amount)){
                     $response = $withdrawalHistory->update([ "address_type" => ADDRESS_TYPE_EXTERNAL ]);
                     DB::commit();
                     storeException("walletWithdrawalProccess", "withdrawal history id: $withdrawalHistory->id --- Extarnal withdrawal success!");
@@ -366,8 +371,8 @@ public function saveItemData($request)
             }
 
             if($customerWallet = Wallet::find($addressHistory->wallet_id)){
-                $wallet->decrement("balance", $withdrawalHistory->amount);
-                if($customerWallet->increment("balance", $withdrawalHistory->amount)){
+                $wallet->decrement("balance", $amount);
+                if($customerWallet->increment("balance", $amount)){
                     $response = $withdrawalHistory->update([
                         "receiver_wallet_id" => $customerWallet->id,
                         "status" => STATUS_ACTIVE
