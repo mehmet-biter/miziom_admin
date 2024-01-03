@@ -381,7 +381,8 @@ public function saveItemData($request)
             DB::raw(
                 'wallets.name, wallets.coin_type, withdraw_histories.amount, withdraw_histories.address_type, 
                 withdraw_histories.receiver_wallet_id as sender_wallet, withdraw_histories.transaction_type , 
-                withdraw_histories.transaction_hash as trx_id, withdraw_histories.status, withdraw_histories.created_at as created_at'
+                withdraw_histories.transaction_hash as trx_id, withdraw_histories.status, withdraw_histories.created_at as created_at
+                withdraw_histories.wallet_id'
             )
         )
         ->join('wallets', 'withdraw_histories.wallet_id', '=', 'wallets.id')
@@ -429,7 +430,8 @@ public function saveItemData($request)
                     DB::raw(
                         'wallets.name, wallets.coin_type, deposite_transactions.amount, deposite_transactions.address_type, 
                         deposite_transactions.sender_wallet_id as sender_wallet, deposite_transactions.transaction_type, 
-                        deposite_transactions.transaction_id as trx_id, deposite_transactions.status, deposite_transactions.created_at as created_at'
+                        deposite_transactions.transaction_id as trx_id, deposite_transactions.status, deposite_transactions.created_at as created_at,
+                        deposite_transactions.receiver_wallet_id as wallet_id'
                     )
                 )
                 ->union($this->getUnionWithdrawQuery($user, $request))
@@ -473,11 +475,9 @@ public function saveItemData($request)
             $transactions->map(function($trx) use($request) {
                 // set user
                 $trx->user = null;
-                if($trx->sender_wallet){
-                    if($wallet = Wallet::with('user:id,name,username')->find($trx->sender_wallet)){
-                        if(isset($request->wallet_id) && $trx->sender_wallet != $request->wallet_id)
+                if($trx->sender_wallet && ($trx->sender_wallet != $trx->wallet_id)){
+                    if($wallet = Wallet::with('user:id,name,username')->find($trx->sender_wallet))
                         $trx->user = $wallet->user ?? null;
-                    }
                 }
 
                 // set status
