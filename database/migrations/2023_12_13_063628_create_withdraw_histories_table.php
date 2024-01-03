@@ -17,12 +17,13 @@ return new class extends Migration
             $table->bigInteger('wallet_id')->unsigned();
             $table->foreign('wallet_id')->references('id')->on('wallets')->onDelete('cascade');
             $table->decimal('amount',19,8)->default(0);
-            $table->decimal('btc',19,8)->default(0);
-            $table->decimal('doller',19,8)->default(0);
+            $table->decimal('currency_amount',19,8)->default(0);
+            $table->decimal('rate',19,8)->default(0);
             $table->tinyInteger('address_type');
             $table->string('address');
             $table->string('transaction_hash');
             $table->string('coin_type')->default('BTC');
+            $table->string('currency_type')->default('NGN');
             $table->decimal('used_gas',19,8)->default(0);
             $table->string('receiver_wallet_id')->nullable();
             $table->string('confirmations')->nullable();

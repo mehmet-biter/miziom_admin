@@ -239,19 +239,24 @@ public function saveItemData($request)
 
             if(!$wallet) return responseData(false, __('Wallet not found!'));
 
+            $currencyAmount = $request->amount;
             $amount = $request->amount;
+            $rate = 0;
+            $fees = $wallet->withdrawal_fees ?? 0;
             $defaultCurrency = settings('default_currency') ?? "NGN";
 
             if($request->type == WITHDRAWAL_CURRENCY_TYPE_CRYPTO){
-
+                $rate = convert_currency($wallet->coin_type, $defaultCurrency, 1);
+                $currencyAmount = $amount * $rate;
+                $amount = $amount + $fees;
                 if( !($wallet->balance >= $amount))
-                    return responseData(false, __('insufficient balance for withdrawal request!'));
+                    return responseData(false, __('Insufficient balance for withdrawal request!'));
             }else{
 
-                $usdTotalAmount = convert_currency($defaultCurrency, $wallet->coin_type, 1);
-                $amount = $amount * $usdTotalAmount;
+                $rate = convert_currency($defaultCurrency, $wallet->coin_type, 1);
+                $amount = ($amount * $rate) + $fees;
                 if( !($wallet->balance >= $amount))
-                    return responseData(false, __('insufficient balance for withdrawal request!'));
+                    return responseData(false, __('Insufficient balance for withdrawal request!'));
             }
 
             DB::beginTransaction();
@@ -260,14 +265,16 @@ public function saveItemData($request)
                 "user_id"              => $user->id,
                 "wallet_id"            => $wallet->id,
                 "amount"               => $amount,
-                "doller"               => 0,
+                "currency_amount"      => $currencyAmount,
+                "rate"                 => $rate,
                 "address_type"         => $request->type,
                 "address"              => $request->address ?? '',
                 "transaction_hash"     => Str::random(32),
                 "coin_type"            => $wallet->coin_type,
+                "currency_type"        => $defaultCurrency,
                 // "used_gas"             => 0,
                 "confirmations"        => 1,
-                "fees"                 => 0,
+                "fees"                 => $fees,
                 "status"               => 1,
                 // "updated_by"           => 0,
                 // "automatic_withdrawal" => 0,
