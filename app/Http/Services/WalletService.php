@@ -5,6 +5,7 @@ namespace App\Http\Services;
 use App\Models\Coin;
 use App\Models\User;
 use App\Models\Wallet;
+use Illuminate\Support\Str;
 use App\Models\CurrencyList;
 use App\Models\WithdrawHistory;
 use Illuminate\Support\Facades\DB;
@@ -261,14 +262,14 @@ public function saveItemData($request)
                 "doller"               => 0,
                 "address_type"         => $request->type,
                 "address"              => $request->address ?? '',
-                "transaction_hash"     => "sdjfjdsl;g;lskfdg",
+                "transaction_hash"     => Str::random(32),
                 "coin_type"            => $wallet->coin_type,
-                "used_gas"             => 0,
+                // "used_gas"             => 0,
                 "confirmations"        => 1,
                 "fees"                 => 0,
                 "status"               => 1,
-                "updated_by"           => 0,
-                "automatic_withdrawal" => 0,
+                // "updated_by"           => 0,
+                // "automatic_withdrawal" => 0,
                 "network_type"         => $wallet->network,
                 'memo'                 => $request->memo ? $request->memo : ''
             ];
