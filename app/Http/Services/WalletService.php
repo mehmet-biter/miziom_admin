@@ -381,7 +381,7 @@ public function saveItemData($request)
             DB::raw(
                 'wallets.name, wallets.coin_type, withdraw_histories.amount, withdraw_histories.address_type, 
                 withdraw_histories.receiver_wallet_id as sender_wallet, withdraw_histories.transaction_type , 
-                withdraw_histories.transaction_hash as trx_id, withdraw_histories.status, withdraw_histories.created_at as created_at
+                withdraw_histories.transaction_hash as trx_id, withdraw_histories.status, withdraw_histories.created_at as created_at,
                 withdraw_histories.wallet_id'
             )
         )
