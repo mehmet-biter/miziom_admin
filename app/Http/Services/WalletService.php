@@ -5,6 +5,7 @@ namespace App\Http\Services;
 use App\Models\Coin;
 use App\Models\User;
 use App\Models\Wallet;
+use DateTime;
 use Illuminate\Support\Str;
 use App\Models\CurrencyList;
 use App\Models\WithdrawHistory;
@@ -381,7 +382,7 @@ public function saveItemData($request)
             DB::raw(
                 'wallets.name, wallets.coin_type, withdraw_histories.amount, withdraw_histories.address_type, 
                 withdraw_histories.receiver_wallet_id as sender_wallet, withdraw_histories.transaction_type , 
-                withdraw_histories.transaction_hash as trx_id, withdraw_histories.status, withdraw_histories.created_at as created_at,
+                withdraw_histories.transaction_hash as trx_id, withdraw_histories.status, withdraw_histories.created_at,
                 withdraw_histories.wallet_id'
             )
         )
@@ -430,7 +431,7 @@ public function saveItemData($request)
                     DB::raw(
                         'wallets.name, wallets.coin_type, deposite_transactions.amount, deposite_transactions.address_type, 
                         deposite_transactions.sender_wallet_id as sender_wallet, deposite_transactions.transaction_type, 
-                        deposite_transactions.transaction_id as trx_id, deposite_transactions.status, deposite_transactions.created_at as created_at,
+                        deposite_transactions.transaction_id as trx_id, deposite_transactions.status, deposite_transactions.created_at,
                         deposite_transactions.receiver_wallet_id as wallet_id'
                     )
                 )
@@ -498,6 +499,8 @@ public function saveItemData($request)
                     if($trx->address_type == ADDRESS_TYPE_EXTERNAL)  $trx->title = __("External Deposit");
                 }
 
+                // created_At data
+                $trx->created_at = date('Y-m-d\TH:i:s.u\Z', strtotime($trx->created_at));
             });
 
             $data = [
