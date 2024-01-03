@@ -3,9 +3,11 @@
 namespace App\Http\Services;
 
 use App\Models\Coin;
-use App\Models\CurrencyList;
 use App\Models\User;
 use App\Models\Wallet;
+use Illuminate\Support\Str;
+use App\Models\CurrencyList;
+use App\Models\WithdrawHistory;
 use Illuminate\Support\Facades\DB;
 use App\Models\WalletAddressHistory;
 use Illuminate\Support\Facades\Auth;
@@ -253,17 +255,39 @@ public function saveItemData($request)
 
             DB::beginTransaction();
 
+            $withdrawalHistory = [
+                "user_id"              => $user->id,
+                "wallet_id"            => $wallet->id,
+                "amount"               => $amount,
+                "doller"               => 0,
+                "address_type"         => $request->type,
+                "address"              => $request->address ?? '',
+                "transaction_hash"     => Str::random(32),
+                "coin_type"            => $wallet->coin_type,
+                // "used_gas"             => 0,
+                "confirmations"        => 1,
+                "fees"                 => 0,
+                "status"               => 1,
+                // "updated_by"           => 0,
+                // "automatic_withdrawal" => 0,
+                "network_type"         => $wallet->network,
+                'memo'                 => $request->memo ? $request->memo : ''
+            ];
+
             if(isset($request->customer_id)){
                 if(! $customer = User::find($request->customer_id))
                     return responseData(false, __('Customer not found!'));
 
                 if(! $customerWallet = Wallet::where(['user_id' => $customer->id, "coin_type" => $wallet->coin_type])->first()){
                     createUserWallet($customer->id);
-                    if(! $customerWallet = Wallet::where(['user_id' => $customer->id, "coin_type" => $wallet->coin_type])->first())
+                    if(! $customerWallet = Wallet::where(['user_id' => $customer->id, "coin_type" => $wallet->coin_type])->first()){
+                        $withdrawalHistory["receiver_wallet_id"] = $customerWallet->id;
                         return responseData(false, __("Customer wallet not found!"));
+                    }
                 }
 
                 if(($wallet->decrement("balance", $amount) && $customerWallet->increment("balance", $amount))){
+                    WithdrawHistory::create($withdrawalHistory);
                     DB::commit();
                     return responseData(true, __("Customer withdrawal success"));
                 }
@@ -276,16 +300,19 @@ public function saveItemData($request)
                 $withdrawl_type = ADDRESS_TYPE_EXTERNAL;
 
                 if($wallet->decrement("balance", $amount)){
+                    WithdrawHistory::create($withdrawalHistory);
                     DB::commit();
                     return responseData(true, __("Withdrawal success"));
                 }
                 DB::rollBack();
-                return responseData(true, __("Withdrawal failed"));
+                return responseData(false, __("Withdrawal failed"));
             }
 
             if($customerWallet = Wallet::find($addressHistory->wallet_id)){
                 $wallet->decrement("balance", $amount);
                 if($customerWallet->increment("balance", $amount)){
+                    $withdrawalHistory["receiver_wallet_id"] = $customerWallet->id;
+                    WithdrawHistory::create($withdrawalHistory);
                     DB::commit();
                     return responseData(true, __("Withdrawal success"));
                 }
