@@ -289,9 +289,12 @@ public function saveItemData($request)
                 if(! $customerWallet = Wallet::where(['user_id' => $customer->id, "coin_type" => $wallet->coin_type])->first()){
                     createUserWallet($customer->id);
                     if(! $customerWallet = Wallet::where(['user_id' => $customer->id, "coin_type" => $wallet->coin_type])->first()){
-                        $withdrawalHistory["receiver_wallet_id"] = $customerWallet->id;
                         return responseData(false, __("Customer wallet not found!"));
                     }
+                    
+                    if(! isset($customerWallet->id)) return responseData(false, __("Customer wallet not found!"));
+
+                    $withdrawalHistory["receiver_wallet_id"] = $customerWallet->id;
                 }
 
                 if(($wallet->decrement("balance", $amount) && $customerWallet->increment("balance", $amount))){
