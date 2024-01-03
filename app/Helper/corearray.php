@@ -585,3 +585,19 @@ function deposit_status($input = null)
         return $output[$input] ? $output[$input] : null;
     }
 }
+
+function getNetworkType($input = null)
+{
+    $output = [
+        POLYGON_NETWORK => __('Polygon'),
+        SOLANA_NETWORK => __('Solana'),
+        BINANCE_MAINNET_NETWORK => __('Binance Mainnet'),
+        TRON_MAINNET_NETWORK => __('Tron Mainnet'),
+        ETHEREUM_MAINNET_NETWORK => __('Ethereum Mainnet'),
+    ];
+    if (is_null($input)) {
+        return $output;
+    } else {
+        return isset($output[$input]) ? $output[$input] : null;
+    }
+}

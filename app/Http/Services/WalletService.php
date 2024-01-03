@@ -188,7 +188,7 @@ public function saveItemData($request)
             $wallet->usd_value_rate       = $rate;
             $wallet->usd_value            = bcmul($rate,$wallet->balance,8);
             $wallet->address              = $walletAddress->address ?? null; 
-            $coin->network                = api_settings($coin->network ?? 0);
+            $coin->network                = getNetworkType($coin->network_type ?? 0);
             $wallet->coin                 = $coin;
             $data['wallet'] = $wallet;
             $data['memo'] = null;

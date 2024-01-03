@@ -16,6 +16,7 @@ class Coin extends Model
         "usd_rate",
         "status",
         "network",
+        "network_type",
 
         "is_withdrawal",
         "minimum_withdrawal",

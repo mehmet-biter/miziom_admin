@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('currency_id')->nullable();
             $table->decimal('usd_rate',19, 8)->default(1);
             $table->tinyInteger('network')->default(1);
+            $table->tinyInteger('network_type')->default(1);
 
             $table->tinyInteger('is_withdrawal')->default(1);
             $table->decimal('minimum_withdrawal', 19, 8)->default(0.0000001);
