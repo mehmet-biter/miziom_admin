@@ -77,7 +77,7 @@ class WalletController extends Controller
     public function walletWithdrawalProccess(WithdrawalRequest $request)
     {
         return response()->json(
-            $this->service->walletWithdrawalProccess($request)
+            $this->service->walletWithdrawalProccessRequest($request)
         );
     }
     

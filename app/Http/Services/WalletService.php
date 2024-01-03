@@ -9,6 +9,7 @@ use App\Models\Wallet;
 use Illuminate\Support\Str;
 use App\Models\CurrencyList;
 use App\Models\WithdrawHistory;
+use App\Jobs\WithdrawalProccess;
 use Illuminate\Support\Facades\DB;
 use App\Models\DepositeTransaction;
 use App\Models\WalletAddressHistory;
@@ -229,7 +230,31 @@ public function saveItemData($request)
         }
     }
 
-    public function walletWithdrawalProccess($request)
+    private function makeWithdrawalHistory($user, $request, $wallet, $amount, $currencyAmount, $rate, $defaultCurrency, $fees)
+    {
+        return [
+            "user_id"              => $user->id,
+            "wallet_id"            => $wallet->id,
+            "amount"               => $amount,
+            "currency_amount"      => $currencyAmount,
+            "rate"                 => $rate,
+            "address_type"         => ADDRESS_TYPE_INTERNAL,
+            "address"              => $request->address ?? '',
+            "transaction_hash"     => Str::random(32),
+            "coin_type"            => $wallet->coin_type,
+            "currency_type"        => $defaultCurrency,
+            // "used_gas"             => 0,
+            "confirmations"        => 1,
+            "fees"                 => $fees,
+            "status"               => 0,
+            // "updated_by"           => 0,
+            // "automatic_withdrawal" => 0,
+            "network_type"         => $wallet->network,
+            'memo'                 => $request->memo ? $request->memo : ''
+        ];
+    }
+
+    public function walletWithdrawalProccessRequest($request)
     {
         try{
             $user = Auth::user();
@@ -261,84 +286,108 @@ public function saveItemData($request)
                     return responseData(false, __('Insufficient balance for withdrawal request!'));
             }
 
-            DB::beginTransaction();
-
-            $withdrawalHistory = [
-                "user_id"              => $user->id,
-                "wallet_id"            => $wallet->id,
-                "amount"               => $amount,
-                "currency_amount"      => $currencyAmount,
-                "rate"                 => $rate,
-                "address_type"         => ADDRESS_TYPE_INTERNAL,
-                "address"              => $request->address ?? '',
-                "transaction_hash"     => Str::random(32),
-                "coin_type"            => $wallet->coin_type,
-                "currency_type"        => $defaultCurrency,
-                // "used_gas"             => 0,
-                "confirmations"        => 1,
-                "fees"                 => $fees,
-                "status"               => 1,
-                // "updated_by"           => 0,
-                // "automatic_withdrawal" => 0,
-                "network_type"         => $wallet->network,
-                'memo'                 => $request->memo ? $request->memo : ''
-            ];
-
             if(isset($request->customer_id)){
                 if(! $customer = User::find($request->customer_id))
                     return responseData(false, __('Customer not found!'));
+            }
 
+            $withdrawalHistory = $this->makeWithdrawalHistory($user, $request, $wallet, $amount, $currencyAmount, $rate, $defaultCurrency, $fees);
+            if($withdrawalHistoryData = WithdrawHistory::create($withdrawalHistory))
+            {
+                WithdrawalProccess::dispatch($withdrawalHistoryData->id, $request->customer_id ?? null)->onQueue("withdrawal-proccess");
+                return responseData(true, __('Your withdrawal request has been submitted successfully.'));
+            }
+            return responseData(false, __('Your withdrawal request failed.'));
+        } catch (\Exception $e) {
+            storeException("walletWithdrawalProccessRequest", $e->getMessage() . $e->getLine());
+            return responseData(false, __('Something went wrong!'));
+        }
+    }
+    public function walletWithdrawalProccess($withdrawalHistory)
+    {
+        try{
+            $wallet = Wallet::join('coins', 'coins.id', '=', 'wallets.coin_id')
+                    ->where(['wallets.id'=>$withdrawalHistory->wallet_id, 'wallets.user_id'=> $withdrawalHistory->user_id, 'coins.is_withdrawal' => STATUS_ACTIVE])
+                    ->select('wallets.*', 'coins.status as coin_status', 'coins.is_withdrawal', 'coins.minimum_withdrawal',
+                        'coins.maximum_withdrawal', 'coins.withdrawal_fees', 'coins.max_send_limit','coins.withdrawal_fees_type','coins.network')
+                    ->first();
+
+            if(!$wallet){
+                storeException("walletWithdrawalProccess", "withdrawal history id: $withdrawalHistory->id --- wallet not found");
+                return;
+            }
+
+            if(isset($withdrawalHistory->customer_id) && $withdrawalHistory->customer_id){
+                if(! $customer = User::find($withdrawalHistory->customer_id)){
+                    storeException("walletWithdrawalProccess", "withdrawal history id: $withdrawalHistory->id --- customer not found");
+                    return;
+                }
+                unset($withdrawalHistory->customer_id);
                 if(! $customerWallet = Wallet::where(['user_id' => $customer->id, "coin_type" => $wallet->coin_type])->first()){
                     createUserWallet($customer->id);
                     if(! $customerWallet = Wallet::where(['user_id' => $customer->id, "coin_type" => $wallet->coin_type])->first()){
-                        return responseData(false, __("Customer wallet not found!"));
+                        storeException("walletWithdrawalProccess", "withdrawal history id: $withdrawalHistory->id --- Customer wallet not found!");
+                        return;
                     }
                 }
 
-                if(! isset($customerWallet->id)) return responseData(false, __("Customer wallet not found!"));
-                $withdrawalHistory["receiver_wallet_id"] = $customerWallet->id;
+                if(! isset($customerWallet->id)){
+                    storeException("walletWithdrawalProccess", "withdrawal history id: $withdrawalHistory->id --- Customer id not found in db!");
+                    return;
+                }
 
-                if(($wallet->decrement("balance", $amount) && $customerWallet->increment("balance", $amount))){
-                    WithdrawHistory::create($withdrawalHistory);
+                if(($wallet->decrement("balance", $withdrawalHistory->amount) && $customerWallet->increment("balance", $withdrawalHistory->amount))){
+                    $response = $withdrawalHistory->update([
+                        "receiver_wallet_id" => $customerWallet->id,
+                        "status" => STATUS_ACTIVE
+                    ]);storeException("ssssss", json_encode($withdrawalHistory));
                     DepositeTransaction::create($this->createDepositTransaction($withdrawalHistory));
                     DB::commit();
-                    return responseData(true, __("Customer withdrawal success"));
+                    storeException("walletWithdrawalProccess", "withdrawal history id: $withdrawalHistory->id --- Customer withdrawal success");
+                    return;
                 }
                 DB::rollBack();
-                return responseData(false, __("Customer withdrawal failed!"));
+                storeException("walletWithdrawalProccess", "withdrawal history id: $withdrawalHistory->id --- Customer withdrawal failed!");
+                return;
             }
 
             $withdrawl_type = ADDRESS_TYPE_INTERNAL;
-            if(! $addressHistory = WalletAddressHistory::where('address', $request->address)->first()){
+            if(! $addressHistory = WalletAddressHistory::where('address', $withdrawalHistory->address)->first()){
                 $withdrawl_type = ADDRESS_TYPE_EXTERNAL;
-                $withdrawalHistory["address_type"] = ADDRESS_TYPE_EXTERNAL;
-                if($wallet->decrement("balance", $amount)){
-                    WithdrawHistory::create($withdrawalHistory);
+                if($wallet->decrement("balance", $withdrawalHistory->amount)){
+                    $response = $withdrawalHistory->update([ "address_type" => ADDRESS_TYPE_EXTERNAL ]);
                     DB::commit();
-                    return responseData(true, __("Withdrawal success"));
+                    storeException("walletWithdrawalProccess", "withdrawal history id: $withdrawalHistory->id --- Extarnal withdrawal success!");
+                    return;
                 }
                 DB::rollBack();
-                return responseData(false, __("Withdrawal failed"));
+                storeException("walletWithdrawalProccess", "withdrawal history id: $withdrawalHistory->id --- Extarnal withdrawal failed!");
+                return;
             }
 
             if($customerWallet = Wallet::find($addressHistory->wallet_id)){
-                $wallet->decrement("balance", $amount);
-                if($customerWallet->increment("balance", $amount)){
-                    $withdrawalHistory["receiver_wallet_id"] = $customerWallet->id;
-                    WithdrawHistory::create($withdrawalHistory);
+                $wallet->decrement("balance", $withdrawalHistory->amount);
+                if($customerWallet->increment("balance", $withdrawalHistory->amount)){
+                    $response = $withdrawalHistory->update([
+                        "receiver_wallet_id" => $customerWallet->id,
+                        "status" => STATUS_ACTIVE
+                    ]);
                     DepositeTransaction::create($this->createDepositTransaction($withdrawalHistory));
                     DB::commit();
-                    return responseData(true, __("Withdrawal success"));
+                    storeException("walletWithdrawalProccess", "withdrawal history id: $withdrawalHistory->id --- Inernal withdrawal success!");
+                    return;
                 }
                 DB::rollBack();
-                return responseData(false, __("Withdrawal failed!"));
+                storeException("walletWithdrawalProccess", "withdrawal history id: $withdrawalHistory->id --- Internal withdrawal failed!");
+                return;
             }
 
-            return responseData(false, __("Withdrawal Failed!"));
+            storeException("walletWithdrawalProccess", "withdrawal history id: $withdrawalHistory->id --- Withdrawal failed!");
+            return;
         } catch(\Exception $e) {
-            storeException("walletWithdrawalProccess", $e->getMessage());
+            storeException("walletWithdrawalProccess", $e->getMessage(). $e->getLine());
             DB::rollBack();
-            return responseData(false, __("Withdrawal Failed! Something went wrong"));
+            return;
         }
     }
 
@@ -347,7 +396,7 @@ public function saveItemData($request)
         return [
             "address" => $data["address"] ?? "",
             "from_address" => NULL,
-            "fees" => $data["fees"] ?? "",
+            "fees" => $data["fees"] ?? "0",
             "sender_wallet_id" => $data["wallet_id"] ?? "",
             "receiver_wallet_id" => $data["receiver_wallet_id"] ?? "",
             "address_type" => $data["address_type"] ?? "",
