@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Models\Faq;
 use App\Http\Repository\FaqRepository;
 
 class FaqService extends BaseService
@@ -62,5 +63,23 @@ public function saveItemData($request, $user)
     }
     return $response;
 }
+
+    public function getFaqApi($request)
+    {
+        try{
+
+            $faqList = Faq::where('status', STATUS_ACTIVE)
+                // ->when(isset($request->faq_type_id),function($query)use($request){
+                //     $query->Where('faq_type_id',$request->faq_type_id);
+                // })
+                ->orderBy('id', 'DESC')->paginate($request->per_page ?? 200);
+
+            if(isset($faqList[0])) return responseData(true, __("FAQ get successfully"), $faqList);
+            return responseData(false, __("FAQ not found"));
+        } catch(\Exception $e){
+            storeException('faq api', $e->getMessage());
+            return responseData(false, __("Something went wrong!"));
+        }
+    }
 
 }

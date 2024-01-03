@@ -155,4 +155,11 @@ class FaqController extends Controller
              return redirect()->back()->with('dismiss', __('Something went wrong'));
          }
      }
+
+     public function getFaqApi(Request $request)
+     {
+        return response()->json(
+            $this->service->getFaqApi($request)
+        );
+     }
 }
