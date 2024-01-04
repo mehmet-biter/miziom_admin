@@ -58,13 +58,18 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','admins']], function 
     Route::post('role/store',[RoleController::class,'store'])->name('roleStoreProcess');
 
     Route::get('list',[UserController::class,'adminList'])->name('adminList');
-    Route::get('user/list',[UserController::class,'index'])->name('userList');
     Route::get('add',[UserController::class,'create'])->name('adminAdd');
+    Route::get('edit-{id}',[UserController::class,'edit'])->name('adminEdit');
+    Route::get('delete-{id}',[UserController::class,'destroy'])->name('adminDelete');
+    Route::get('preview-{id}',[UserController::class,'preview'])->name('adminPreview');
+    Route::post('store',[UserController::class,'store'])->name('adminStoreProcess');
+
+    Route::get('user/list',[UserController::class,'index'])->name('userList');
     Route::get('user/add',[UserController::class,'createUser'])->name('userAdd');
-    Route::get('user/edit-{id}',[UserController::class,'edit'])->name('adminEdit');
-    Route::get('user/delete-{id}',[UserController::class,'destroy'])->name('adminDelete');
-    Route::get('user/preview-{id}',[UserController::class,'preview'])->name('adminPreview');
-    Route::post('user/store',[UserController::class,'store'])->name('adminStoreProcess');
+    Route::get('user/edit-{id}',[UserController::class,'edit'])->name('userEdit');
+    Route::get('user/delete-{id}',[UserController::class,'destroy'])->name('userDelete');
+    Route::get('user/preview-{id}',[UserController::class,'preview'])->name('userPreview');
+    Route::post('user/store',[UserController::class,'store'])->name('userStoreProcess');
 
     Route::get('settings',[AdminSettingController::class,'adminSetting'])->name('adminSetting');
     Route::post('update-generel-settings',[AdminSettingController::class,'updateGeneralSetting'])->name('updateGeneralSetting');
@@ -77,7 +82,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','admins']], function 
     Route::get('add-new-coin', [CoinController::class,'adminAddCoin'])->name('adminAddCoin');
     Route::get('coin-edit/{id}', [CoinController::class,'adminCoinEdit'])->name('adminCoinEdit');
     Route::get('coin-delete/{id?}', [CoinController::class,'adminCoinDelete'])->name('adminCoinDelete');
-    Route::get('coin-settings/{id}', [CoinController::class,'adminCoinSettings'])->name('adminCoinSettings');
     Route::post('coin-save-process', [CoinController::class,'adminCoinSaveProcess'])->name('adminCoinSaveProcess');
     Route::post('save-new-coin', [CoinController::class,'adminSaveCoin'])->name('adminSaveCoin');
     Route::post('change-coin-status', [CoinController::class,'adminCoinStatus'])->name('adminCoinStatus');

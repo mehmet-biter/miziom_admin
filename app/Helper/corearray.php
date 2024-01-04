@@ -280,73 +280,7 @@ function gender($input = null)
     }
 }
 
-function roleActionArray($input = null){
-        $currency_list = array(
-            array("name"=>"Admin List View","code"=>USER_LIST,"group" =>"Admin","route" => "adminList","url" =>"admin/user"),
-            array("name"=>"Admin Create View","code"=>USER_CREATE,"group" =>"Admin","route" => "adminAdd","url" =>"admin/user/add"),
-            array("name"=>"Admin Update","code"=>USER_EDIT,"group" =>"Admin","route" => "adminEdit","url" =>"admin/user/edit"),
-            array("name"=>"Admin Delete","code"=>USER_DESTROY,"group" =>"Admin","route" => "adminDelete","url" =>"admin/user/delete"),
-            array("name"=>"Admin Preview","code"=>USER_PREVIEW,"group" =>"Admin","route" => "adminPreview","url" =>"admin/user/preview"),
-            array("name"=>"Admin Store","code"=>USER_STORE,"group" =>"Admin","route" => "adminStoreProcess","url" =>"admin/user/store"),
 
-            array("name"=>"Role List View","code"=>ROLE_LIST,"group" =>"Role","route" => "roleList","url" =>"admin/role"),
-            array("name"=>"Role Create View","code"=>ROLE_CREATE,"group" =>"Role","route" => "roleAdd","url" =>"admin/role/add"),
-            array("name"=>"Role Update","code"=>ROLE_EDIT,"group" =>"Role","route" => "roleEdit","url" =>"admin/role/edit"),
-            array("name"=>"Role Delete","code"=>ROLE_DESTROY,"group" =>"Role","route" => "roleDelete","url" =>"admin/role/delete"),
-            array("name"=>"Role Preview","code"=>ROLE_PREVIEW,"group" =>"Role","route" => "rolePreview","url" =>"admin/role/preview"),
-            array("name"=>"Role Store","code"=>ROLE_STORE,"group" =>"Role","route" => "roleStoreProcess","url" =>"admin/role/store"),
-
-            array("name"=>"Job Category List View","code"=>JOB_CATEGORY_LIST,"group" =>"Job","route" => "jobCategoryList","url" =>"admin/job/category"),
-            array("name"=>"Job Category Create View","code"=>JOB_CATEGORY_CREATE,"group" =>"Job","route" => "jobCategoryAdd","url" =>"admin/job/category/add"),
-            array("name"=>"Job Category Update","code"=>JOB_CATEGORY_EDIT,"group" =>"Job","route" => "jobCategoryEdit","url" =>"admin/job/category/edit"),
-            array("name"=>"Job Category Delete","code"=>JOB_CATEGORY_DESTROY,"group" =>"Job","route" => "jobCategoryDelete","url" =>"admin/job/category/delete"),
-            array("name"=>"Job Category Preview","code"=>JOB_CATEGORY_PREVIEW,"group" =>"Job","route" => "jobCategoryPreview","url" =>"admin/job/category/preview"),
-            array("name"=>"Job Category Store","code"=>JOB_CATEGORY_STORE,"group" =>"Job","route" => "jobCategoryStoreProcess","url" =>"admin/job/category/store"),
-
-            array("name"=>"Job Post List View","code"=>JOB_POST_LIST,"group" =>"Job","route" => "jobPostList","url" =>"admin/job/post"),
-            array("name"=>"Job Post Create View","code"=>JOB_POST_CREATE,"group" =>"Job","route" => "jobPostAdd","url" =>"admin/job/post/add"),
-            array("name"=>"Job Post Update","code"=>JOB_POST_EDIT,"group" =>"Job","route" => "jobPostEdit","url" =>"admin/job/post/edit"),
-            array("name"=>"Job Post Delete","code"=>JOB_POST_DESTROY,"group" =>"Job","route" => "jobPostDelete","url" =>"admin/job/post/delete"),
-            array("name"=>"Job Post Preview","code"=>JOB_POST_PREVIEW,"group" =>"Job","route" => "jobPostPreview","url" =>"admin/job/post/preview"),
-
-            array("name"=>"Job Application List","code"=>JOB_APPLICATION_LIST,"group" =>"Job","route" => "jobApplicationList","url" =>"admin/job/application"),
-            array("name"=>"Job Application Preview","code"=>JOB_APPLICATION_PREVIEW,"group" =>"Job","route" => "jobApplicationPreview","url" =>"admin/job/application/preview"),
-            array("name"=>"Job Application Delete","code"=>JOB_APPLICATION_DESTROY,"group" =>"Job","route" => "jobApplicationDelete","url" =>"admin/job/application/delete"),
-
-            array("name"=>"Service List View","code"=>SERVICE_LIST,"group" =>"Service","route" => "serviceList","url" =>"admin/service"),
-            array("name"=>"Service Create View","code"=>SERVICE_CREATE,"group" =>"Service","route" => "serviceAdd","url" =>"admin/service/add"),
-            array("name"=>"Service Update","code"=>SERVICE_EDIT,"group" =>"Service","route" => "serviceEdit","url" =>"admin/service/edit"),
-            array("name"=>"Service Delete","code"=>SERVICE_DESTROY,"group" =>"Service","route" => "serviceDelete","url" =>"admin/service/delete"),
-            array("name"=>"Service Preview","code"=>SERVICE_PREVIEW,"group" =>"Service","route" => "servicePreview","url" =>"admin/service/preview"),
-            array("name"=>"Service Store","code"=>SERVICE_STORE,"group" =>"Service","route" => "serviceStoreProcess","url" =>"admin/service/store"),
-
-            array("name"=>"Team List View","code"=>TEAM_LIST,"group" =>"Team","route" => "teamList","url" =>"admin/team"),
-            array("name"=>"Team Create View","code"=>TEAM_CREATE,"group" =>"Team","route" => "teamAdd","url" =>"admin/team/add"),
-            array("name"=>"Team Update","code"=>TEAM_EDIT,"group" =>"Team","route" => "teamEdit","url" =>"admin/team/edit"),
-            array("name"=>"Team Delete","code"=>TEAM_DESTROY,"group" =>"Team","route" => "teamDelete","url" =>"admin/team/delete"),
-            array("name"=>"Team Preview","code"=>TEAM_PREVIEW,"group" =>"Team","route" => "teamPreview","url" =>"admin/team/preview"),
-            array("name"=>"Team Store","code"=>TEAM_STORE,"group" =>"Team","route" => "teamStoreProcess","url" =>"admin/team/store"),
-
-            array("name"=>"Faq List View","code"=>FAQ_LIST,"group" =>"Faq","route" => "faqList","url" =>"admin/faq"),
-            array("name"=>"Faq Create View","code"=>FAQ_CREATE,"group" =>"Faq","route" => "faqAdd","url" =>"admin/faq/add"),
-            array("name"=>"Faq Update","code"=>FAQ_EDIT,"group" =>"Faq","route" => "faqEdit","url" =>"admin/faq/edit"),
-            array("name"=>"Faq Delete","code"=>FAQ_DESTROY,"group" =>"Faq","route" => "faqDelete","url" =>"admin/faq/delete"),
-            array("name"=>"Faq Preview","code"=>FAQ_PREVIEW,"group" =>"Faq","route" => "faqPreview","url" =>"admin/faq/preview"),
-            array("name"=>"Faq Store","code"=>FAQ_STORE,"group" =>"Faq","route" => "faqStoreProcess","url" =>"admin/faq/store"),
-
-            array("name"=>"Admin Setting","code"=>SETTING_VIEW,"group" =>"Setting","route" => "adminSetting","url" =>"admin/settings"),
-            array("name"=>"Admin Setting Update","code"=>SETTING_UPDATE,"group" =>"Setting","route" => "updateGeneralSetting","url" =>"admin/update-generel-settings"),
-
-        );
-        if($input != null){
-            foreach($currency_list as $item){
-                if($item['code'] == $input){
-                    return $item;
-                }
-            }
-        }
-        return $currency_list;
-    }
 
 function getTradeCurrencyType($index = null)
 {

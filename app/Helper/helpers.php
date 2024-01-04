@@ -13,31 +13,11 @@ use Illuminate\Support\Facades\Auth;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 
-
+require_once('role.php');
 
 function makeUniqueId()
 {
     return uniqid().date('').time();
-}
-
-function checkRolePermission($role_task, $my_role)
-{
-    if(Auth::user()->role_module == ROLE_SUPER_ADMIN)
-    return 1;
-    $role = Role::findOrFail($my_role);
-    if (!empty($role->actions)) {
-        if (!empty($role->actions)) {
-            $tasks = array_filter(explode('|', $role->actions));
-        }
-        if (isset($tasks)) {
-            if (in_array($role_task, $tasks)) {
-                return 1;
-            } else {
-                return 0;
-            }
-        }
-    }
-    return 0;
 }
 
 
