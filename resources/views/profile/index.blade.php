@@ -32,7 +32,7 @@
                     </div>
                     <div class="mb-5">
                         <div class="flex flex-col justify-center items-center">
-                            <img @if(!empty($user->photo)) src="{{ asset($user->photo) }}" @else src="{{ asset('assets/images/avatar.jpg') }}" @endif alt="image"
+                            <img @if(!empty($user->photo)) src="{{ showUserImage(VIEW_IMAGE_PATH_USER,$user->photo) }}" @else src="{{ asset('assets/images/avatar.jpg') }}" @endif alt="image"
                                 class="w-24 h-24 rounded-full object-cover  mb-5" />
                             <p class="font-semibold text-primary text-xl">{{ $user->name }}</p>
                         </div>

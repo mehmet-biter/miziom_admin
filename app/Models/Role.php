@@ -14,4 +14,13 @@ class Role extends Model
         'actions',
         'unique_code'
     ];
+
+    protected $appends = [
+        'permissions'
+    ];
+
+    public function getPermissionsAttribute() {
+        $actions = explode('|', $this->actions);
+        return array_map('intval', $actions);
+    }
 }
