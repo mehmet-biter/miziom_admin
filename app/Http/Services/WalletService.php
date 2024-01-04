@@ -371,7 +371,7 @@ public function saveItemData($request)
                 if($wallet->decrement("balance", $amount)){
                     $response = $withdrawalHistory->update([ "address_type" => ADDRESS_TYPE_EXTERNAL ]);
                     DB::commit();
-                    storeException("walletWithdrawalProccess", "withdrawal history id: $withdrawalHistory->id --- Extarnal withdrawal success!");
+                    storeException("walletWithdrawalProccess", "withdrawal history id: $withdrawalHistory->id --- Extarnal withdrawal listed for admin approval!");
                     return;
                 }
                 DB::rollBack();
