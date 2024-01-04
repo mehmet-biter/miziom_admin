@@ -648,8 +648,8 @@ public function saveItemData($request)
     {
         try {
             storeException('checkAddressAndDeposit', json_encode($data));
-            storeException('checkAddressAndDeposit coin_type', $data['coin_type']);
             $coin_type = $data['coin_type'] == "polygon" ? "USDC" : $data['coin_type'];
+            storeException('checkAddressAndDeposit coin_type', $data['coin_type']);
             $checkAddress = WalletAddressHistory::where(['address' => $data['address'], 'coin_type' => $coin_type])->first();
             if ($checkAddress) {
                 $wallet = Wallet::find($checkAddress->wallet_id);
