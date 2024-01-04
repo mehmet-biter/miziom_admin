@@ -6,6 +6,7 @@ use DateTime;
 use App\Models\Coin;
 use App\Models\User;
 use App\Models\Wallet;
+use Exception;
 use Illuminate\Support\Str;
 use App\Models\CurrencyList;
 use App\Models\WithdrawHistory;
@@ -738,4 +739,125 @@ public function saveItemData($request)
     }
 
     // Bitgo wallet webhook End
+
+    public function sendBitgoCoin($coinType,$walletId,$amount,$address,$walletPassphrase)
+    {
+        try {
+            $bitgoService = new BitgoWalletService();
+            $bitgoResponse = $bitgoService->sendCoinsWithBitgo($coinType,$walletId,$amount,$address,$walletPassphrase);
+            storeException('send coin api response', json_encode($bitgoResponse));
+
+            if ($bitgoResponse['success'] == true) {
+                $response = [
+                    'success' => true,
+                    'message' => __('Coin send successful'),
+                    'data' => $bitgoResponse['data']['txid'],
+                ];
+            } else {
+                storeException('Bitgo sendCoin', $bitgoResponse['message']);
+                $response = [
+                    'success' => false,
+                    'message' => $bitgoResponse['message'],
+                    'data' => ""
+                ];
+            }
+
+        } catch (Exception $e) {
+            storeException('sendBitgoCoin', $e->getMessage());
+            $response = [
+                'success' => false,
+                'message' => __('Something went wrong'),
+                'data' => ""
+            ];
+        }
+        return $response;
+    }
+
+    public function sendCoinWithBitgo($transaction)
+    {
+        try {
+            $coin = Coin::join('coin_settings','coin_settings.coin_id', '=', 'coins.id')
+                ->where(['coins.coin_type' => $transaction->coin_type])
+                ->select('coins.*', 'coin_settings.*')
+                ->first();
+            if ($coin) {
+                $currency =  !empty($transaction->network_type) ? $transaction->network_type : $transaction->coin_type;
+                $response = $this->sendBitgoCoin($currency,$coin->bitgo_wallet_id,$transaction->amount,$transaction->address, $coin->bitgo_wallet);
+            } else {
+                $response = [
+                    'success' => false,
+                    'message' => __('Coin not found'),
+                    'data' => ''
+                ];
+            }
+        } catch (Exception $e) {
+            storeException('sendCoinWithBitgo', $e->getMessage());
+            $response = [
+                'success' => false,
+                'message' => __('Something went wrong'),
+                'data' => ''
+            ];
+        }
+        return $response;
+    }
+
+    public function withdrawalApproveProccess($id)
+    {
+        try{
+            $adminId = Auth::id();
+            if(! $withdrawalHistory = WithdrawHistory::where(['id' => $id, 'status' => STATUS_PENDING])->first())
+            return responseData(false, __("Withdrawal request not found"));
+
+            if(isset($withdrawalHistory->address_type) && $withdrawalHistory->address_type == ADDRESS_TYPE_EXTERNAL){
+                if(isset($withdrawalHistory->network_type) && $withdrawalHistory->network_type == BITGO_API){
+                    $result = $this->sendCoinWithBitgo($withdrawalHistory);
+                    if (isset($result['success']) && $result['success']) {
+                        $withdrawalHistory->transaction_hash = $result['data'];
+                        $withdrawalHistory->status = STATUS_SUCCESS;
+                        $withdrawalHistory->updated_by = $adminId;
+                        if (empty($adminId)) {
+                            $withdrawalHistory->automatic_withdrawal = 'success';
+                        }
+                        $withdrawalHistory->update();
+
+                        return ['success' => true, 'message' => __('Pending withdrawal accepted Successfully.')];
+                    } else {
+                        return ['success' => false, 'message' => $result['message']];
+                    }
+                }
+            }
+            return responseData(true, __("Withdrawal request do not complete"));
+        } catch (Exception $e){
+            storeException("withdrawalRejecteProccess", $e->getMessage());
+            return responseData(false, __("Something went wrong!"));
+        }
+    }
+
+    public function withdrawalRejecteProccess($id)
+    {
+        try{
+            if(! $withdrawalHistory = WithdrawHistory::where(['id' => $id, 'status' => STATUS_PENDING])->first())
+            return responseData(false, __("Withdrawal request not found"));
+
+            $fees = 0;
+            if(isset($withdrawalHistory->fees) && is_numeric($withdrawalHistory->fees) && $withdrawalHistory->fees > 0){
+                $fees = $withdrawalHistory->fees;
+            }
+            $amount = $withdrawalHistory->amount + $fees;
+            if(! $wallet = Wallet::find($withdrawalHistory->wallet_id))
+                return responseData(false, __("User wallet not found"));
+
+            if(!$wallet->increment("balance", $amount))
+                return responseData(false, __("Failed to refund user wallet"));
+
+            $withdrawalHistory->status = STATUS_REJECTED;
+            $withdrawalHistory->updated_by = Auth::id();
+            if($withdrawalHistory->update())
+            return responseData(true, __("Withdrawal request rejected successfully"));
+            return responseData(false, __("Withdrawal request failed to reject"));
+        } catch (Exception $e){
+            storeException("withdrawalRejecteProccess", $e->getMessage());
+            return responseData(false, __("Something went wrong!"));
+        }
+    }
 }
