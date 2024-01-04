@@ -213,7 +213,7 @@ public function saveItemData($request)
                     return false;
                 } else {
                     $bitgoApi =  new BitgoWalletService();
-                    $address = $bitgoApi->createBitgoWalletAddress($coin->coin_type,$coin->bitgo_wallet_id,$coin->chain);
+                    $address = $bitgoApi->createBitgoWalletAddress((getCoinByNetworkType($coin->network_type) ?? $coin->coin_type), $coin->bitgo_wallet_id,$coin->chain);
                     storeException('address bitgo', json_encode($address));
                     if ($address['success']) {
                         return $address['data']['address'];

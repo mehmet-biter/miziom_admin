@@ -535,3 +535,15 @@ function getNetworkType($input = null)
         return isset($output[$input]) ? $output[$input] : null;
     }
 }
+
+function getCoinByNetworkType($input = null)
+{
+    $output = [
+        POLYGON_NETWORK => __('POLYGON'),
+    ];
+    if (is_null($input)) {
+        return $output;
+    } else {
+        return isset($output[$input]) ? $output[$input] : null;
+    }
+}
