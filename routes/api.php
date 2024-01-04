@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\WalletNotifier;
 use App\Http\Controllers\Api\WalletController;
 use App\Http\Controllers\Setting\FaqController;
 
@@ -23,6 +24,7 @@ use App\Http\Controllers\Setting\FaqController;
 // });
 
 Route::group(['namespace'=>'Api','middleware' => ['apiCheck']], function (){
+    Route::post('bitgo-wallet-webhook',[WalletNotifier::class, 'bitgoWalletWebhook']);
     Route::group(['prefix'=>'auth'], function (){
         Route::get('common-setting',[AuthController::class, 'commonSetting']);
         Route::post('sign-up',[AuthController::class, 'register']);

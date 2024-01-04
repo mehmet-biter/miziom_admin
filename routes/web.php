@@ -113,6 +113,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','admins']], function 
 
     Route::get('pending-deposit', [TransactionController::class, 'adminPendingDeposit'])->name('adminPendingDeposit');
     Route::get('active-deposit', [TransactionController::class, 'adminActiveDeposit'])->name('adminActiveDeposit');
+
+    Route::get('user-withdrawal-approve/{id}', [TransactionController::class, 'withdrawalApproveProccess'])->name('withdrawalApproveProccess');
+    Route::get('user-withdrawal-reject/{id}', [TransactionController::class, 'withdrawalRejecteProccess'])->name('withdrawalRejecteProccess');
 });
 });
 

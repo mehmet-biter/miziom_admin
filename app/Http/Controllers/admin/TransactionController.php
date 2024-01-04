@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\admin;
 
+use App\Http\Services\WalletService;
 use Illuminate\Http\Request;
 use App\Models\WithdrawHistory;
 use App\Models\DepositeTransaction;
@@ -9,6 +10,11 @@ use App\Http\Controllers\Controller;
 
 class TransactionController extends Controller
 {
+    private $service;
+    public function __construct()
+    {
+        $this->service = new WalletService;
+    }
 
     public function adminPendingWithdrawal(Request $request)
     {
@@ -53,10 +59,10 @@ class TransactionController extends Controller
                     return api_settings($wdrl->network_type);
                 })
                 ->addColumn('actions', function ($wdrl) {
-                    $action = '<div class="activity-icon"><ul>';
-                    // $action .= accept_html('adminAcceptPendingWithdrawal',encrypt($wdrl->id));
-                    // $action .= reject_html('adminRejectPendingWithdrawal',encrypt($wdrl->id));
-                    $action .= '</ul> </div>';
+                    $action = '<div class="activity-icon">';
+                    $action .= '<a href="'.route("withdrawalApproveProccess",['id' => $wdrl->id]).'" class="btn btn-secondary btn-sm">Approve</a>';
+                    $action .= '<a href="'.route("withdrawalRejecteProccess",['id' => $wdrl->id]).'" class="btn btn-danger btn-sm">Reject</a>';
+                    $action .= '</div>';
 
                     return $action;
                 })
@@ -233,5 +239,21 @@ class TransactionController extends Controller
                 ->make(true);
         }
         return view('deposit.active_deposit', $data);        
+    }
+
+    public function withdrawalApproveProccess($id)
+    {
+        $response = $this->service->withdrawalApproveProccess($id);
+        if(isset($response["success"]) && $response["success"])
+        return redirect()->back()->withInput()->with('success', $response['message']);
+        return redirect()->back()->withInput()->with('dismiss', $response['message']  ?? __("Something went wrong!"));
+    }
+    
+    public function withdrawalRejecteProccess($id)
+    {
+        $response = $this->service->withdrawalRejecteProccess($id);
+        if(isset($response["success"]) && $response["success"])
+        return redirect()->back()->withInput()->with('success', $response['message']);
+        return redirect()->back()->withInput()->with('dismiss', $response['message'] ?? __("Something went wrong!"));
     }
 }
