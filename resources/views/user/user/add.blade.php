@@ -42,7 +42,7 @@
                                     <select name="role" id="" class="form-select">
                                         @if(isset($roles[0]))
                                         @foreach ($roles as $role)
-                                            <option value="{{ $role->id }}">{{ $role->title }}</option>
+                                            <option @if(isset($user) && $user->role == $role->id) selected @endif value="{{ $role->id }}">{{ $role->title }}</option>
                                         @endforeach
                                         @endif
                                     </select>
@@ -51,7 +51,7 @@
                                     <label for="status" class="">{{ __('Activation Status') }} <span class="text-danger">*</span></label>
                                     <select id="status" name="status" class="form-select">
                                         @foreach (activationStatus() as $key => $val)
-                                            <option @if(isset($item) && $item->status == $key) selected @endif value="{{$key}}">{{$val}}</option>
+                                            <option @if(isset($user) && $user->status == $key) selected @endif value="{{$key}}">{{$val}}</option>
                                         @endforeach
                                     </select>
                                 </div>

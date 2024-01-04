@@ -86,8 +86,8 @@ class UserController extends Controller
                      ->addColumn('actions', function ($item) use ($request) {
                          
                          $html = '<div class="flex gap-4 items-center">';
-                         $html .= edit_html('adminEdit',$item->unique_code);
-                         $html .= delete_html('adminDelete',$item->unique_code);
+                         $html .= edit_html('userEdit',$item->unique_code);
+                         $html .= delete_html('userDelete',$item->unique_code);
                          $html .= '</div>';
                          
                          return $html;
@@ -141,7 +141,12 @@ class UserController extends Controller
              $data['roles'] = Role::where(['status' => STATUS_ACTIVE])->get();
              $data['user'] = User::where(['unique_code' => $id])->first();
              if ($data['user']) {
-                 return view('user.user.add',$data);
+                if($data['user']->role_module == ROLE_USER) {
+                    return view('user.user.add_user',$data);
+                } else {
+                    return view('user.user.add',$data);
+                }
+                 
              } else {
                  return redirect()->back()->with('dismiss', __('Data not found'));
              }

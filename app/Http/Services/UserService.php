@@ -353,7 +353,7 @@ class UserService
             $item='';
             $oldImg = '';
             if($request->edit_id) {
-                $data = $request->except(['_token', 'photo', 'edit_id','password_confirmation','password']);
+                $data = $request->except(['_token', 'photo', 'edit_id','password_confirmation','password','user_type']);
                 $item = User::where(['id' => $request->edit_id])->first();
                 if(empty($item)) {
                     return responseData(false,__('Data not found'));
@@ -362,7 +362,7 @@ class UserService
                     $oldImg = $item->photo;
                 }
             } else {
-                $data = $request->except(['_token', 'photo','password_confirmation','password']);
+                $data = $request->except(['_token', 'photo','password_confirmation','password','user_type']);
                 $data['unique_code'] = randomNumber(14);
                 if ($request->user_type == 'admin') {
                     $data['role_module'] = ROLE_ADMIN;

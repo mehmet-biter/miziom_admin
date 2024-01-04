@@ -137,8 +137,7 @@
                                         alt="image" />
                                 </div>
                                 <div class="ltr:pl-4 rtl:pr-4 truncate">
-                                    <h4 class="text-base">{{ Auth::user()->first_name.' '.Auth::user()->last_name }}<span
-                                            class="text-xs bg-success-light rounded text-success px-1 ltr:ml-2 rtl:ml-2"></span>
+                                    <h4 class="text-base">{{ Auth::user()->name}}
                                     </h4>
                                     <a class="text-black/60  hover:text-primary dark:text-dark-light/60 dark:hover:text-white"
                                         href="javascript:;">{{ Auth::user()->email }}</a>
