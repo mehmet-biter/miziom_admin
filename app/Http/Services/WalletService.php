@@ -602,4 +602,134 @@ public function saveItemData($request)
             return responseData(false, __("Something went wrong"));
         }
     }
+
+
+    // Bitgo wallet webhook Start
+
+    public function getBitgoTransaction($coinType, $walletId, $txId)
+    {
+        try {
+            $bitGoService = new BitgoWalletService();
+            $bitgoResponse = $bitGoService->transferBitgoData($coinType,$walletId,$txId);
+            storeException('getTransaction response ', json_encode($bitgoResponse));
+            if ($bitgoResponse['success']) {
+
+                $response = [
+                    'success' => true,
+                    'message' => __('Data get successfully'),
+                    'data' => $bitgoResponse['data']
+                ];
+            } else {
+                storeException('getTransaction', $bitgoResponse['message']);
+                $response = [
+                    'success' => false,
+                    'message' => $bitgoResponse['message'],
+                    'data' => []
+                ];
+            }
+        } catch (\Exception $e) {
+            storeException('bitgoWalletWebhook getTransaction', $e->getMessage());
+            $response = [
+                'success' => false,
+                'message' => $e->getMessage(),
+                'data' => []
+            ];
+        }
+        return $response;
+    }
+    public function checkAddressAndDeposit($data)
+    {
+        try {
+            storeException('checkAddressAndDeposit', json_encode($data));
+            $checkAddress = WalletAddressHistory::where(['address' => $data['address'], 'coin_type' => $data['coin_type']])->first();
+            if ($checkAddress) {
+                $wallet = Wallet::find($checkAddress->wallet_id);
+                if ($wallet) {
+                    storeException('checkAddressAndDeposit wallet ', json_encode($wallet));
+                    $deposit = DepositeTransaction::create($this->depositData($data,$wallet));
+                    storeException('checkAddressAndDeposit created ', json_encode($deposit));
+                    storeException('checkAddressAndDeposit wallet balance before ', $wallet->balance);
+                    $wallet->increment('balance',$data['amount']);
+                    storeException('checkAddressAndDeposit wallet balance increment ', $wallet->balance);
+                    storeException('checkAddressAndDeposit', ' wallet deposit successful');
+                    $response = responseData(false,__('Wallet deposited successfully'));
+                } else {
+                    storeException('checkAddressAndDeposit', ' wallet not found');
+                    $response = responseData(false,__('wallet not found'));
+                }
+            } else {
+                storeException('checkAddressAndDeposit', $data['address'].' this address not found in db ');
+                $response = responseData(false,__('This address not found in db the address is ').$data['address']);
+            }
+        } catch (\Exception $e) {
+            storeException('checkAddressAndDeposit', $e->getMessage());
+            $response = responseData(false,$e->getMessage());
+        }
+        return $response;
+    }
+
+    public function depositData($data,$wallet)
+    {
+        return [
+            'address' => $data['address'],
+            'from_address' => isset($data['from_address']) ? $data['from_address'] : "",
+            'receiver_wallet_id' => $wallet->id,
+            'address_type' => ADDRESS_TYPE_EXTERNAL,
+            'coin_type' => $wallet->coin_type,
+            'amount' => $data['amount'],
+            'transaction_id' => $data['txId'],
+            'status' => STATUS_SUCCESS,
+            'confirmations' => $data['confirmations']
+        ];
+    }
+
+
+    public function bitgoWalletCoinDeposit($coinType, $walletId, $txId)
+    {
+        try {
+            $bitgoService = new BitgoWalletService();
+            $checkHash = DepositeTransaction::where(['transaction_id' => $txId])->first();
+            if (isset($checkHash)) {
+                storeException('bitgoWalletCoinDeposit hash already in db ', $txId);
+            } else {
+                $getTransaction = $this->getBitgoTransaction($coinType, $walletId, $txId);
+                if ($getTransaction['success'] == true) {
+                    $transactionData = $getTransaction['data'];
+                    if ($transactionData['type'] == 'receive' && $transactionData['state'] == 'confirmed') {
+                        $coinVal = $bitgoService->getDepositDivisibilityValues($transactionData['coin']);
+                        $amount = bcdiv($transactionData['value'],$coinVal,8);
+
+                        $data = [
+                            'coin_type' => $transactionData['coin'],
+                            'txId' => $transactionData['txid'],
+                            'confirmations' => $transactionData['confirmations'],
+                            'amount' => $amount
+                        ];
+
+                        if (isset($transactionData['entries'][0])) {
+                            foreach ($transactionData['entries'] as $entry) {
+                                if (isset($entry['wallet']) && ($entry['wallet'] == $transactionData['wallet'])) {
+                                    $data['address'] = $entry['address'];
+                                    storeException('entry address', $data['address']);
+                                }
+                            }
+                        }
+
+                        if(isset($data['address'])) {
+                            $this->checkAddressAndDeposit($data);
+                        }
+                    } else {
+                        storeException('bitgoWalletCoinDeposit type', 'the transaction type is not receive');
+                    }
+                } else {
+                    storeException('bitgoWalletCoinDeposit failed', $getTransaction['message']);
+                }
+            }
+
+        } catch (\Exception $e) {
+            storeException('bitgoWalletCoinDeposit', $e->getMessage());
+        }
+    }
+
+    // Bitgo wallet webhook End
 }
