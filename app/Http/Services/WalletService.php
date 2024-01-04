@@ -232,13 +232,19 @@ public function saveItemData($request)
 
     private function makeWithdrawalHistory($user, $request, $wallet, $amount, $currencyAmount, $rate, $defaultCurrency, $fees)
     {
+        $address_type = ADDRESS_TYPE_INTERNAL;
+        if(isset($request->address) && !empty($request->address)){
+            if(! $addressHistory = WalletAddressHistory::where('address', $request->address)->first()){
+                $address_type = ADDRESS_TYPE_EXTERNAL;
+            }
+        }
         return [
             "user_id"              => $user->id,
             "wallet_id"            => $wallet->id,
             "amount"               => $amount,
             "currency_amount"      => $currencyAmount,
             "rate"                 => $rate,
-            "address_type"         => ADDRESS_TYPE_INTERNAL,
+            "address_type"         => $address_type,
             "address"              => $request->address ?? '',
             "transaction_hash"     => Str::random(32),
             "coin_type"            => $wallet->coin_type,
