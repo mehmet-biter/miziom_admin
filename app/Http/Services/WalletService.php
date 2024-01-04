@@ -357,6 +357,7 @@ public function saveItemData($request)
                 storeException("walletWithdrawalProccess", "withdrawal history id: $withdrawalHistory->id --- Customer withdrawal failed!");
                 return;
             }
+            unset($withdrawalHistory->customer_id);
 
             $withdrawl_type = ADDRESS_TYPE_INTERNAL;
             if(! $addressHistory = WalletAddressHistory::where('address', $withdrawalHistory->address)->first()){
