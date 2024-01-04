@@ -23,8 +23,8 @@ use App\Http\Controllers\Setting\FaqController;
 //     return $request->user();
 // });
 
+Route::post('bitgo-wallet-webhook',[WalletNotifier::class, 'bitgoWalletWebhook']);
 Route::group(['namespace'=>'Api','middleware' => ['apiCheck']], function (){
-    Route::post('bitgo-wallet-webhook',[WalletNotifier::class, 'bitgoWalletWebhook']);
     Route::group(['prefix'=>'auth'], function (){
         Route::get('common-setting',[AuthController::class, 'commonSetting']);
         Route::post('sign-up',[AuthController::class, 'register']);
