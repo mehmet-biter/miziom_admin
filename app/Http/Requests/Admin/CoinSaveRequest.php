@@ -25,12 +25,13 @@ class CoinSaveRequest extends FormRequest
             'currency_type'=>'required|in:1,2',
             'name'=>'required|max:100',
             'coin_type'=>'required|max:80|unique:coins',
-            'get_price_api' => 'required',
+            // 'get_price_api' => 'required',
             'network' => 'required',
+            'coin_price' => 'required|numeric|gt:0',
         ];
-        if($this->get_price_api == 2) {
-            $rules['coin_price'] = 'required|numeric|gt:0';
-        }
+        // if($this->get_price_api == 2) {
+        //     $rules['coin_price'] = 'required|numeric|gt:0';
+        // }
 
         return $rules;
 

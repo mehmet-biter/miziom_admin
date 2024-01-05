@@ -146,7 +146,7 @@ class CoinController extends Controller
                     $data['usd_rate'] = bcdiv(1,$currency->rate,8);
                 }
             } else {
-                if ($request->get_price_api == 1) {
+                if (isset($request->get_price_api) && $request->get_price_api == 1) {
                     $pair = strtoupper($request->coin_type).'_'.'USDT';
                     $apiData = getPriceFromApi($pair);
                     if ($apiData['success'] == true) {
