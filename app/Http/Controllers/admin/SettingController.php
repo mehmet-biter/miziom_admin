@@ -65,6 +65,38 @@ class SettingController extends Controller
             }
         }
     }
+    
+    public function apiServicSave(Request $request)
+    {
+        if ($request->post()) {
+            $rules = [
+                'CURRENCY_EXCHANGE_RATE_API_KEY' => 'required|max:255',
+                'CRYPTO_COMPARE_API_KEY' => 'required|max:255',
+            ];
+
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                $errors = [];
+                $e = $validator->errors()->all();
+                foreach ($e as $error) {
+                    $errors[] = $error;
+                }
+                $data['message'] = $errors;
+                return redirect()->back()->with(['dismiss' => $errors[0]]);
+            }
+
+            try {
+                $response = $this->settingRepo->saveApiServiceSetting($request);
+                if ($response['success'] == true) {
+                    return redirect()->back()->with('success', $response['message']);
+                } else {
+                    return redirect()->back()->withInput()->with('success', $response['message']);
+                }
+            } catch(\Exception $e) {
+                return redirect()->back()->with(['dismiss' => $e->getMessage()]);
+            }
+        }
+    }
 
     public function adminSavePaymentSettings(Request $request)
     {
@@ -96,5 +128,11 @@ class SettingController extends Controller
                 return redirect()->back()->with(['dismiss' => $e->getMessage()]);
             }
         }
+    }
+
+    public function apiServicPage()
+    {
+        $data['settings'] = settings(['CURRENCY_EXCHANGE_RATE_API_KEY', 'CRYPTO_COMPARE_API_KEY']);
+        return view('setting.api_service', $data);
     }
 }

@@ -122,6 +122,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','admins']], function 
 
     Route::get('admin-config', [ConfigController::class, "configurationPage"])->name('adminConfiguration');
     Route::get('run-admin-command/{type}', [ConfigController::class, "adminRunCommand"])->name('adminRunCommand');
+    Route::get('api-service-setting', [SettingController::class, "apiServicPage"])->name('apiServicPage');
+    Route::post('api-service-setting', [SettingController::class, 'apiServicSave'])->name('apiServicSave');
 });
 });
 

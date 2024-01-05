@@ -33,6 +33,30 @@ class SettingRepository
         return $response;
     }
 
+    public function saveApiServiceSetting($request)
+    {
+        $response = ['success' => false, 'message' => __('Invalid request')];
+        DB::beginTransaction();
+        try {
+            AdminSetting::updateOrCreate(['slug' => 'CRYPTO_COMPARE_API_KEY'], ['value' => $request->CRYPTO_COMPARE_API_KEY]);
+            AdminSetting::updateOrCreate(['slug' => 'CURRENCY_EXCHANGE_RATE_API_KEY'], ['value' => $request->CURRENCY_EXCHANGE_RATE_API_KEY]);
+
+            $response = [
+                'success' => true,
+                'message' => __('Api Service updated successfully')
+            ];
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $response = [
+                'success' => false,
+                'message' => __('Something went wrong')
+            ];
+            return $response;
+        }
+        DB::commit();
+        return $response;
+    }
+
     public function savePaymentSetting($request)
     {
         $response = ['success' => false, 'message' => __('Invalid request')];

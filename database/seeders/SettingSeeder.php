@@ -39,6 +39,9 @@ class SettingSeeder extends Seeder
 
         AdminSetting::firstOrCreate(['slug' => 'default_coin'], ['value' => 'USDC']);
         AdminSetting::firstOrCreate(['slug' => 'default_currency'], ['value' => 'NGN']);
+       
+        AdminSetting::firstOrCreate(['slug' => 'CURRENCY_EXCHANGE_RATE_API_KEY'], ['value' => 'test']);
+        AdminSetting::firstOrCreate(['slug' => 'CRYPTO_COMPARE_API_KEY'], ['value' => 'test']);
         
     }
 }
