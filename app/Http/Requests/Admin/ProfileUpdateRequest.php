@@ -26,16 +26,17 @@ class ProfileUpdateRequest extends FormRequest
     public function rules(): array
     {
         $rule = [
-            'name' => 'required|string|max:255',
+            // 'name' => 'required|string|max:255',
             // 'email' => ['required','email',Rule::unique('users')->ignore(($this->edit_id),'id')],
+            'photo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ];
         
-        if($this->photo) {
-            $rule['photo'] = 'image|mimes:jpeg,png,jpg|max:2048';
-        }
-        if($this->phone) {
-            $rule['phone'] = ['numeric',Rule::unique('users')->ignore(($this->edit_id),'id')];
-        }
+        // if($this->photo) {
+        //     $rule['photo'] = 'image|mimes:jpeg,png,jpg|max:2048';
+        // }
+        // if($this->phone) {
+        //     $rule['phone'] = ['numeric',Rule::unique('users')->ignore(($this->edit_id),'id')];
+        // }
         return $rule;
     }
 
