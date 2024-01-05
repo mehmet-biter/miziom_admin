@@ -49,13 +49,13 @@
                                     @if(isset($item)) value="{{ $item->decimal }}" @else value="{{ old('decimal') }}" @endif />
                             </div>
                             
-                            <div class="items-center mt-4">
+                            {{-- <div class="items-center mt-4">
                                 <label for="status" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">{{ __('Get coin rate from api ?') }} <span class="text-danger">*</span></label>
                                 <select id="status" name="get_price_api" class="form-select flex-1">
                                     <option value="1">{{__('Yes')}}</option>
                                     <option value="2">{{__('No')}}</option>
                                 </select>
-                            </div>
+                            </div> --}}
                             <div class="mt-4 items-center">
                                 <label for="question" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">{{ __('Coin Price') }} <span class="text-danger">*</span></label>
                                 <input id="question" type="text" name="coin_price" class="form-input flex-1"
