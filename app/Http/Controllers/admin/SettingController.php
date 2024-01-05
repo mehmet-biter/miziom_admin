@@ -132,6 +132,7 @@ class SettingController extends Controller
 
     public function apiServicPage()
     {
+        $data['title'] = __("Api Service");
         $data['settings'] = settings(['CURRENCY_EXCHANGE_RATE_API_KEY', 'CRYPTO_COMPARE_API_KEY']);
         return view('setting.api_service', $data);
     }
