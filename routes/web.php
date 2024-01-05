@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ConfigController;
 use App\Http\Controllers\User\RoleController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\admin\CoinController;
@@ -118,6 +119,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','admins']], function 
 
     Route::get('user-withdrawal-approve/{id}', [TransactionController::class, 'withdrawalApproveProccess'])->name('withdrawalApproveProccess');
     Route::get('user-withdrawal-reject/{id}', [TransactionController::class, 'withdrawalRejecteProccess'])->name('withdrawalRejecteProccess');
+
+    Route::get('admin-config', [ConfigController::class, "configurationPage"])->name('adminConfiguration');
+    Route::get('run-admin-command/{type}', [ConfigController::class, "adminRunCommand"])->name('adminRunCommand');
 });
 });
 
