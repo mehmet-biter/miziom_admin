@@ -36,20 +36,21 @@ class UserRepository
             $userData = [];
             if ($user) {
                 
-                $userData = [
-                    // 'email' => $request['email'],
-                    'name' => $request['name'],
-                    'phone' => $request['phone'],
-                ];
-                if (!empty($request['country'])) {
-                    $userData['country'] = $request['country'];
-                }
-                if (!empty($request['gender'])) {
-                    $userData['gender'] = $request['gender'];
-                }
-                if (!empty($request['birth_date'])) {
-                    $userData['birth_date'] = $request['birth_date'];
-                }
+                $userData = [];
+                // $userData = [
+                //     'email' => $request['email'],
+                //     'name' => $request['name'],
+                //     'phone' => $request['phone'],
+                // ];
+                // if (!empty($request['country'])) {
+                //     $userData['country'] = $request['country'];
+                // }
+                // if (!empty($request['gender'])) {
+                //     $userData['gender'] = $request['gender'];
+                // }
+                // if (!empty($request['birth_date'])) {
+                //     $userData['birth_date'] = $request['birth_date'];
+                // }
 
                 if (!empty($request['photo'])) {
                     $old_img = '';
@@ -58,15 +59,18 @@ class UserRepository
                     }
                     $userData['photo'] = uploadFileStorage($request['photo'], IMAGE_PATH_USER, $old_img);
                 }
-                if ($user->phone != $request->phone){
-                    $userData['phone'] =  $request->phone;
-                    $userData['phone_verified'] = 0;
-                }
+                // if ($user->phone != $request->phone){
+                //     $userData['phone'] =  $request->phone;
+                //     $userData['phone_verified'] = 0;
+                // }
+                if(empty($userData)) return responseData(false, __("Nothing to update!"));
 
                 $affected_row = User::where('id', $user_id)->update($userData);
                 if ($affected_row) {
+                    $user = User::find($user_id);
+                    $user->photo = showUserImage(VIEW_IMAGE_PATH_USER,$user->photo);
                     $response['success'] = true;
-                    $response['data'] = User::find($user_id);
+                    $response['data'] = $user;
                     $response['message'] = __('Profile updated successfully');
                 }
             } else {
