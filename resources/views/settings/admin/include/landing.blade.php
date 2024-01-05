@@ -1,4 +1,4 @@
-<form method="POST" action="{{ route('updateGeneralSetting') }}" enctype="multipart/form-data">
+<form method="POST" action="{{ route('adminSaveLandingSettings') }}" enctype="multipart/form-data">
     @csrf
         <div class="mt-4 px-4">
             <div class="flex justify-between lg:flex-row flex-col">

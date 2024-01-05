@@ -31,9 +31,53 @@ class AdminSettingController extends Controller
     public function updateGeneralSetting(Request $request) {
         $response = $this->service->saveAdminSetting($request);
         if($response['success']) {
-            return redirect()->back()->with('success',$response['message']);
+            return redirect()->route('adminSettings', ['tab' => 'home'])->with('success',$response['message']);
         } else {
-            return redirect()->back()->with('dismiss',$response['message']);
+            return redirect()->route('adminSettings', ['tab' => 'home'])->with('dismiss',$response['message']);
+        }
+    }
+
+    // save adminSaveLandingSettings
+    public function adminSaveLandingSettings(Request $request) {
+        $response = $this->service->saveAdminSetting($request);
+        if($response['success']) {
+            return redirect()->route('adminSettings', ['tab' => 'landing'])->with('success',$response['message']);
+        } else {
+            return redirect()->route('adminSettings', ['tab' => 'landing'])->with('dismiss',$response['message']);
+        }
+    }
+
+    public function adminSaveLogoSettings(Request $request)
+    {
+        if ($request->post()) {
+            $rules = [];
+            if($request->logo) {
+                $rules['logo'] = 'required|image|mimes:jpeg,png,jpg|max:2048';
+            }
+            if($request->favicon) {
+                $rules['favicon'] = 'required|image|mimes:jpeg,png,jpg|max:2048';
+            }
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                $errors = [];
+                $e = $validator->errors()->all();
+                foreach ($e as $error) {
+                    $errors[] = $error;
+                }
+                $data['message'] = $errors;
+                return redirect()->route('adminSettings', ['tab' => 'logo'])->with(['dismiss' => $errors[0]]);
+            }
+
+            try {
+                $response = $this->service->saveAdminSetting($request);
+                if ($response['success'] == true) {
+                    return redirect()->route('adminSetting', ['tab' => 'logo'])->with('success', $response['message']);
+                } else {
+                    return redirect()->route('adminSetting', ['tab' => 'logo'])->withInput()->with('success', $response['message']);
+                }
+            } catch(\Exception $e) {
+                return redirect()->back()->with(['dismiss' => $e->getMessage()]);
+            }
         }
     }
 
@@ -61,7 +105,7 @@ class AdminSettingController extends Controller
             }
 
             try {
-                $response = $this->service->saveEmailSetting($request);
+                $response = $this->service->saveAdminSetting($request);
                 if ($response['success'] == true) {
                     return redirect()->route('adminSetting', ['tab' => 'email'])->with('success', $response['message']);
                 } else {

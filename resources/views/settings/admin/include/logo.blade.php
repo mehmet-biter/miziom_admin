@@ -1,43 +1,27 @@
-<form method="POST" action="{{ route('updateGeneralSetting') }}" enctype="multipart/form-data">
+<form method="POST" action="{{ route('adminSaveLogoSettings') }}" enctype="multipart/form-data">
     @csrf
         <div class="mt-4 px-4">
             <div class="flex justify-between lg:flex-row flex-col">
                 <div class="lg:w-1/2 w-full ltr:lg:mr-6 rtl:lg:ml-6 mb-6">
                     <div class="mt-4  items-center">
-                        <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('App Name') }}</label>
-                        <input type="text" name="app_title" class="mt-2 form-input flex-1"
-                            value="{{ $settings['app_title'] ?? ""}}" />
+                        <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Logo') }}</label>
+                        <input type="file" name="logo" class="mt-2 form-input flex-1"/>
+                        @if(!empty($settings['logo'] ?? ""))
+                            <div>
+                                <img class="w-40 h-20" src="{{ showImage(VIEW_IMAGE_SETTING_PATH,$settings['logo'] ?? "") }}" alt="">
+                            </div>
+                        @endif
                     </div>
-                    <div class="mt-4  items-center">
-                        <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Tag Title') }}</label>
-                        <input type="text" name="tag_title" class="mt-2 form-input flex-1"
-                            value="{{ $settings['tag_title'] ?? ""}}" />
-                    </div>
-                    
-                    
-                    <div class="mt-4  items-center">
-                        <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Email Address') }}</label>
-                        <input type="text" name="company_email" class="mt-2 form-input flex-1"
-                            value="{{ $settings['company_email'] ?? ""}}" />
-                    </div>
-                    
                 </div>
                 <div class="lg:w-1/2 w-full ltr:lg:mr-6 rtl:lg:ml-6 mb-6">
                     <div class="mt-4  items-center">
-                        <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Address Line') }}</label>
-                        <input type="text" name="company_address" class="mt-2 form-input flex-1"
-                            value="{{ $settings['company_address'] ?? ""}}" />
-                    </div>
-                    <div class="mt-4  items-center">
-                        <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Helpline') }}</label>
-                        <input type="text" name="helpline" class="mt-2 form-input flex-1"
-                            value="{{ $settings['helpline'] ?? ""}}" />
-                    </div>
-                    
-                    <div class="mt-4  items-center">
-                        <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Copyright Text') }}</label>
-                        <input type="text" name="copyright_text" class="mt-2 form-input flex-1"
-                            value="{{ $settings['copyright_text'] ?? ""}}" />
+                        <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Favicon') }}</label>
+                        <input type="file" name="favicon" class="mt-2 form-input flex-1"/>
+                        @if(!empty($settings['favicon'] ?? ""))
+                            <div>
+                                <img class="w-40 h-20" src="{{ showImage(VIEW_IMAGE_SETTING_PATH,$settings['favicon'] ?? "") }}" alt="">
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -71,7 +55,7 @@
                                 <path opacity="0.5" d="M6 18L21 3" stroke="currentColor" stroke-width="1.5"
                                     stroke-linecap="round" />
                             </svg>
-                            Cancel </button>
+                            {{ __('Cancel') }} </button>
                         </a>
                 </div>
             </div>

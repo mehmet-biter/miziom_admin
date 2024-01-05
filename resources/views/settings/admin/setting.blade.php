@@ -28,7 +28,7 @@
                                 {{ __('General') }}
                             </a>
                         </li>
-                        <li>
+                        {{-- <li>
                             <a href="javascript:;"
                                 class="p-7 py-3 flex flex-col items-center justify-center rounded-lg bg-[#f1f2f3] dark:bg-[#191e3a] hover:!bg-success hover:text-white hover:shadow-[0_5px_15px_0_rgba(0,0,0,0.30)]"
                                 :class="{ '!bg-success text-white': tab === 'profile' }"
@@ -43,12 +43,12 @@
                                 </svg>
                                 {{ __('Landing') }}
                             </a>
-                        </li>
+                        </li> --}}
                         <li>
                             <a href="javascript:;"
                                 class="p-7 py-3 flex flex-col items-center justify-center rounded-lg bg-[#f1f2f3] dark:bg-[#191e3a] hover:!bg-success hover:text-white hover:shadow-[0_5px_15px_0_rgba(0,0,0,0.30)]"
-                                :class="{ '!bg-success text-white': tab === 'contact' }"
-                                @click="tab = 'contact'">
+                                :class="{ '!bg-success text-white': tab === 'email' }"
+                                @click="tab = 'email'">
 
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mb-1">
@@ -69,8 +69,8 @@
                         <li>
                             <a href="javascript:;"
                                 class="p-7 py-3 flex flex-col items-center justify-center rounded-lg bg-[#f1f2f3] dark:bg-[#191e3a] hover:!bg-success hover:text-white hover:shadow-[0_5px_15px_0_rgba(0,0,0,0.30)]"
-                                :class="{ '!bg-success text-white': tab === 'settings' }"
-                                @click="tab = 'settings'">
+                                :class="{ '!bg-success text-white': tab === 'logo' }"
+                                @click="tab = 'logo'">
 
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mb-1">
@@ -92,19 +92,19 @@
                             @include('settings.admin.include.general_setting')
                         </div>
                     </template>
-                    <template x-if="tab === 'profile'">
+                    <template x-if="tab === 'landing'">
                         <div>
                             <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6">
                             @include('settings.admin.include.landing')
                         </div>
                     </template>
-                    <template x-if="tab === 'contact'">
+                    <template x-if="tab === 'email'">
                         <div>
                             <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6">
                             @include('settings.admin.include.email')
                         </div>
                     </template>
-                    <template x-if="tab === 'settings'">
+                    <template x-if="tab === 'logo'">
                         <div>
                             <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6">
                             @include('settings.admin.include.logo')

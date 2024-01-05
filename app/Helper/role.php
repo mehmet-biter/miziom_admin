@@ -155,6 +155,8 @@ function roleActionArray($input = null){
         array("name"=>"Admin Setting","code"=>GENERAL_SETTING,"group" =>"Setting","route" => "adminSetting","url" =>"admin/settings"),
         array("name"=>"Admin Setting Update","code"=>UPDATE_SETTING,"group" =>"Setting","route" => "updateGeneralSetting","url" =>"admin/update-generel-settings"),
         array("name"=>"Email Setting","code"=>EMAIL_SETTING,"group" =>"Setting","route" => "adminSaveEmailSettings","url" =>"admin/email-save-settings"),
+        // array("name"=>"Landing Setting","code"=>LANDING_SETTING,"group" =>"Setting","route" => "adminSaveLandingSettings","url" =>"admin/landing-save-settings"),
+        array("name"=>"Logo Setting","code"=>LOGO_SETTING,"group" =>"Setting","route" => "adminSaveLogoSettings","url" =>"admin/logo-save-settings"),
         array("name"=>"Bitgo Setting","code"=>BITGO_SETTING,"group" =>"Setting","route" => "bitgoSetting","url" =>"admin/bitgo-setting"),
         array("name"=>"Bitgo Setting Update","code"=>BITGO_SETTING_UPDATE,"group" =>"Setting","route" => "adminSaveBitgoSettings","url" =>"admin/save-bitgo-settings"),
         array("name"=>"Coin Payment Setting","code"=>COIN_PAYMENT_SETTING,"group" =>"Setting","route" => "coinPaymentSetting","url" =>"admin/coin-payment-setting"),
