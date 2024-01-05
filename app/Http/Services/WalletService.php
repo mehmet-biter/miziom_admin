@@ -110,7 +110,13 @@ public function saveItemData($request)
                         ->orWhere('username', 'LIKE', "%$search%");
                     })
                     ->where('role_module', MODULE_USER)
-                    ->get(['id', 'username', 'unique_code', 'name', 'email']);
+                    ->get(['id', 'username', 'unique_code', 'name', 'email', 'photo']);
+
+            if($user){
+                $user->map(function($u){
+                    $u->photo = showUserImage(VIEW_IMAGE_PATH_USER,$u->photo);
+                });
+            }
             $data['customer'] = $user;
 
             if(isset($user[0])) return responseData(true, __('Customer get successfully'),$data);
@@ -567,8 +573,10 @@ public function saveItemData($request)
                 // set user
                 $trx->user = null;
                 if($trx->sender_wallet && ($trx->sender_wallet != $trx->wallet_id)){
-                    if($wallet = Wallet::with('user:id,name,username')->find($trx->sender_wallet))
+                    if($wallet = Wallet::with('user:id,name,username,photo')->find($trx->sender_wallet)){
                         $trx->user = $wallet->user ?? null;
+                        $trx->user->photo = showUserImage(VIEW_IMAGE_PATH_USER,$trx->user->photo);
+                    }
                 }
 
                 // set status

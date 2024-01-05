@@ -48,6 +48,7 @@ class ProfileUpdateRequest extends FormRequest
             'phone.numeric' => __("Invalid phone number"),
             'phone.unique' => __("This phone number already exists"),
 
+            'photo.required' => __("Photo is required"),
             'photo.image' => __("Invalid image file"),
             'photo.mimes' => __("Supported image file are jpeg,png,jpg"),
         ];

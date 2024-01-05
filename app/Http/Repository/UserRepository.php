@@ -67,8 +67,10 @@ class UserRepository
 
                 $affected_row = User::where('id', $user_id)->update($userData);
                 if ($affected_row) {
+                    $user = User::find($user_id);
+                    $user->photo = showUserImage(VIEW_IMAGE_PATH_USER,$user->photo);
                     $response['success'] = true;
-                    $response['data'] = User::find($user_id);
+                    $response['data'] = $user;
                     $response['message'] = __('Profile updated successfully');
                 }
             } else {
