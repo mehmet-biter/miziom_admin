@@ -79,11 +79,11 @@
                             </div>
 
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div class="mt-4 ">
+                                {{-- <div class="mt-4 ">
                                     <label for="question" class="ltr:mr-2 rtl:ml-2 w-4/4 mb-0">{{ __('Withdrawal limit for admin Approval') }} </label>
                                     <input id="question" type="text" name="max_send_limit" class="form-input flex-1"
                                         @if(isset($item)) value="{{ $item->max_send_limit }}" @else value="{{ old('max_send_limit') }}" @endif />
-                                </div>
+                                </div> --}}
                                 
                                 <div class=" mt-4">
                                     <label for="status" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">{{ __('Enable admin approval') }}</label>

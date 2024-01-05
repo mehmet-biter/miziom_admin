@@ -296,6 +296,11 @@ public function saveItemData($request)
                     return responseData(false, __('Insufficient balance for withdrawal request!'));
             }
 
+            if($amount < $wallet->minimum_withdrawal)
+                return responseData(false, __('Minimum withdrawal coin amount is :coin', [ 'coin' => $wallet->minimum_withdrawal ]));
+            if($amount > $wallet->maximum_withdrawal)
+                return responseData(false, __('Maximum withdrawal coin amount is :coin', [ 'coin' => $wallet->maximum_withdrawal ]));
+
             if(isset($request->customer_id)){
                 if(! $customer = User::find($request->customer_id))
                     return responseData(false, __('Customer not found!'));
