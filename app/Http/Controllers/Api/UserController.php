@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+use Illuminate\Http\Request;
+use App\Http\Services\UserService;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Admin\ProfileUpdateRequest;
 use App\Http\Requests\Admin\UpdatePasswordRequest;
-use App\Http\Services\UserService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\Api\ProfileUpdateApiRequest;
 
 class UserController extends Controller
 {
@@ -28,9 +29,9 @@ class UserController extends Controller
     }
 
     // update profile
-    public function updateProfile(ProfileUpdateRequest $request) {
+    public function updateProfile(ProfileUpdateApiRequest $request) {
         try {
-            $response = $this->service->userProfileUpdate($request,Auth::id());
+            $response = $this->service->userProfileUpdateApi($request,Auth::id());
             return responseJsonData($response['success'],$response['message'],$response['data']);
         } catch(\Exception $e) {
             storeException('profile update ex', $e->getMessage());

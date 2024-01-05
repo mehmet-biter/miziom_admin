@@ -38,6 +38,12 @@ class UserService
         $response = $this->repository->profileUpdate($request,$userId);
         return $response;
     }
+
+    public function userProfileUpdateApi($request,$userId)
+    {
+        $response = $this->repository->profileUpdateApi($request,$userId);
+        return $response;
+    }
     // user change password
     public function userChangePassword($request,$userId)
     {
