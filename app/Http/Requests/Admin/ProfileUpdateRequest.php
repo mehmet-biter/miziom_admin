@@ -27,7 +27,7 @@ class ProfileUpdateRequest extends FormRequest
     {
         $rule = [
             'name' => 'required|string|max:255',
-            'email' => ['required','email',Rule::unique('users')->ignore(($this->edit_id),'id')],
+            // 'email' => ['required','email',Rule::unique('users')->ignore(($this->edit_id),'id')],
         ];
         
         if($this->photo) {
@@ -37,6 +37,19 @@ class ProfileUpdateRequest extends FormRequest
             $rule['phone'] = ['numeric',Rule::unique('users')->ignore(($this->edit_id),'id')];
         }
         return $rule;
+    }
+
+    public function messages()
+    {
+        return [
+            'name.required' => __("Name is required"),
+
+            'phone.numeric' => __("Invalid phone number"),
+            'phone.unique' => __("This phone number already exists"),
+
+            'photo.image' => __("Invalid image file"),
+            'photo.mimes' => __("Supported image file are jpeg,png,jpg"),
+        ];
     }
 
     protected function failedValidation(Validator $validator)

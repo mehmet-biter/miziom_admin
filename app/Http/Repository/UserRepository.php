@@ -37,7 +37,7 @@ class UserRepository
             if ($user) {
                 
                 $userData = [
-                    'email' => $request['email'],
+                    // 'email' => $request['email'],
                     'name' => $request['name'],
                     'phone' => $request['phone'],
                 ];

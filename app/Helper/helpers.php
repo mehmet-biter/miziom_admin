@@ -157,9 +157,9 @@ function uploadFileStorage($new_file, $path, $old_file_name = null, $width = nul
     try{
         if ($new_file == '') return false;
         if (isset($old_file_name) && $old_file_name != "" ) {
-            $fileExists = Storage::disk('local')->exists($path.$old_file_name);
+            $fileExists = Storage::disk('local')->exists('/public/'.$path.$old_file_name);
             if($fileExists) {
-                Storage::delete($path.$old_file_name);
+                Storage::delete('/public/'.$path.$old_file_name);
             }
         }
 
