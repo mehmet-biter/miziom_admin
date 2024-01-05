@@ -4,6 +4,7 @@ namespace App\Http\Services;
 
 use Exception;
 use App\Models\Coin;
+use GuzzleHttp\Client;
 use App\Models\CurrencyList;
 use App\Jobs\UpdateCoinRateUsd;
 use Illuminate\Support\Facades\DB;
@@ -98,7 +99,7 @@ class CurrencyService
                 return responseData(false, __("Status failed to update"));
             }
             return responseData(false, __("Currency not found"));
-        }catch (\Exception $e){
+        }catch (Exception $e){
             DB::rollBack();
             storeException("Currency Status Changed",$e->getMessage());
             return responseData(false, __("Something went wrong"));
@@ -176,24 +177,45 @@ class CurrencyService
         }
         return [ "success" => true, "message" => __("Coins rate update process started successfully, It will take some time") ];
     }
+
+    public function getPriceFromApi($coin)
+    {
+        $response = responseData(false);
+        try {
+            $client = new Client();
+            $api_key = settings('CRYPTO_COMPARE_API_KEY') ?? '';
+            $callApi = $client->get("https://min-api.cryptocompare.com/data/price?fsym=$coin&tsyms=USD&api_key=$api_key");
+            $getBody = json_decode($callApi->getBody(), true);
+            if (!empty($getBody)) {
+                $response = responseData(true,__('Success'),$getBody['USD'] ?? 0);
+            } else {
+                storeException('callAskBidApi '.$coin,'api has no data');
+                $response = responseData(false,__('Api has no data'));
+            }
+        } catch (Exception $e) {
+            storeException('getPriceFromApi ex -> '.$coin,$e->getMessage());
+
+            $response = responseData(false,$e->getMessage());
+        }
+        return $response;
+    }
     public function updateCoinRateCorn(){
         try{
            $coins = Coin::where(['currency_type' => CURRENCY_TYPE_CRYPTO,'status' => STATUS_ACTIVE])->get();
            if(isset($coins[0])) {
               foreach ($coins as $coin){
-                  $pair = explode('.',$coin->coin_type)[0];
-                  if( $pair == 'USDT') continue;
-                  $pair = $pair.'_'.'USDT';
-                  $res = getPriceFromApi($pair);
-                  if($res['success']){
-                      $coin->coin_price = $res['data']['price'];
-                      $coin->save();
+                  $coin_type = explode('.',$coin->coin_type)[0];
+                  $res = $this->getPriceFromApi($coin_type);
+                  if(isset($res['success']) && $res['success']){
+                    $res = number_format(($res['data'] ?? 0),8,'.','');
+                    $coin->usd_rate = $res;
+                    $coin->save();
                   }
               }
            }
            $this->currencyRateSave();
-        }catch (\Exception $e){
-            storeBotException("Update Coin Rate",$e->getMessage());
+        }catch (Exception $e){
+            storeException("Update Coin Rate",$e->getMessage());
             return [ "success" => false, "message" => __("Coins rate updated Failed") ];
         }
         return [ "success" => true, "message" => __("Coins rate update process started successfully, It will take some time") ];
