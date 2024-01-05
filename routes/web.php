@@ -10,6 +10,7 @@ use App\Http\Controllers\admin\CoinController;
 use App\Http\Controllers\Setting\FaqController;
 use App\Http\Controllers\admin\SettingController;
 use App\Http\Controllers\admin\CurrencyController;
+use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\Contact\ContactController;
 use App\Http\Controllers\Profile\ProfileController;
 use App\Http\Controllers\admin\TransactionController;
@@ -36,7 +37,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','admins']], function 
     Route::post('profile-update-process',[ProfileController::class,'update'])->name('updateProfileProcess');
     Route::post('change-password-process',[ProfileController::class,'changePassword'])->name('changePasswordProcess');
 
-    Route::view('/dashboard', 'index')->name('adminDashboard');
+    Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('adminDashboard');
 
     Route::group(['middleware' => ['roles']], function () {
     
