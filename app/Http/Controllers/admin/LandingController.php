@@ -61,9 +61,9 @@ class LandingController extends Controller
             }
             $id = $request->edit_id ?? 0;
             $custom_page = [
-                'title' => $request->title,
-                'slug' => '$request->key',
-                'body' => $request->body,
+                'title'  => $request->title,
+                'slug'   => make_unique_slug($request->title),
+                'body'   => $request->body,
                 'status' => isset($request->status)
             ];
             CustomPage::updateOrCreate(['id' => $id], $custom_page);
