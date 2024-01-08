@@ -31,7 +31,7 @@ class WalletNotifier extends Controller
                 $walletId = $request->wallet;
                 storeException('bitgoWalletWebhook hash', $txId);
                 if ($type == 'transfer' || $type == 'transaction') {
-                    $checkHashInDB = DepositeTransaction::where(['transaction_id' => $txId, 'coin_type' => $coinType])->first();
+                    $checkHashInDB = DepositeTransaction::where(['transaction_id' => $txId])->first();
                     if (isset($checkHashInDB)) {
                         storeException('bitgoWalletWebhook, already deposited hash -> ',$txId);
                     } else {
