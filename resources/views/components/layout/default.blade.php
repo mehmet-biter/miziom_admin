@@ -34,6 +34,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="https://unpkg.com/file-upload-with-preview/dist/file-upload-with-preview.iife.js"></script>
+    <link rel="stylesheet" href="{{ asset('assets/richtexteditor/rte_theme_default.css') }}" />
+    <script type="text/javascript" src="{{ asset('assets/richtexteditor/rte.js') }}"></script>
+    <script type="text/javascript" src='{{ asset('assets/richtexteditor/plugins/all_plugins.js') }}'></script>
 </head>
 
 <body x-data="main" class="antialiased relative font-nunito text-sm font-normal overflow-x-hidden"

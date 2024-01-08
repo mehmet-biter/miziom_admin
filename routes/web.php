@@ -8,6 +8,7 @@ use App\Http\Controllers\User\RoleController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\admin\CoinController;
 use App\Http\Controllers\Setting\FaqController;
+use App\Http\Controllers\admin\LandingController;
 use App\Http\Controllers\admin\SettingController;
 use App\Http\Controllers\admin\CurrencyController;
 use App\Http\Controllers\admin\DashboardController;
@@ -125,6 +126,13 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','admins']], function 
     Route::get('run-admin-command/{type}', [ConfigController::class, "adminRunCommand"])->name('adminRunCommand');
     Route::get('api-service-setting', [SettingController::class, "apiServicPage"])->name('apiServicPage');
     Route::post('api-service-setting', [SettingController::class, 'apiServicSave'])->name('apiServicSave');
+
+    Route::get('custom-page', [LandingController::class, 'adminCustomPage'])->name('adminCustomPage');
+    Route::get('custom-page-add', [LandingController::class, 'adminCustomPageAdd'])->name('adminCustomPageAdd');
+    Route::get('custom-page-edit/{id}', [LandingController::class, 'adminCustomPageEdit'])->name('adminCustomPageEdit');
+    Route::post('custom-page-status', [LandingController::class, 'adminPageStatus'])->name('customPagestatus');
+    Route::get('custom-page-delete/{id?}', [LandingController::class, 'customPagesDelete'])->name('adminCustomPageDelete');
+    Route::post('custom-page-save', [LandingController::class, 'adminCustomPageSave'])->name('adminCustomPageSave');
 });
 });
 
