@@ -105,7 +105,7 @@ class BitgoWalletService {
         if(allsetting('BITGO_ENV') == 'test') {
             $coinType = 't'.$coinType;
         }
-        return $this->apiService->getDepositDivisibilityValue(strtolower($coinType));
+        return bitgo_divisibility_value(strtolower($coinType));
     }
 
     public function addWebhook($coin,$walletId,$type,$allToken,$url,$label,$numConfirmations) {
