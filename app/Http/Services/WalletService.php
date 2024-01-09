@@ -797,7 +797,7 @@ public function saveItemData($request)
             if ($coin) {
                 // $currency =  !empty($transaction->network_type) ? $transaction->network_type : $transaction->coin_type;
                 $currency = getCoinByNetworkType($coin->network_type) ?? $transaction->coin_type;
-                $response = $this->sendBitgoCoin($currency,$coin->bitgo_wallet_id,$transaction->amount,$transaction->address, $coin->bitgo_wallet);
+                $response = $this->sendBitgoCoin($currency,$coin->bitgo_wallet_id,$transaction->amount,$transaction->address, decrypt($coin->bitgo_wallet));
             } else {
                 $response = [
                     'success' => false,
