@@ -614,7 +614,7 @@ public function saveItemData($request)
                 $trx->updated_at = date('Y-m-d\TH:i:s.u\Z', strtotime($trx->updated_at));
 
                 // network
-                $trx->network = getNetworkType($trx->network_type);
+                $trx->network = $trx->network_type ? getNetworkType($trx->network_type) : '';
             });
 
             $data = [
