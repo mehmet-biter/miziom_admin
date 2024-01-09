@@ -539,7 +539,7 @@ function getNetworkType($input = null)
 function getCoinByNetworkType($input = null)
 {
     $output = [
-        POLYGON_NETWORK => __('POLYGON'),
+        POLYGON_NETWORK => __('POLYGON:USDCV2'),
     ];
     if (is_null($input)) {
         return $output;
