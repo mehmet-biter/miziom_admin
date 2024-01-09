@@ -27,6 +27,7 @@ class DepositeTransaction extends Model
         "received_amount",
         "status",
         "updated_by",
+        "for",
         "network_type",
         "confirmations",
     ];

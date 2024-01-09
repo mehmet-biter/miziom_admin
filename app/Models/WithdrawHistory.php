@@ -30,6 +30,7 @@ class WithdrawHistory extends Model
         "automatic_withdrawal",
         "network_type",
         "memo",
+        "for",
         "message",
     ];
 

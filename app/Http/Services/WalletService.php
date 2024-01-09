@@ -259,6 +259,7 @@ public function saveItemData($request)
             // "used_gas"             => 0,
             "confirmations"        => 1,
             "fees"                 => $fees,
+            "for"                  => $request->for ?? 0,
             "status"               => 0,
             // "updated_by"           => 0,
             // "automatic_withdrawal" => 0,
@@ -435,6 +436,7 @@ public function saveItemData($request)
             "is_admin_receive" => 0,
             "received_amount" => 0,
             "status" => 1,
+            "for" => $data["for"] ?? "",
             "network_type" => $data["network_type"] ?? "",
             "confirmations" => 1,
         ];
@@ -484,7 +486,7 @@ public function saveItemData($request)
                 'wallets.name, wallets.coin_type, withdraw_histories.amount, withdraw_histories.address_type, 
                 withdraw_histories.receiver_wallet_id as sender_wallet, withdraw_histories.transaction_type , 
                 withdraw_histories.transaction_hash as trx_id, withdraw_histories.status, withdraw_histories.created_at,
-                withdraw_histories.wallet_id'
+                withdraw_histories.wallet_id, withdraw_histories.for'
             )
         )
         ->join('wallets', 'withdraw_histories.wallet_id', '=', 'wallets.id')
@@ -533,7 +535,7 @@ public function saveItemData($request)
                         'wallets.name, wallets.coin_type, deposite_transactions.amount, deposite_transactions.address_type, 
                         deposite_transactions.sender_wallet_id as sender_wallet, deposite_transactions.transaction_type, 
                         deposite_transactions.transaction_id as trx_id, deposite_transactions.status, deposite_transactions.created_at,
-                        deposite_transactions.receiver_wallet_id as wallet_id'
+                        deposite_transactions.receiver_wallet_id as wallet_id, deposite_transactions.for'
                     )
                 )
                 ->union($this->getUnionWithdrawQuery($user, $request))
