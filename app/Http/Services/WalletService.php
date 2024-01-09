@@ -486,11 +486,12 @@ public function saveItemData($request)
                 'wallets.name, wallets.coin_type, withdraw_histories.amount, withdraw_histories.address_type, 
                 withdraw_histories.receiver_wallet_id as sender_wallet, withdraw_histories.transaction_type , 
                 withdraw_histories.transaction_hash as trx_id, withdraw_histories.status, withdraw_histories.created_at,
-                withdraw_histories.wallet_id, withdraw_histories.for, withdraw_histories.network_type,
+                withdraw_histories.wallet_id, withdraw_histories.for, coins.network_type,
                 withdraw_histories.updated_at'
             )
         )
         ->join('wallets', 'withdraw_histories.wallet_id', '=', 'wallets.id')
+        ->join('coins', 'wallets.coin_id', '=', 'coins.id')
         ->where('wallets.user_id', $user->id);
 
         if(isset($request->wallet_id)){
@@ -536,12 +537,13 @@ public function saveItemData($request)
                         'wallets.name, wallets.coin_type, deposite_transactions.amount, deposite_transactions.address_type, 
                         deposite_transactions.sender_wallet_id as sender_wallet, deposite_transactions.transaction_type, 
                         deposite_transactions.transaction_id as trx_id, deposite_transactions.status, deposite_transactions.created_at,
-                        deposite_transactions.receiver_wallet_id as wallet_id, deposite_transactions.for, deposite_transactions.network_type,
+                        deposite_transactions.receiver_wallet_id as wallet_id, deposite_transactions.for, coins.network_type,
                         deposite_transactions.updated_at '
                     )
                 )
                 ->union($this->getUnionWithdrawQuery($user, $request))
                 ->join('wallets', 'deposite_transactions.receiver_wallet_id', '=', 'wallets.id')
+                ->join('coins', 'wallets.coin_id', '=', 'coins.id')
                 ->where('wallets.user_id', $user->id)
                 ->orderBy($column, $orderBy);
 
