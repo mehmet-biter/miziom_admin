@@ -120,8 +120,8 @@ public function saveItemData($request)
             $data['customer'] = $user;
 
             if(isset($user[0])) return responseData(true, __('Customer get successfully'),$data);
-            return responseData(false, __('Customer not found!')); 
-        } catch(\Exception $e) {
+            return responseData(true, __('Customer not found!')); 
+        } catch(Exception $e) {
             storeException('searcheCustomer ex', $e->getMessage());
             return responseData(false, __('Something went wrong'));
         }
