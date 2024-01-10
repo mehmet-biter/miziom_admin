@@ -21,7 +21,7 @@
                                 <div class=" mt-4">
                                     <label for="name" class="ltr:mr-2 rtl:ml-2 w-3/3 mb-0">{{ __('Descreption') }} </label>
                                     <textarea id="name" type="text" name="description" class="form-input flex-1"
-                                    >{{ isset($setting) ? $setting["HERO_SECTION_DESCRIPTION"] : old('description') }}</textarea>
+                                    >{{ isset($setting) ? ($setting["HERO_SECTION_DESCRIPTION"] ?? 0) : old('description') }}</textarea>
                                 </div>
                             </div>
                             
@@ -31,12 +31,12 @@
                                 <div class="mt-4 ">
                                     <label for="question" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">{{ __('Second Header') }} </label>
                                     <input id="question" type="text" name="second_header" class="form-input flex-1"
-                                        @if(isset($setting)) value="{{ $setting['HERO_SECTION_SECOND_HEADER'] }}" @else value="{{ old('second_header') }}" @endif />
+                                        @if(isset($setting)) value="{{ $setting['HERO_SECTION_SECOND_HEADER'] ?? '' }}" @else value="{{ old('second_header') }}" @endif />
                                 </div>
                             </div>
 
                             <div class="grid grid-cols-1 mt-1 sm:grid-cols-2 gap-4">
-                                <input type="file" name="cover_image" class="mt-4 dropify" data-default-file="{{ isset($setting) ? asset(IMG_PATH.$setting["HERO_SECTION_COVER_IMAGE"]) : '' }}" />
+                                <input type="file" name="cover_image" class="mt-4 dropify" data-default-file="{{ isset($setting) ? asset(IMG_PATH.($setting["HERO_SECTION_COVER_IMAGE"] ?? '')) : '' }}" />
                             </div>
 
                             <div class="mt-8">
