@@ -22,6 +22,7 @@
                     <thead>
                         <tr>
                             <th scope="col" >{{__('Title')}}</th>
+                            <th scope="col" >{{__('Slug')}}</th>
                             <th scope="col" class="all">{{__('Status')}}</th>
                             <th scope="col">{{__('Updated At')}}</th>
                             <th scope="col">{{__('Created At')}}</th>
@@ -33,6 +34,7 @@
                             @foreach($pages as $p)
                                 <tr>
                                     <td> {{$p->title}} </td>
+                                    <td> {{$p->slug}} </td>
                                     <td>
                                         <div>
                                             <label class="w-12 h-6 relative">

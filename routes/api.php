@@ -54,5 +54,5 @@ Route::group(['namespace'=>'Api','middleware' => ['apiCheck']], function (){
         Route::post('exchange-rate',[WalletController::class, 'exchangeRate']);
         Route::get('faq', [FaqController::class, 'getFaqApi']);
     });
-    
+    Route::get('page/{slug}', [AuthController::class, 'getDataBySlug']);    
 });

@@ -9,6 +9,7 @@ use App\Http\Requests\Api\Auth\RegisterRequest;
 use App\Http\Requests\Api\Auth\ResetPasswordRequest;
 use App\Http\Requests\Api\Auth\VerifyEmailRequest;
 use App\Http\Services\AuthService;
+use App\Models\CustomPage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
@@ -127,6 +128,24 @@ class AuthController extends Controller
         } catch(\Exception $e) {
             storeException('logout', $e->getMessage());
             return responseJsonData(false,__('Something went wrong'));
+        }
+    }
+
+    public function getDataBySlug($slug){
+        try {
+            $data = CustomPage::where(['status' => STATUS_ACTIVE, 'slug'=> $slug])->first(['title','body']);
+            if($data)
+            return response()->json(
+                responseData(true, __("Page get successfully"), $data)
+            );
+            return response()->json(
+                responseData(false, __("Page not found"), $data)
+            );
+        } catch(\Exception $e) {
+            storeException('getDataBySlug', $e->getMessage());
+            return response()->json(
+                responseData(false, __("Something went wrong"))
+            );
         }
     }
 }
