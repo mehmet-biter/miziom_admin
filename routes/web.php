@@ -136,6 +136,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','admins']], function 
     
     Route::get('landing-hero-page-setting', [LandingController::class, 'landingHeroPageSetting'])->name('landingHeroPageSetting');
     Route::post('landing-hero-page-setting', [LandingController::class, 'landingHeroPageSettingSave'])->name('landingHeroPageSettingSave');
+    Route::get('landing-body-page-setting', [LandingController::class, 'landingBodyPageSetting'])->name('landingBodyPageSetting');
+    Route::post('landing-body-page-setting', [LandingController::class, 'landingBodyPageSettingSave'])->name('landingBodyPageSettingSave');
 });
 });
 

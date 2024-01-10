@@ -158,4 +158,80 @@ class LandingController extends Controller
             return redirect()->back()->with(['dismiss' => __('Something went wrong')]);
         }
     }
+
+    public function landingBodyPageSetting()
+    {
+        $setting = allsetting([
+            "BODY_SECTION_HEADER_ONE",
+            "BODY_SECTION_DESCRIPTION_ONE",
+            "BODY_SECTION_HEADER_TWO",
+            "BODY_SECTION_DESCRIPTION_TWO",
+            "BODY_SECTION_HEADER_THREE",
+            "BODY_SECTION_DESCRIPTION_THREE",
+            "BODY_SECTION_COVER_IMAGE_THREE",
+            "BODY_SECTION_COVER_IMAGE_TWO",
+            "BODY_SECTION_COVER_IMAGE_ONE",
+        ]);
+        $data['setting'] = $setting;
+        return view('landing.section-2', $data);
+    }
+
+    public function landingBodyPageSettingSave(Request $request)
+    {
+        try {
+            $rules = [
+                'header_one' => 'required|max:255',
+                'description_one' => 'required',
+                'header_two' => 'required|max:255',
+                'description_two' => 'required',
+                'header_three' => 'required|max:255',
+                'description_three' => 'required',
+            ];
+
+            $messages = [
+                'header_one.required' => __('Header one Can\'t be empty!'),
+                'description_one.required' => __('Description two Can\'t be empty!'),
+                'header_two.required' => __('Header two Can\'t be empty!'),
+                'description_two.required' => __('Description two Can\'t be empty!'),
+                'header_three.required' => __('Header three Can\'t be empty!'),
+                'description_three.required' => __('Description three Can\'t be empty!'),
+            ];
+            $validator = Validator::make($request->all(), $rules, $messages);
+
+            if ($validator->fails()) {
+                $errors = [];
+                $e = $validator->errors()->all();
+                foreach ($e as $error) {
+                    $errors[] = $error;
+                }
+                $data['message'] = $errors[0];
+
+                return redirect()->back()->withInput()->with(['dismiss' => $data['message']]);
+            }
+
+            AdminSetting::updateOrCreate(['slug' => 'BODY_SECTION_HEADER_ONE'], ['value' => $request->header_one]);
+            AdminSetting::updateOrCreate(['slug' => 'BODY_SECTION_DESCRIPTION_ONE'], ['value' => $request->description_one]);
+            AdminSetting::updateOrCreate(['slug' => 'BODY_SECTION_HEADER_TWO'], ['value' => $request->header_two]);
+            AdminSetting::updateOrCreate(['slug' => 'BODY_SECTION_DESCRIPTION_TWO'], ['value' => $request->description_two]);
+            AdminSetting::updateOrCreate(['slug' => 'BODY_SECTION_HEADER_THREE'], ['value' => $request->header_three]);
+            AdminSetting::updateOrCreate(['slug' => 'BODY_SECTION_DESCRIPTION_THREE'], ['value' => $request->description_three]);
+
+            if ($request->hasFile("cover_image_one")) {
+                $image = uploadImage($request->cover_image_one, IMG_PATH, isset(allsetting()["BODY_SECTION_COVER_IMAGE_ONE"]) ? allsetting()["BODY_SECTION_COVER_IMAGE_ONE"] : '');
+                AdminSetting::updateOrCreate(['slug' => "BODY_SECTION_COVER_IMAGE_ONE"], ['value' => $image]);
+            } 
+            if ($request->hasFile("cover_image_two")) {
+                $image = uploadImage($request->cover_image_two, IMG_PATH, isset(allsetting()["BODY_SECTION_COVER_IMAGE_TWO"]) ? allsetting()["BODY_SECTION_COVER_IMAGE_TWO"] : '');
+                AdminSetting::updateOrCreate(['slug' => "BODY_SECTION_COVER_IMAGE_TWO"], ['value' => $image]);
+            } 
+            if ($request->hasFile("cover_image_three")) {
+                $image = uploadImage($request->cover_image_three, IMG_PATH, isset(allsetting()["BODY_SECTION_COVER_IMAGE_THREE"]) ? allsetting()["BODY_SECTION_COVER_IMAGE_THREE"] : '');
+                AdminSetting::updateOrCreate(['slug' => "BODY_SECTION_COVER_IMAGE_THREE"], ['value' => $image]);
+            } 
+            return redirect()->route('landingBodyPageSetting')->with(['success' => __('Section one updated successfully')]);
+        } catch (\Exception $e) {
+            storeException('landingHeroPageSetting', $e->getMessage());
+            return redirect()->back()->with(['dismiss' => __('Something went wrong')]);
+        }
+    }
 }
