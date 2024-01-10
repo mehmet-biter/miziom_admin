@@ -28,20 +28,33 @@ class AuthController extends Controller
         try{
             $setting = allsetting();
 
-            $data['app_title']       = $setting['app_title'] ?? '';
-            $data['tag_title']       = $setting['tag_title'] ?? '';
-            $data['company_email']   = $setting['company_email'] ?? '';
-            $data['company_address'] = $setting['company_address'] ?? '';
-            $data['helpline']        = $setting['helpline'] ?? '';
-            $data['logo']            = (isset($setting['logo']) && !empty($setting['logo'])) ? asset($setting['logo']) : '';
-            $data['landing_logo']    = (isset($setting['landing_logo']) && !empty($setting['landing_logo'])) ? asset($setting['landing_logo']) : '';
-            $data['favicon']         = (isset($setting['favicon']) && !empty($setting['favicon'])) ? asset($setting['favicon']) : '';
-            $data['copyright_text']  = $setting['copyright_text'] ?? '';
-            $data['pagination_count']= $setting['pagination_count'] ?? '';
-            $data['currency']        = $setting['currency'] ?? '';
-            $data['lang']            = $setting['lang'] ?? '';
-            $data['default_coin']    = $setting['default_coin'] ?? '';
-            $data['default_currency']= $setting['default_currency'] ?? '';
+            $data['app_title']              = $setting['app_title'] ?? '';
+            $data['tag_title']              = $setting['tag_title'] ?? '';
+            $data['company_email']          = $setting['company_email'] ?? '';
+            $data['company_address']        = $setting['company_address'] ?? '';
+            $data['helpline']               = $setting['helpline'] ?? '';
+            $data['logo']                   = (isset($setting['logo']) && !empty($setting['logo'])) ? asset($setting['logo']) : '';
+            $data['landing_logo']           = (isset($setting['landing_logo']) && !empty($setting['landing_logo'])) ? asset($setting['landing_logo']) : '';
+            $data['favicon']                = (isset($setting['favicon']) && !empty($setting['favicon'])) ? asset($setting['favicon']) : '';
+            $data['copyright_text']         = $setting['copyright_text'] ?? '';
+            $data['pagination_count']       = $setting['pagination_count'] ?? '';
+            $data['currency']               = $setting['currency'] ?? '';
+            $data['lang']                   = $setting['lang'] ?? '';
+            $data['default_coin']           = $setting['default_coin'] ?? '';
+            $data['default_currency']       = $setting['default_currency'] ?? '';
+            $data['hero_cover_image']       = isset($setting['HERO_SECTION_COVER_IMAGE']) ? asset(IMG_PATH . $setting['HERO_SECTION_COVER_IMAGE']) : null;
+            $data['hero_header']            = $setting['HERO_SECTION_HEADER'] ?? '';
+            $data['hero_description']       = $setting['HERO_SECTION_DESCRIPTION'] ?? '';
+            $data['hero_second_header']     = $setting['HERO_SECTION_SECOND_HEADER'] ?? ''; 
+            $data['body_header_one']        = $setting["BODY_SECTION_HEADER_ONE"] ?? '';
+            $data['body_descriptioin_one']  = $setting["BODY_SECTION_DESCRIPTION_ONE"] ?? '';
+            $data['body_header_two']        = $setting["BODY_SECTION_HEADER_TWO"] ?? '';
+            $data['body_descriptioin_two']  = $setting["BODY_SECTION_DESCRIPTION_TWO"] ?? '';
+            $data['body_header_three']      = $setting["BODY_SECTION_HEADER_THREE"] ?? '';
+            $data['body_descriptioin_three']= $setting["BODY_SECTION_DESCRIPTION_THREE"] ?? '';
+            $data['body_cover_image_three'] = isset($setting['BODY_SECTION_COVER_IMAGE_THREE']) ? asset(IMG_PATH . $setting['BODY_SECTION_COVER_IMAGE_THREE']) : null;
+            $data['body_cover_image_two']   = isset($setting['BODY_SECTION_COVER_IMAGE_TWO']) ? asset(IMG_PATH . $setting['BODY_SECTION_COVER_IMAGE_TWO']) : null;
+            $data['body_cover_image_one']   = isset($setting['BODY_SECTION_COVER_IMAGE_ONE']) ? asset(IMG_PATH . $setting['BODY_SECTION_COVER_IMAGE_ONE']) : null;
 
             return responseJsonData(true,__('Data get successfully'),$data);
         } catch(\Exception $e) {
