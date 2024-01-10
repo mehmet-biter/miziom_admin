@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="{{asset('assets/common/css/datatable/jquery.dataTables.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/common/css/css-circular-prog-bar.css')}}">
     <link rel="stylesheet" href="{{asset('assets/common/css/fontawsome6.min.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/css/dropify.css')}}">
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/file-upload-with-preview/dist/style.css" />
 
     <script src="/assets/js/perfect-scrollbar.min.js"></script>
@@ -37,6 +38,7 @@
     <link rel="stylesheet" href="{{ asset('assets/richtexteditor/rte_theme_default.css') }}" />
     <script type="text/javascript" src="{{ asset('assets/richtexteditor/rte.js') }}"></script>
     <script type="text/javascript" src='{{ asset('assets/richtexteditor/plugins/all_plugins.js') }}'></script>
+    <script type="text/javascript" src='{{ asset('assets/js/dropify.js') }}'></script>
 </head>
 
 <body x-data="main" class="antialiased relative font-nunito text-sm font-normal overflow-x-hidden"

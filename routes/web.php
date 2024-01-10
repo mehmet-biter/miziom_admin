@@ -133,6 +133,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','admins']], function 
     Route::post('custom-page-status', [LandingController::class, 'adminPageStatus'])->name('customPagestatus');
     Route::get('custom-page-delete/{id?}', [LandingController::class, 'customPagesDelete'])->name('adminCustomPageDelete');
     Route::post('custom-page-save', [LandingController::class, 'adminCustomPageSave'])->name('adminCustomPageSave');
+    
+    Route::get('landing-hero-page-setting', [LandingController::class, 'landingHeroPageSetting'])->name('landingHeroPageSetting');
+    Route::post('landing-hero-page-setting', [LandingController::class, 'landingHeroPageSettingSave'])->name('landingHeroPageSettingSave');
 });
 });
 
