@@ -16,7 +16,7 @@
                                 <div class=" mt-4">
                                     <label for="name" class="ltr:mr-2 rtl:ml-2 w-3/3 mb-0">{{ __('Header') }} </label>
                                     <input id="name" type="text" name="header" class="form-input flex-1"
-                                    @if(isset($setting)) value="{{ $setting['HERO_SECTION_HEADER'] }}" @else value="{{ old('header') }}" @endif />
+                                    @if(isset($setting)) value="{{ ($setting['HERO_SECTION_HEADER'] ?? '') }}" @else value="{{ old('header') }}" @endif />
                                 </div>
                                 <div class=" mt-4">
                                     <label for="name" class="ltr:mr-2 rtl:ml-2 w-3/3 mb-0">{{ __('Descreption') }} </label>
