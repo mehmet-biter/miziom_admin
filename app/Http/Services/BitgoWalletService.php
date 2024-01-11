@@ -25,7 +25,7 @@ class BitgoWalletService {
             config(['bitgolaravelapi.BITGO_ENV' => $BITGO_ENV]);
         }
 
-        $this->apiService = new BitgoApiLaravelService();
+        $this->apiService = new BitgoWalletApiService(); // BitgoApiLaravelService();
     }
 
 
