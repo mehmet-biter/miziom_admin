@@ -240,8 +240,17 @@ public function saveItemData($request)
     private function makeWithdrawalHistory($user, $request, $wallet, $amount, $currencyAmount, $rate, $defaultCurrency, $fees)
     {
         $address_type = ADDRESS_TYPE_INTERNAL;
-        if(isset($request->address) && !empty($request->address)){
-            if(! $addressHistory = WalletAddressHistory::where('address', $request->address)->first()){
+        $receiver_wallet = null;
+
+        if(isset($request->customer_id)) {
+            $customer = User::find($request->customer_id);
+            $receiver_wallet = Wallet::where(['user_id'=> $customer->id, 'coin_type'=> $wallet->coin_type])->first();
+        }
+
+        if(!isset($request->customer_id) && (isset($request->address) && !empty($request->address))){
+            if( $addressHistory = WalletAddressHistory::where('address', $request->address)->first()){
+                $receiver_wallet = Wallet::where(['id' => $addressHistory->wallet_id, 'user_id'=> $customer->user_id])->first();
+            }else{
                 $address_type = ADDRESS_TYPE_EXTERNAL;
             }
         }
@@ -255,6 +264,7 @@ public function saveItemData($request)
             "address"              => $request->address ?? '',
             "transaction_hash"     => Str::random(32),
             "coin_type"            => $wallet->coin_type,
+            "receiver_wallet_id"   => $receiver_wallet->id ?? NULL,
             "currency_type"        => $defaultCurrency,
             // "used_gas"             => 0,
             "confirmations"        => 1,
