@@ -726,3 +726,9 @@ table.dataTable thead th {
 .dataTables_wrapper .dataTables_paginate {
   @apply flex items-center gap-4;
 }
+.dataTables_wrapper {
+  @apply overflow-x-auto;
+}
+.dataTables_info {
+  @apply !text-left;
+}
