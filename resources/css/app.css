@@ -710,5 +710,19 @@ table.dataTable thead th {
   @apply border-b-0;
 }
 .dataTables_length select {
-  @apply border border-[#e0e6ed] py-1.5 rounded-[6px];
+  @apply rounded-[6px] border border-[#e0e6ed] py-1.5;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  @apply flex h-[35px] w-[35px] items-center justify-center rounded-full border bg-[#dfe6ed];
+}
+.dataTables_wrapper .dataTables_paginate .previous {
+  @apply w-fit p-0;
+}
+.dataTables_wrapper .dataTables_paginate .next {
+  @apply w-fit p-0;
+}
+
+.dataTables_wrapper .dataTables_paginate {
+  @apply flex items-center gap-4;
 }
