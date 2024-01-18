@@ -25,7 +25,7 @@ class IconSaveRequest extends FormRequest
             'title'         => 'required',
             // 'tag'           => 'required',
             'category_id'   => 'sometimes',
-            'icon'          => 'mimes:jpeg,png,jpg|max:2048',
+            'icon'          => 'mimes:svg,jpeg,png,jpg|max:2048',
         ];
     }
 
@@ -35,7 +35,7 @@ class IconSaveRequest extends FormRequest
             'title.required'       => __("Title is required"),
             'tag.required'         => __("Tag is required"),
             'category_id.required' => __("Category is required"),
-            'icon.mimes'           => __("Icon not support. Supported icons are 'jpeg,png,jpg'"),
+            'icon.mimes'           => __("Icon not support. Supported icons are 'jpeg,png,jpg,svg'"),
             'icon.max'             => __("Icon max size is 2MB"),
         ];
     }

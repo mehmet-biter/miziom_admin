@@ -19,7 +19,7 @@
                                     @if(isset($item)) value="{{$item->title}}" @else value="{{old('title')}}" @endif />
                             </div>
                             <div class="mt-4 items-center">
-                                <label for="question" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">{{ __('Tag') }} <span class="text-danger">*</span></label>
+                                <label for="question" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">{{ __('Slug') }} <span class="text-danger">*</span></label>
                                 <input id="question" type="text" name="tag" class="form-input flex-1"
                                     @if(isset($item)) value="{{$item->tag}}" @else value="{{old('tag')}}" @endif />
                             </div>
