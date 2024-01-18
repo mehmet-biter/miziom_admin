@@ -5,28 +5,25 @@
         <div class="flex xl:flex-row flex-col gap-2.5">
             <div class="panel px-0 flex-1 py-6 ltr:xl:mr-6 rtl:xl:ml-6">
                 <div class="flex justify-between flex-wrap px-4">
-                    <div class="text-lg font-semibold ltr:sm:text-left rtl:sm:text-right text-center">{{ __('Add New Team Member') }}</div>
+                    <div class="text-lg font-semibold ltr:sm:text-left rtl:sm:text-right text-center">{{ __('Add New FAQ') }}</div>
                 </div>
                 <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-6">
                 <form method="POST" action="{{ route('faqStoreProcess') }}" enctype="multipart/form-data">
                  @csrf
                 <div class="mt-8 px-4">
-                    <div class="flex justify-between lg:flex-row flex-col">
-                        <div class="lg:w-1/2 w-full ltr:lg:mr-6 rtl:lg:ml-6 mb-6">
-                            <div class="text-lg font-semibold">{{ __('Basic Info') }}</div>
-                            
-                            <div class="mt-4 flex items-center">
-                                <label for="question" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">{{ __('Question') }} <span class="text-danger">*</span></label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="w-full">
+                            <div class="flex flex-col">
+                                <label for="question" class=" mb-2">{{ __('Question') }} <span class="text-danger">*</span></label>
                                 <input id="question" type="text" name="question" class="form-input flex-1"
                                     @if(isset($item)) value="{{ $item->question }}" @else value="{{ old('question') }}" @endif />
                             </div>
                             
                             
                         </div>
-                        <div class="lg:w-1/2 w-full">
-                            <div class="text-lg font-semibold">{{ __('Additional Info') }}</div>
-                            <div class="flex items-center mt-4">
-                                <label for="status" class="ltr:mr-2 rtl:ml-2 w-1/3 mb-0">{{ __('Activation Status') }} <span class="text-danger">*</span></label>
+                        <div class="w-full">
+                            <div class="flex flex-col">
+                                <label for="status" class=" mb-2">{{ __('Activation Status') }} <span class="text-danger">*</span></label>
                                 <select id="status" name="status" class="form-select flex-1">
                                     @foreach (activationStatus() as $key => $val)
                                         <option @if(isset($item) && $item->status == $key) selected @endif value="{{$key}}">{{$val}}</option>
@@ -34,14 +31,13 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="w-full">
+                            <label for="answer">{{ __('Answer') }} </label>
+                            <textarea id="answer" name="answer" class="form-textarea min-h-[30px]" >{{ isset($item) ? $item->answer : old('answer') }}</textarea>
+                        </div>
                     </div>
                 </div>
-                <div class="mt-8 px-4">
-                    <div>
-                        <label for="answer">{{ __('Answer') }} </label>
-                        <textarea id="answer" name="answer" class="form-textarea min-h-[30px]" >{{ isset($item) ? $item->answer : old('answer') }}</textarea>
-                    </div>
-                </div>
+               
                 
                 <div class="mt-8">
                     <div class="flex justify-between sm:flex-row flex-col mt-6 px-4">

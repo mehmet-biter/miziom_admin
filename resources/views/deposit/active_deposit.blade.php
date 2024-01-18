@@ -1,8 +1,8 @@
 <x-layout.default>
     <div>
         <div class="panel px-0 border-[#e0e6ed] dark:border-[#1b2e4b]">
-            <div class="mt-5">
-                <table id="myTable" class="">
+            <div class="mt-8 px-5">
+                <table id="myTable" class="table-hover !pt-5">
                     <thead>
                         <tr>
                             <th class="all">{{__('Type')}}</th>

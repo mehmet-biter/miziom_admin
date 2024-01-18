@@ -100,7 +100,7 @@
      -webkit-transform: translateY(-50%);
              transform: translateY(-50%); }
      .dropify-wrapper .dropify-message span.file-icon {
-       font-size: 50px;
+       font-size: 14px;
        color: #CCC; }
      .dropify-wrapper .dropify-message p {
        margin: 5px 0 0 0; }
@@ -152,7 +152,7 @@
        -webkit-transition: border-color 0.15s linear;
        transition: border-color 0.15s linear; }
      .dropify-wrapper .dropify-preview .dropify-render i {
-       font-size: 70px;
+       font-size: 14px;
        top: 50%;
        left: 50%;
        -webkit-transform: translate(-50%, -50%);
