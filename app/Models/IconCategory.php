@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\IconList;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class IconCategory extends Model
 {
@@ -11,4 +12,9 @@ class IconCategory extends Model
     protected $fillable = [
         'title', 'status'
     ];
+
+    public function icons()
+    {
+        return $this->hasMany(IconList::class, "category_id", "id");
+    }
 }
