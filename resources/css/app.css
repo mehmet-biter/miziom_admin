@@ -717,10 +717,10 @@ table.dataTable thead th {
   @apply flex h-[35px] w-[35px] items-center justify-center rounded-full border bg-[#dfe6ed];
 }
 .dataTables_wrapper .dataTables_paginate .previous {
-  @apply w-fit p-0;
+  @apply w-fit bg-transparent p-0;
 }
 .dataTables_wrapper .dataTables_paginate .next {
-  @apply w-fit p-0;
+  @apply w-fit bg-transparent p-0;
 }
 
 .dataTables_wrapper .dataTables_paginate {
@@ -731,4 +731,7 @@ table.dataTable thead th {
 }
 .dataTables_info {
   @apply !text-left;
+}
+.dataTables_wrapper .dataTables_paginate span {
+  @apply flex items-center gap-4;
 }
