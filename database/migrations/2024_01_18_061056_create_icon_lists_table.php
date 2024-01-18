@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('icon_lists', function (Blueprint $table) {
             $table->id();
             $table->string('title', 100);
-            $table->string('tag')->nullable();
+            $table->string('tag', 100)->nullable();
+            $table->unsignedInteger('category_id');
             $table->boolean('status')->default(true);
             $table->string('icon')->nullable();
             $table->timestamps();

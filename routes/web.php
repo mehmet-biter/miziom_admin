@@ -140,11 +140,19 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','admins']], function 
     Route::get('landing-body-page-setting', [LandingController::class, 'landingBodyPageSetting'])->name('landingBodyPageSetting');
     Route::post('landing-body-page-setting', [LandingController::class, 'landingBodyPageSettingSave'])->name('landingBodyPageSettingSave');
 
+    // icon categories
     Route::get('icon-category-page', [IconController::class, 'iconCategoryPage'])->name('iconCategoryPage');
     Route::get('icon-category/{id?}', [IconController::class, 'iconCategoryAddEdit'])->name('iconCategoryAddEdit');
     Route::post('icon-category', [IconController::class, 'iconCategoryAddEditProccess'])->name('iconCategoryAddEditProccess');
     Route::get('icon-category-delete/{id}', [IconController::class, 'iconCategoryDelete'])->name('iconCategoryDelete');
     Route::post('icon-category-status', [IconController::class, 'iconCategoryStatusUpdate'])->name('iconCategoryStatusUpdate');
+  
+    // icon list
+    Route::get('icon-list-page', [IconController::class, 'iconPage'])->name('iconPage');
+    Route::get('icon/{id?}', [IconController::class, 'iconAddEdit'])->name('iconAddEdit');
+    Route::post('icon-save', [IconController::class, 'iconAddEditProccess'])->name('iconAddEditProccess');
+    Route::get('icon-delete/{id}', [IconController::class, 'iconDelete'])->name('iconDelete');
+    Route::post('icon-status', [IconController::class, 'iconStatusUpdate'])->name('iconStatusUpdate');
 });
 });
 
