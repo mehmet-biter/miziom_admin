@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\admin\IconController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
@@ -138,6 +139,12 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','admins']], function 
     Route::post('landing-hero-page-setting', [LandingController::class, 'landingHeroPageSettingSave'])->name('landingHeroPageSettingSave');
     Route::get('landing-body-page-setting', [LandingController::class, 'landingBodyPageSetting'])->name('landingBodyPageSetting');
     Route::post('landing-body-page-setting', [LandingController::class, 'landingBodyPageSettingSave'])->name('landingBodyPageSettingSave');
+
+    Route::get('icon-category-page', [IconController::class, 'iconCategoryPage'])->name('iconCategoryPage');
+    Route::get('icon-category/{id?}', [IconController::class, 'iconCategoryAddEdit'])->name('iconCategoryAddEdit');
+    Route::post('icon-category', [IconController::class, 'iconCategoryAddEditProccess'])->name('iconCategoryAddEditProccess');
+    Route::get('icon-category-delete/{id}', [IconController::class, 'iconCategoryDelete'])->name('iconCategoryDelete');
+    Route::post('icon-category-status', [IconController::class, 'iconCategoryStatusUpdate'])->name('iconCategoryStatusUpdate');
 });
 });
 

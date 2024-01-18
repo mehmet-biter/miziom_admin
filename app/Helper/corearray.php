@@ -9,7 +9,7 @@ function activationStatus($input = null)
     if (is_null($input)) {
         return $output;
     } else {
-        return $output[$input];
+        return isset($output[$input]) ? $output[$input] : null;
     }
 }
 
