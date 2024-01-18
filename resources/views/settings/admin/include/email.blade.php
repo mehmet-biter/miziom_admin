@@ -54,7 +54,7 @@
                 <h2 class="font-semibold dark:text-white-light">{{ __('This configuration is only for mailgun (optional)') }}</h2>
             </div>
             <div class=" ">
-                <div class="flex lg:w-1/2 w-full ltr:lg:mr-6 rtl:lg:ml-6 mb-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                     <div class="mt-4  items-center ">
                         <label class="ltr:mr-2 rtl:ml-2 w-full mb-0">{{ __('Mailgun Domain') }}</label>
                         <input type="text" name="MAILGUN_DOMAIN" class="mt-2 form-input flex-1"

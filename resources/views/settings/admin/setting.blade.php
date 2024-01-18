@@ -11,14 +11,14 @@
             <div class="mb-5" x-data="{ tab: 'home' }">
                 <div>
                     <ul
-                        class="grid grid-cols-4 gap-2 sm:flex sm:flex-wrap sm:justify-center mt-3 mb-5 sm:space-x-3 rtl:space-x-reverse">
+                        class="grid grid-cols-4 gap-2 sm:flex sm:flex-wrap mt-3 mb-5 sm:space-x-3 rtl:space-x-reverse">
                         <li>
                             <a href="javascript:;"
-                                class="p-7 py-3 flex flex-col items-center justify-center rounded-lg bg-[#f1f2f3] dark:bg-[#191e3a] hover:!bg-success hover:text-white hover:shadow-[0_5px_15px_0_rgba(0,0,0,0.30)]"
+                                class="p-7 py-3 flex gap-4 items-center justify-center rounded-lg bg-[#f1f2f3] dark:bg-[#191e3a] hover:!bg-success hover:text-white hover:shadow-[0_5px_15px_0_rgba(0,0,0,0.30)]"
                                 :class="{ '!bg-success text-white': tab === 'home' }" @click="tab = 'home'">
 
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mb-1">
+                                    xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
                                     <path opacity="0.5"
                                         d="M2 12.2039C2 9.91549 2 8.77128 2.5192 7.82274C3.0384 6.87421 3.98695 6.28551 5.88403 5.10813L7.88403 3.86687C9.88939 2.62229 10.8921 2 12 2C13.1079 2 14.1106 2.62229 16.116 3.86687L18.116 5.10812C20.0131 6.28551 20.9616 6.87421 21.4808 7.82274C22 8.77128 22 9.91549 22 12.2039V13.725C22 17.6258 22 19.5763 20.8284 20.7881C19.6569 22 17.7712 22 14 22H10C6.22876 22 4.34315 22 3.17157 20.7881C2 19.5763 2 17.6258 2 13.725V12.2039Z"
                                         stroke="currentColor" stroke-width="1.5"></path>
@@ -46,12 +46,12 @@
                         </li> --}}
                         <li>
                             <a href="javascript:;"
-                                class="p-7 py-3 flex flex-col items-center justify-center rounded-lg bg-[#f1f2f3] dark:bg-[#191e3a] hover:!bg-success hover:text-white hover:shadow-[0_5px_15px_0_rgba(0,0,0,0.30)]"
+                                class="p-7 py-3 flex gap-4 items-center justify-center rounded-lg bg-[#f1f2f3] dark:bg-[#191e3a] hover:!bg-success hover:text-white hover:shadow-[0_5px_15px_0_rgba(0,0,0,0.30)]"
                                 :class="{ '!bg-success text-white': tab === 'email' }"
                                 @click="tab = 'email'">
 
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mb-1">
+                                    xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
                                     <path
                                         d="M16.1007 13.359L16.5562 12.9062C17.1858 12.2801 18.1672 12.1515 18.9728 12.5894L20.8833 13.628C22.1102 14.2949 22.3806 15.9295 21.4217 16.883L20.0011 18.2954C19.6399 18.6546 19.1917 18.9171 18.6763 18.9651M4.00289 5.74561C3.96765 5.12559 4.25823 4.56668 4.69185 4.13552L6.26145 2.57483C7.13596 1.70529 8.61028 1.83992 9.37326 2.85908L10.6342 4.54348C11.2507 5.36691 11.1841 6.49484 10.4775 7.19738L10.1907 7.48257"
                                         stroke="currentColor" stroke-width="1.5"></path>
@@ -68,12 +68,12 @@
                         </li>
                         <li>
                             <a href="javascript:;"
-                                class="p-7 py-3 flex flex-col items-center justify-center rounded-lg bg-[#f1f2f3] dark:bg-[#191e3a] hover:!bg-success hover:text-white hover:shadow-[0_5px_15px_0_rgba(0,0,0,0.30)]"
+                                class="p-7 py-3 flex gap-4 items-center justify-center rounded-lg bg-[#f1f2f3] dark:bg-[#191e3a] hover:!bg-success hover:text-white hover:shadow-[0_5px_15px_0_rgba(0,0,0,0.30)]"
                                 :class="{ '!bg-success text-white': tab === 'logo' }"
                                 @click="tab = 'logo'">
 
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mb-1">
+                                    xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
                                     <circle cx="12" cy="12" r="3"
                                         stroke="currentColor" stroke-width="1.5"></circle>
                                     <path opacity="0.5"
