@@ -3,7 +3,7 @@
         <div class="panel px-0 border-[#e0e6ed] dark:border-[#1b2e4b]">
             <div class="px-5">
                 <div class=" md:top-5 ltr:md:left-5 rtl:md:right-5">
-                    <div class="flex items-center gap-2 mb-5">
+                    <div class="flex flex-wrap items-center gap-2 mb-5">
                         {{-- <h5 class="font-semibold text-lg dark:text-white-light">{{ __('Admin Setting') }}</h5> --}}
                         <a href="{{ route('adminCurrencyAdd') }}" class="btn btn-primary gap-2 float-right">
 
