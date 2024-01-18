@@ -4,7 +4,7 @@
         <div class="bg-white dark:bg-[#0e1726] h-full">
             <div class="flex justify-between items-center px-4 py-3">
                 <a href="/" class="main-logo flex items-center shrink-0">
-                    <img class="w-24 ml-[5px] flex-none" src="{{ settings('logo') ? showImage(VIEW_IMAGE_PATH,settings('logo')) : asset('assets/images/logo.png')  }}"
+                    <img class="h-10 ml-[5px] flex-none" src="{{ settings('logo') ? showImage(VIEW_IMAGE_PATH,settings('logo')) : asset('assets/images/logo.png')  }}"
                         alt="image" />
                     
                 </a>
