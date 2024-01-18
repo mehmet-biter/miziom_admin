@@ -17,7 +17,7 @@
                     </div>
                 </div>
             </div>
-            <div class="mt-5 px-5">
+            <div class="mt-8 px-5">
                 <table id="myTable" class="table-hover !pt-5">
                     <thead>
                         <tr>
