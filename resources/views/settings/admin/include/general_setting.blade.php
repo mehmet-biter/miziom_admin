@@ -74,8 +74,8 @@
             </div>
         </div>
         <div class="mt-8">
-            <div class="flex justify-between sm:flex-row flex-col mt-6 px-4">
-                <div class="sm:mb-0 mb-6 flex justify-between gap-2">
+            <div class="flex justify-between  sm:flex-row flex-col mt-6 px-4">
+                <div class="sm:mb-0 mb-6 flex  sm:flex-row flex-col  justify-between gap-2">
                     <button type="submit" class="btn btn-success w-full gap-2">
 
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"

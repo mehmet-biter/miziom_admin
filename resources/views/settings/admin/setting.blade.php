@@ -11,7 +11,7 @@
             <div class="mb-5" x-data="{ tab: 'home' }">
                 <div>
                     <ul
-                        class="grid grid-cols-4 gap-2 sm:flex sm:flex-wrap mt-3 mb-5 sm:space-x-3 rtl:space-x-reverse">
+                        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 mt-3 mb-5  rtl:space-x-reverse">
                         <li>
                             <a href="javascript:;"
                                 class="p-7 py-3 flex gap-4 items-center justify-center rounded-lg bg-[#f1f2f3] dark:bg-[#191e3a] hover:!bg-success hover:text-white hover:shadow-[0_5px_15px_0_rgba(0,0,0,0.30)]"
